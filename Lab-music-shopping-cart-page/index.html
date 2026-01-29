@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Music Shopping Cart</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-4">
+
+  <div
+    id="shopping-cart-container"
+    class="flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto"
+  >
+
+    <div id="products-container" class="lg:w-2/3 space-y-4">
+
+      <div class="card bg-white p-4 rounded shadow">
+        <h2 class="text-xl text-gray-800 mb-2">
+          The Midnight – Days of Thunder
+        </h2>
+
+        <div class="quantity mb-2">
+          Quantity: <span class="font-bold">1</span>
+        </div>
+
+        <div class="price mb-4">
+          Price: <span class="font-bold">$24.99</span>
+        </div>
+
+        <button
+          class="remove-button bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
+        >
+          Remove
+        </button>
+      </div>
+
+      <div class="card bg-white p-4 rounded shadow">
+        <h2 class="text-xl text-gray-800 mb-2">
+          Daft Punk – Random Access Memories
+        </h2>
+
+        <div class="quantity mb-2">
+          Quantity: <span class="font-bold">2</span>
+        </div>
+
+        <div class="price mb-4">
+          Price: <span class="font-bold">$29.99</span>
+        </div>
+
+        <button
+          class="remove-button bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
+        >
+          Remove
+        </button>
+      </div>
+
+    </div>
+
+    <div
+      id="order-summary-container"
+      class="lg:w-1/3 bg-white rounded-lg border-2 border-gray-300 p-6"
+    >
+      <h2 class="text-2xl mb-4">Order Summary</h2>
+
+      <div
+        id="total"
+        class="font-bold text-lg"
+      >
+        Total:
+      </div>
+
+      <div
+        id="total-amount"
+        class="text-2xl font-bold text-blue-600 mb-4"
+      >
+        $84.97
+      </div>
+
+      <a
+        href="#"
+        class="block text-center bg-blue-500 hover:bg-blue-600 text-white py-3 rounded"
+      >
+        Checkout
+      </a>
+    </div>
+
+  </div>
+
+</body>
+</html>
+
