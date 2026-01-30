@@ -3,62 +3,225 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Frontend Projects</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 30px; }
-        .container { background: white; max-width: 1200px; margin: 0 auto; border-radius: 20px; padding: 40px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
-        h1 { color: #2d3436; text-align: center; margin-bottom: 40px; }
-        .projects { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
-        .project-card { background: #f8f9fa; border-radius: 15px; padding: 25px; border-left: 5px solid #6c5ce7; }
-        .project-card h3 { color: #2d3436; margin-bottom: 10px; }
-        .project-card p { color: #636e72; margin-bottom: 15px; }
-        .btn { display: inline-block; background: #6c5ce7; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold; transition: 0.3s; }
-        .btn:hover { background: #5b4fcf; transform: translateY(-2px); }
-    </style>
+    <title>Frontend Projects Portfolio | Raoul Lupastean</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="https://cdn-icons-png.flaticon.com/512/5968/5968292.png">
 </head>
 <body>
-    <div class="container">
-        <h1>My Frontend Projects Portfolio</h1>
-        <div class="projects">
-            <!-- Folosește EXACT numele folderelor din captura ta -->
-            <div class="project-card">
-                <h3>Currency Converter</h3>
-                <p>Convertor de valută cu rate în timp real.</p>
-                <a href="Currency-Converter/index.html" class="btn">View Project</a>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-code"></i>
+                <span>Frontend Portfolio</span>
             </div>
-            <div class="project-card">
-                <h3>Event RSVP</h3>
-                <p>Sistem de confirmare participare evenimente.</p>
-                <a href="Event-rsvp/index.html" class="btn">View Project</a>
+            <ul class="nav-links">
+                <li><a href="#projects"><i class="fas fa-project-diagram"></i> Projects</a></li>
+                <li><a href="https://github.com/LupasteanRaoul" target="_blank"><i class="fab fa-github"></i> GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-container">
+            <h1 class="hero-title">Frontend Development Projects</h1>
+            <p class="hero-subtitle">A collection of interactive web applications built with HTML, CSS & JavaScript</p>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number">6</span>
+                    <span class="stat-label">Projects</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">100%</span>
+                    <span class="stat-label">Vanilla JS</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">0</span>
+                    <span class="stat-label">Frameworks</span>
+                </div>
             </div>
-            <div class="project-card">
-                <h3>Music Shopping Cart</h3>
-                <p>Coș de cumpărături pentru magazin muzical.</p>
-                <a href="Music-shopping-cart-page/index.html" class="btn">View Project</a>
+            <a href="#projects" class="cta-button">
+                <i class="fas fa-arrow-down"></i> Explore Projects
+            </a>
+        </div>
+    </header>
+
+    <!-- Projects Grid -->
+    <main class="container">
+        <section id="projects" class="projects-section">
+            <h2 class="section-title">Featured Projects</h2>
+            <p class="section-subtitle">Click on any project to see it in action</p>
+            
+            <div class="projects-grid">
+                <!-- Project 1 -->
+                <div class="project-card">
+                    <div class="project-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <h3 class="project-title">Currency Converter</h3>
+                    <p class="project-description">
+                        Real-time currency converter with exchange rates and historical data visualization.
+                    </p>
+                    <div class="project-tech">
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">API</span>
+                        <span class="tech-tag">CSS3</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="Currency-Converter/index.html" class="btn btn-primary">
+                            <i class="fas fa-external-link-alt"></i> Live Demo
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="project-card">
+                    <div class="project-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3 class="project-title">Event RSVP System</h3>
+                    <p class="project-description">
+                        Event management system with RSVP functionality, guest list, and confirmation emails.
+                    </p>
+                    <div class="project-tech">
+                        <span class="tech-tag">HTML5</span>
+                        <span class="tech-tag">LocalStorage</span>
+                        <span class="tech-tag">Forms</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="Event-rsvp/index.html" class="btn btn-primary">
+                            <i class="fas fa-external-link-alt"></i> Live Demo
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="project-card">
+                    <div class="project-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <h3 class="project-title">Music Shopping Cart</h3>
+                    <p class="project-description">
+                        E-commerce cart for music store with product filtering, cart management, and checkout.
+                    </p>
+                    <div class="project-tech">
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">Cart Logic</span>
+                        <span class="tech-tag">UI/UX</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="Music-shopping-cart-page/index.html" class="btn btn-primary">
+                            <i class="fas fa-external-link-alt"></i> Live Demo
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="project-card">
+                    <div class="project-icon">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <h3 class="project-title">Photography Exhibit</h3>
+                    <p class="project-description">
+                        Interactive photography gallery with lightbox, filters, and fullscreen mode.
+                    </p>
+                    <div class="project-tech">
+                        <span class="tech-tag">CSS Grid</span>
+                        <span class="tech-tag">Lightbox</span>
+                        <span class="tech-tag">Animations</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="Lab-photography-exibit/index.html" class="btn btn-primary">
+                            <i class="fas fa-external-link-alt"></i> Live Demo
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Project 5 -->
+                <div class="project-card">
+                    <div class="project-icon">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <h3 class="project-title">Tic Tac Toe Game</h3>
+                    <p class="project-description">
+                        Classic game with AI opponent, score tracking, and multiple difficulty levels.
+                    </p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Game Logic</span>
+                        <span class="tech-tag">AI</span>
+                        <span class="tech-tag">Animations</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="Tic-Tac-Toe-Game/index.html" class="btn btn-primary">
+                            <i class="fas fa-external-link-alt"></i> Live Demo
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Project 6 -->
+                <div class="project-card">
+                    <div class="project-icon">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <h3 class="project-title">Lab Music Cart</h3>
+                    <p class="project-description">
+                        Alternative music store cart with different UI approach and functionality.
+                    </p>
+                    <div class="project-tech">
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">Design</span>
+                        <span class="tech-tag">Experiments</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="Lab-music-shopping-cart-page/index.html" class="btn btn-primary">
+                            <i class="fas fa-external-link-alt"></i> Live Demo
+                        </a>
+                    </div>
+                </div>
             </div>
-            <div class="project-card">
-                <h3>Photography Exhibit</h3>
-                <p>Expoziție foto interactivă.</p>
-                <a href="Lab-photography-exibit/index.html" class="btn">View Project</a>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-info">
+                <h3><i class="fas fa-code"></i> Frontend Projects Portfolio</h3>
+                <p>A showcase of vanilla JavaScript projects without frameworks or libraries.</p>
+                <p class="footer-links">
+                    <a href="https://github.com/LupasteanRaoul/frontend-projects" target="_blank">
+                        <i class="fab fa-github"></i> Repository
+                    </a>
+                    <a href="https://lupasteanraoul.github.io" target="_blank">
+                        <i class="fas fa-user"></i> Portfolio
+                    </a>
+                </p>
             </div>
-            <div class="project-card">
-                <h3>Tic Tac Toe Game</h3>
-                <p>Joc clasic X și O cu AI.</p>
-                <a href="Tic-Tac-Toe-Game/index.html" class="btn">View Project</a>
-            </div>
-            <div class="project-card">
-                <h3>Lab Music Cart</h3>
-                <p>Alt coș de cumpărături pentru exercițiu.</p>
-                <a href="Lab-music-shopping-cart-page/index.html" class="btn">View Project</a>
+            <div class="footer-stats">
+                <h4>Repository Stats</h4>
+                <div class="stats">
+                    <div class="stat-item">
+                        <i class="fas fa-folder"></i>
+                        <span>6 Projects</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-code-branch"></i>
+                        <span id="commit-count">Loading...</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-calendar"></i>
+                        <span id="current-year">2024</span>
+                    </div>
+                </div>
             </div>
         </div>
-        <p style="margin-top: 40px; text-align: center; color: #636e72;">
-            <strong>GitHub Repository:</strong> 
-            <a href="https://github.com/LupasteanRaoul/frontend-projects" target="_blank">
-                github.com/LupasteanRaoul/frontend-projects
-            </a>
-        </p>
-    </div>
+        <div class="footer-bottom">
+            <p>&copy; <span id="footer-year">2024</span> Raoul Lupastean. All projects built with vanilla JavaScript.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
