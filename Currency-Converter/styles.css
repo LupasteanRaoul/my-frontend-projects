@@ -358,7 +358,7 @@ body {
 }
 
 .currency-flag {
-    position: relative;
+    position: absolute;
     right: 1rem;
     top: 50%;
     transform: translateY(-50%);
