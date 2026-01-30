@@ -1,22 +1,48 @@
-const { useState, useEffect } = React;
+// Main Tic-Tac-Toe Game Component
+const { useState, useEffect, useRef } = React;
 
+// Export Board component
 export function Board() {
   const [squares, setSquares] = useState(Array(9).fill(null));
   const [xIsNext, setXIsNext] = useState(true);
   const [winner, setWinner] = useState(null);
   const [winningLine, setWinningLine] = useState([]);
   const [score, setScore] = useState({ X: 0, O: 0, draws: 0 });
-  const [gameMode, setGameMode] = useState('player'); // 'player' or 'ai'
-  const [difficulty, setDifficulty] = useState('easy'); // 'easy', 'medium', 'hard'
+  const [gameMode, setGameMode] = useState('player');
+  const [difficulty, setDifficulty] = useState('easy');
   const [gameHistory, setGameHistory] = useState([]);
   const [currentMove, setCurrentMove] = useState(0);
   const [isThinking, setIsThinking] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(false);
+  const [gameStarted, setGameStarted] = useState(false);
   
-  // Load score from localStorage on initial render
+  // Refs for sound
+  const clickSoundRef = useRef(null);
+  const winSoundRef = useRef(null);
+  const drawSoundRef = useRef(null);
+  
+  // Initialize sounds
+  useEffect(() => {
+    clickSoundRef.current = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3');
+    winSoundRef.current = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3');
+    drawSoundRef.current = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-game-show-wrong-answer-buzz-950.mp3');
+    
+    // Short sounds, preload
+    [clickSoundRef.current, winSoundRef.current, drawSoundRef.current].forEach(sound => {
+      sound.volume = 0.3;
+      sound.load();
+    });
+  }, []);
+  
+  // Load saved data
   useEffect(() => {
     const savedScore = localStorage.getItem('ticTacToeScore');
     if (savedScore) {
-      setScore(JSON.parse(savedScore));
+      try {
+        setScore(JSON.parse(savedScore));
+      } catch (e) {
+        console.error('Error loading score:', e);
+      }
     }
     
     const savedGameMode = localStorage.getItem('ticTacToeGameMode');
@@ -30,23 +56,43 @@ export function Board() {
     }
   }, []);
   
-  // Save score to localStorage whenever it changes
+  // Save score when changed
   useEffect(() => {
     localStorage.setItem('ticTacToeScore', JSON.stringify(score));
   }, [score]);
   
-  // AI makes a move if it's AI's turn
+  // AI Move Logic
   useEffect(() => {
-    if (gameMode === 'ai' && !xIsNext && !winner && !isThinking) {
+    if (gameMode === 'ai' && !xIsNext && !winner && !isThinking && gameStarted) {
       const timer = setTimeout(() => {
         makeAIMove();
-      }, 500);
+      }, 600);
       return () => clearTimeout(timer);
     }
-  }, [xIsNext, winner, gameMode, squares]);
+  }, [xIsNext, winner, gameMode, squares, gameStarted]);
+  
+  const playSound = (soundType) => {
+    if (!clickSoundRef.current) return;
+    
+    try {
+      const soundMap = {
+        click: clickSoundRef.current,
+        win: winSoundRef.current,
+        draw: drawSoundRef.current
+      };
+      
+      const sound = soundMap[soundType];
+      if (sound) {
+        sound.currentTime = 0;
+        sound.play().catch(e => console.log('Audio play failed:', e));
+      }
+    } catch (e) {
+      console.log('Sound error:', e);
+    }
+  };
   
   const makeAIMove = () => {
-    if (winner || isThinking) return;
+    if (winner || isThinking || !gameStarted) return;
     
     setIsThinking(true);
     
@@ -55,118 +101,118 @@ export function Board() {
         .map((square, index) => square === null ? index : null)
         .filter(index => index !== null);
       
-      let aiMove;
-      
-      if (difficulty === 'easy') {
-        // Random move
-        aiMove = availableMoves[Math.floor(Math.random() * availableMoves.length)];
-      } else if (difficulty === 'medium') {
-        // Try to win or block
-        aiMove = getStrategicMove(availableMoves, squares, false);
-      } else {
-        // Hard - minimax algorithm
-        aiMove = minimax(squares, false).index;
+      if (availableMoves.length === 0) {
+        setIsThinking(false);
+        return;
       }
       
-      if (aiMove !== undefined && aiMove !== null) {
-        handleClick(aiMove);
+      let aiMove;
+      
+      switch (difficulty) {
+        case 'easy':
+          aiMove = getRandomMove(availableMoves);
+          break;
+        case 'medium':
+          aiMove = getMediumMove(availableMoves, squares);
+          break;
+        case 'hard':
+          aiMove = getBestMove(squares, false);
+          break;
+        default:
+          aiMove = getRandomMove(availableMoves);
+      }
+      
+      if (aiMove !== null && aiMove !== undefined) {
+        handleClick(aiMove, false);
       }
       
       setIsThinking(false);
     }, 300);
   };
   
-  const getStrategicMove = (availableMoves, board, isMaximizing) => {
-    const player = isMaximizing ? 'X' : 'O';
-    const opponent = isMaximizing ? 'O' : 'X';
-    
-    // 1. Try to win
+  const getRandomMove = (moves) => {
+    return moves[Math.floor(Math.random() * moves.length)];
+  };
+  
+  const getMediumMove = (availableMoves, board) => {
+    // Try to win
     for (let move of availableMoves) {
       const newBoard = [...board];
-      newBoard[move] = player;
-      if (calculateWinner(newBoard).winner === player) {
+      newBoard[move] = 'O';
+      if (calculateWinner(newBoard).winner === 'O') {
         return move;
       }
     }
     
-    // 2. Try to block opponent
+    // Block player
     for (let move of availableMoves) {
       const newBoard = [...board];
-      newBoard[move] = opponent;
-      if (calculateWinner(newBoard).winner === opponent) {
+      newBoard[move] = 'X';
+      if (calculateWinner(newBoard).winner === 'X') {
         return move;
       }
     }
     
-    // 3. Take center if available
+    // Take center
     if (availableMoves.includes(4)) return 4;
     
-    // 4. Take corners
+    // Take corners
     const corners = [0, 2, 6, 8];
     const availableCorners = corners.filter(corner => availableMoves.includes(corner));
     if (availableCorners.length > 0) {
       return availableCorners[Math.floor(Math.random() * availableCorners.length)];
     }
     
-    // 5. Random move
-    return availableMoves[Math.floor(Math.random() * availableMoves.length)];
+    // Random move
+    return getRandomMove(availableMoves);
   };
   
-  const minimax = (board, isMaximizing) => {
+  const getBestMove = (board, isMaximizing, depth = 0) => {
     const result = calculateWinner(board);
     
-    if (result.winner === 'X') return { score: -10 };
-    if (result.winner === 'O') return { score: 10 };
+    if (result.winner === 'X') return { score: -10 + depth };
+    if (result.winner === 'O') return { score: 10 - depth };
     if (!board.includes(null)) return { score: 0 };
     
     const availableMoves = board
       .map((square, index) => square === null ? index : null)
       .filter(index => index !== null);
     
+    const moves = [];
+    
+    for (let move of availableMoves) {
+      const newBoard = [...board];
+      newBoard[move] = isMaximizing ? 'O' : 'X';
+      const score = getBestMove(newBoard, !isMaximizing, depth + 1).score;
+      moves.push({ move, score });
+    }
+    
     if (isMaximizing) {
-      let bestScore = -Infinity;
-      let bestMove;
-      
-      for (let move of availableMoves) {
-        const newBoard = [...board];
-        newBoard[move] = 'O';
-        const score = minimax(newBoard, false).score;
-        
-        if (score > bestScore) {
-          bestScore = score;
-          bestMove = move;
-        }
-      }
-      
-      return { score: bestScore, index: bestMove };
+      const bestMove = moves.reduce((best, current) => 
+        current.score > best.score ? current : best, { score: -Infinity }
+      );
+      return bestMove;
     } else {
-      let bestScore = Infinity;
-      let bestMove;
-      
-      for (let move of availableMoves) {
-        const newBoard = [...board];
-        newBoard[move] = 'X';
-        const score = minimax(newBoard, true).score;
-        
-        if (score < bestScore) {
-          bestScore = score;
-          bestMove = move;
-        }
-      }
-      
-      return { score: bestScore, index: bestMove };
+      const bestMove = moves.reduce((best, current) => 
+        current.score < best.score ? current : best, { score: Infinity }
+      );
+      return bestMove;
     }
   };
   
-  const handleClick = (i) => {
-    if (winner || squares[i] || (gameMode === 'ai' && !xIsNext) || isThinking) {
+  const handleClick = (i, playSoundFlag = true) => {
+    if (winner || squares[i] || (gameMode === 'ai' && !xIsNext) || isThinking || !gameStarted) {
       return;
+    }
+    
+    if (playSoundFlag) {
+      playSound('click');
     }
     
     const newSquares = squares.slice();
     newSquares[i] = xIsNext ? 'X' : 'O';
     
-    // Save move to history
+    // Save to history
     const newGameHistory = gameHistory.slice(0, currentMove);
     newGameHistory.push([...newSquares]);
     setGameHistory(newGameHistory);
@@ -178,21 +224,27 @@ export function Board() {
     if (result.winner) {
       setWinner(result.winner);
       setWinningLine(result.line);
+      playSound('win');
       
-      // Update score
-      setScore(prevScore => ({
-        ...prevScore,
-        [result.winner]: prevScore[result.winner] + 1
+      setScore(prev => ({
+        ...prev,
+        [result.winner]: prev[result.winner] + 1
       }));
     } else if (newSquares.every(square => square !== null)) {
       setWinner('draw');
-      setScore(prevScore => ({
-        ...prevScore,
-        draws: prevScore.draws + 1
+      playSound('draw');
+      setScore(prev => ({
+        ...prev,
+        draws: prev.draws + 1
       }));
     } else {
       setXIsNext(!xIsNext);
     }
+  };
+  
+  const startGame = () => {
+    setGameStarted(true);
+    resetGame();
   };
   
   const resetGame = () => {
@@ -221,34 +273,15 @@ export function Board() {
     }
   };
   
-  const renderSquare = (i) => {
-    const isWinningSquare = winningLine.includes(i);
-    const value = squares[i];
+  const getStatusMessage = () => {
+    if (!gameStarted) {
+      return (
+        <div className="status start-prompt">
+          <i className="fas fa-play-circle"></i> Click "Start Game" to begin!
+        </div>
+      );
+    }
     
-    let squareClass = 'square';
-    if (isWinningSquare) squareClass += ' winning';
-    if (value === 'X') squareClass += ' x-move';
-    if (value === 'O') squareClass += ' o-move';
-    if (!value && !winner) squareClass += ' hoverable';
-    
-    return (
-      <button 
-        className={squareClass}
-        onClick={() => handleClick(i)}
-        disabled={!!winner || (gameMode === 'ai' && !xIsNext) || isThinking}
-      >
-        {value}
-        {!value && !winner && xIsNext && (
-          <span className="hint-x"><i className="fas fa-times"></i></span>
-        )}
-        {!value && !winner && !xIsNext && (
-          <span className="hint-o"><i className="far fa-circle"></i></span>
-        )}
-      </button>
-    );
-  };
-  
-  const getStatus = () => {
     if (winner === 'X' || winner === 'O') {
       return (
         <div className="status winner">
@@ -258,7 +291,7 @@ export function Board() {
     } else if (winner === 'draw') {
       return (
         <div className="status draw">
-          <i className="fas fa-handshake"></i> Game ended in a draw!
+          <i className="fas fa-handshake"></i> It's a draw!
         </div>
       );
     } else {
@@ -274,169 +307,265 @@ export function Board() {
     }
   };
   
+  const renderSquare = (i) => {
+    const isWinningSquare = winningLine.includes(i);
+    const value = squares[i];
+    const isEmpty = !value && !winner && gameStarted;
+    
+    let squareClass = 'square';
+    if (isWinningSquare) squareClass += ' winning';
+    if (value === 'X') squareClass += ' x-move';
+    if (value === 'O') squareClass += ' o-move';
+    if (isEmpty) squareClass += ' hoverable';
+    
+    return (
+      <button 
+        className={squareClass}
+        onClick={() => handleClick(i)}
+        disabled={!!winner || (gameMode === 'ai' && !xIsNext) || isThinking || !gameStarted}
+        aria-label={`Square ${i + 1} ${value ? `contains ${value}` : 'empty'}`}
+      >
+        {value}
+        {isEmpty && xIsNext && (
+          <span className="hint-x"><i className="fas fa-times"></i></span>
+        )}
+        {isEmpty && !xIsNext && (
+          <span className="hint-o"><i className="far fa-circle"></i></span>
+        )}
+      </button>
+    );
+  };
+  
   return (
     <div className="board-container">
       <div className="header">
-        <h1><i className="fas fa-gamepad"></i> Tic-Tac-Toe</h1>
-        <div className="subtitle">Advanced React Game</div>
+        <h1><i className="fas fa-gamepad"></i> Advanced Tic-Tac-Toe</h1>
+        <div className="subtitle">React-Powered Game with AI Opponent</div>
       </div>
       
-      <div className="game-info">
-        <div className="score-board">
-          <div className="score-item">
-            <span className="score-label x-label">X Wins</span>
-            <span className="score-value">{score.X}</span>
-          </div>
-          <div className="score-item">
-            <span className="score-label draw-label">Draws</span>
-            <span className="score-value">{score.draws}</span>
-          </div>
-          <div className="score-item">
-            <span className="score-label o-label">O Wins</span>
-            <span className="score-value">{score.O}</span>
+      {!gameStarted ? (
+        <div className="start-screen">
+          <div className="welcome-message">
+            <h2><i className="fas fa-chess-board"></i> Welcome!</h2>
+            <p>Experience the classic game with modern features and AI opponent.</p>
+            
+            <div className="feature-list">
+              <div className="feature">
+                <i className="fas fa-robot"></i>
+                <span>3 AI Difficulty Levels</span>
+              </div>
+              <div className="feature">
+                <i className="fas fa-history"></i>
+                <span>Game History & Undo</span>
+              </div>
+              <div className="feature">
+                <i className="fas fa-chart-line"></i>
+                <span>Score Tracking</span>
+              </div>
+              <div className="feature">
+                <i className="fas fa-users"></i>
+                <span>2-Player Mode</span>
+              </div>
+            </div>
+            
+            <button className="start-game-btn" onClick={startGame}>
+              <i className="fas fa-play"></i> Start Game
+            </button>
+            
+            <button 
+              className="instructions-btn" 
+              onClick={() => setShowInstructions(!showInstructions)}
+            >
+              <i className="fas fa-info-circle"></i> How to Play
+            </button>
+            
+            {showInstructions && (
+              <div className="instructions">
+                <h3><i className="fas fa-graduation-cap"></i> Game Instructions</h3>
+                <ul>
+                  <li>Players take turns placing X and O on a 3x3 grid</li>
+                  <li>First player to get 3 in a row (horizontally, vertically, or diagonally) wins</li>
+                  <li>Choose between 2-player mode or play against AI</li>
+                  <li>AI has three difficulty levels: Easy, Medium, Hard</li>
+                  <li>Use Game History to review or undo moves</li>
+                </ul>
+              </div>
+            )}
           </div>
         </div>
-        
-        {getStatus()}
-        
-        <div className="game-controls">
-          <div className="control-group">
-            <label><i className="fas fa-users"></i> Game Mode</label>
-            <div className="mode-buttons">
-              <button 
-                className={`mode-btn ${gameMode === 'player' ? 'active' : ''}`}
-                onClick={() => {
-                  setGameMode('player');
-                  localStorage.setItem('ticTacToeGameMode', 'player');
-                  resetGame();
-                }}
-              >
-                <i className="fas fa-user-friends"></i> 2 Players
-              </button>
-              <button 
-                className={`mode-btn ${gameMode === 'ai' ? 'active' : ''}`}
-                onClick={() => {
-                  setGameMode('ai');
-                  localStorage.setItem('ticTacToeGameMode', 'ai');
-                  resetGame();
-                }}
-              >
-                <i className="fas fa-robot"></i> vs AI
-              </button>
+      ) : (
+        <>
+          <div className="game-info">
+            <div className="score-board">
+              <div className="score-item">
+                <span className="score-label x-label">
+                  <i className="fas fa-times"></i> X Wins
+                </span>
+                <span className="score-value">{score.X}</span>
+              </div>
+              <div className="score-item">
+                <span className="score-label draw-label">
+                  <i className="fas fa-equals"></i> Draws
+                </span>
+                <span className="score-value">{score.draws}</span>
+              </div>
+              <div className="score-item">
+                <span className="score-label o-label">
+                  <i className="far fa-circle"></i> O Wins
+                </span>
+                <span className="score-value">{score.O}</span>
+              </div>
+            </div>
+            
+            {getStatusMessage()}
+            
+            <div className="game-controls">
+              <div className="control-group">
+                <label><i className="fas fa-users"></i> Game Mode</label>
+                <div className="mode-buttons">
+                  <button 
+                    className={`mode-btn ${gameMode === 'player' ? 'active' : ''}`}
+                    onClick={() => {
+                      setGameMode('player');
+                      localStorage.setItem('ticTacToeGameMode', 'player');
+                      resetGame();
+                    }}
+                  >
+                    <i className="fas fa-user-friends"></i> 2 Players
+                  </button>
+                  <button 
+                    className={`mode-btn ${gameMode === 'ai' ? 'active' : ''}`}
+                    onClick={() => {
+                      setGameMode('ai');
+                      localStorage.setItem('ticTacToeGameMode', 'ai');
+                      resetGame();
+                    }}
+                  >
+                    <i className="fas fa-robot"></i> vs AI
+                  </button>
+                </div>
+              </div>
+              
+              {gameMode === 'ai' && (
+                <div className="control-group">
+                  <label><i className="fas fa-brain"></i> AI Difficulty</label>
+                  <div className="difficulty-buttons">
+                    <button 
+                      className={`difficulty-btn ${difficulty === 'easy' ? 'active' : ''}`}
+                      onClick={() => {
+                        setDifficulty('easy');
+                        localStorage.setItem('ticTacToeDifficulty', 'easy');
+                        resetGame();
+                      }}
+                    >
+                      <i className="fas fa-baby"></i> Easy
+                    </button>
+                    <button 
+                      className={`difficulty-btn ${difficulty === 'medium' ? 'active' : ''}`}
+                      onClick={() => {
+                        setDifficulty('medium');
+                        localStorage.setItem('ticTacToeDifficulty', 'medium');
+                        resetGame();
+                      }}
+                    >
+                      <i className="fas fa-user-graduate"></i> Medium
+                    </button>
+                    <button 
+                      className={`difficulty-btn ${difficulty === 'hard' ? 'active' : ''}`}
+                      onClick={() => {
+                        setDifficulty('hard');
+                        localStorage.setItem('ticTacToeDifficulty', 'hard');
+                        resetGame();
+                      }}
+                    >
+                      <i className="fas fa-crown"></i> Hard
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
           
-          {gameMode === 'ai' && (
-            <div className="control-group">
-              <label><i className="fas fa-brain"></i> AI Difficulty</label>
-              <div className="difficulty-buttons">
+          <div className="game-board">
+            <div className="board">
+              <div className="board-row">
+                {renderSquare(0)}
+                {renderSquare(1)}
+                {renderSquare(2)}
+              </div>
+              <div className="board-row">
+                {renderSquare(3)}
+                {renderSquare(4)}
+                {renderSquare(5)}
+              </div>
+              <div className="board-row">
+                {renderSquare(6)}
+                {renderSquare(7)}
+                {renderSquare(8)}
+              </div>
+            </div>
+          </div>
+          
+          <div className="action-buttons">
+            <button className="action-btn reset-btn" onClick={resetGame}>
+              <i className="fas fa-redo"></i> New Game
+            </button>
+            <button className="action-btn menu-btn" onClick={() => setGameStarted(false)}>
+              <i className="fas fa-home"></i> Main Menu
+            </button>
+            <button className="action-btn score-reset-btn" onClick={resetScore}>
+              <i className="fas fa-trash-alt"></i> Reset Score
+            </button>
+          </div>
+          
+          {gameHistory.length > 0 && (
+            <div className="game-history">
+              <h3><i className="fas fa-history"></i> Game History</h3>
+              <div className="history-list">
                 <button 
-                  className={`difficulty-btn ${difficulty === 'easy' ? 'active' : ''}`}
-                  onClick={() => {
-                    setDifficulty('easy');
-                    localStorage.setItem('ticTacToeDifficulty', 'easy');
-                    resetGame();
-                  }}
+                  className={`history-btn ${currentMove === 0 ? 'active' : ''}`}
+                  onClick={() => jumpToMove(0)}
                 >
-                  Easy
+                  <i className="fas fa-flag"></i> Start
                 </button>
-                <button 
-                  className={`difficulty-btn ${difficulty === 'medium' ? 'active' : ''}`}
-                  onClick={() => {
-                    setDifficulty('medium');
-                    localStorage.setItem('ticTacToeDifficulty', 'medium');
-                    resetGame();
-                  }}
-                >
-                  Medium
-                </button>
-                <button 
-                  className={`difficulty-btn ${difficulty === 'hard' ? 'active' : ''}`}
-                  onClick={() => {
-                    setDifficulty('hard');
-                    localStorage.setItem('ticTacToeDifficulty', 'hard');
-                    resetGame();
-                  }}
-                >
-                  Hard
-                </button>
+                {gameHistory.map((_, move) => (
+                  move > 0 && (
+                    <button 
+                      key={move}
+                      className={`history-btn ${currentMove === move ? 'active' : ''}`}
+                      onClick={() => jumpToMove(move)}
+                    >
+                      <i className="fas fa-step-forward"></i> Move #{move}
+                    </button>
+                  )
+                ))}
               </div>
             </div>
           )}
-        </div>
-      </div>
-      
-      <div className="game-board">
-        <div className="board">
-          <div className="board-row">
-            {renderSquare(0)}
-            {renderSquare(1)}
-            {renderSquare(2)}
-          </div>
-          <div className="board-row">
-            {renderSquare(3)}
-            {renderSquare(4)}
-            {renderSquare(5)}
-          </div>
-          <div className="board-row">
-            {renderSquare(6)}
-            {renderSquare(7)}
-            {renderSquare(8)}
-          </div>
-        </div>
-      </div>
-      
-      <div className="action-buttons">
-        <button className="action-btn reset-btn" onClick={resetGame}>
-          <i className="fas fa-redo"></i> New Game
-        </button>
-        <button className="action-btn score-reset-btn" onClick={resetScore}>
-          <i className="fas fa-trash-alt"></i> Reset Score
-        </button>
-      </div>
-      
-      {gameHistory.length > 0 && (
-        <div className="game-history">
-          <h3><i className="fas fa-history"></i> Game History</h3>
-          <div className="history-list">
-            <button 
-              className={`history-btn ${currentMove === 0 ? 'active' : ''}`}
-              onClick={() => jumpToMove(0)}
-            >
-              Game Start
-            </button>
-            {gameHistory.map((_, move) => (
-              move > 0 && (
-                <button 
-                  key={move}
-                  className={`history-btn ${currentMove === move ? 'active' : ''}`}
-                  onClick={() => jumpToMove(move)}
-                >
-                  Move #{move}
-                </button>
-              )
-            ))}
-          </div>
-        </div>
+        </>
       )}
       
       <div className="footer">
-        <p>Made with <i className="fas fa-heart"></i> using React</p>
+        <p>
+          Made with <i className="fas fa-heart"></i> using React 
+          | <a href="https://github.com/LupasteanRaoul" target="_blank" rel="noopener">
+            <i className="fab fa-github"></i> GitHub
+          </a>
+        </p>
+        <p className="view-live-note">
+          <i className="fas fa-external-link-alt"></i> View Live on GitHub Pages
+        </p>
       </div>
     </div>
   );
 }
 
+// Helper function to calculate winner
 function calculateWinner(squares) {
   const lines = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
+    [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
+    [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
+    [0, 4, 8], [2, 4, 6] // diagonals
   ];
   
   for (let i = 0; i < lines.length; i++) {
