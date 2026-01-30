@@ -19,6 +19,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const productModal = document.getElementById('productModal');
     const modalTitle = document.getElementById('modalTitle');
     const modalBody = document.getElementById('modalBody');
+    const debouncedRender = debounce(renderProducts, 300);
+    searchInput.addEventListener('input', debouncedRender);
     
     // Products Data
     const products = [

@@ -3,91 +3,234 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music Store | Shopping Cart</title>
+    <title>SynthWave Music Store | Vinyl Records & Digital Albums</title>
+    <meta name="description" content="Premium music store for vinyl records, digital albums, and exclusive music merchandise">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="https://img.icons8.com/color/96/000000/headphones.png">
 </head>
 <body>
-    <!-- Header -->
+    <!-- Header & Navigation -->
     <header class="header">
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <i class="fas fa-headphones"></i>
-                    <h1>Music<span>Store</span></h1>
+                    <i class="fas fa-headphones-alt"></i>
+                    <div class="logo-text">
+                        <h1>Synth<span>Wave</span>Music</h1>
+                        <p class="logo-subtitle">Premium Vinyl & Digital</p>
+                    </div>
                 </div>
-                <div class="cart-info">
-                    <div class="cart-icon" id="cartIcon">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span class="cart-count" id="cartCount">0</span>
+                
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="#"><i class="fas fa-record-vinyl"></i> New Releases</a></li>
+                        <li><a href="#"><i class="fas fa-fire"></i> Trending</a></li>
+                        <li><a href="#"><i class="fas fa-gift"></i> Deals</a></li>
+                    </ul>
+                </nav>
+                
+                <div class="header-right">
+                    <div class="user-actions">
+                        <button class="user-btn" id="userBtn">
+                            <i class="fas fa-user"></i>
+                        </button>
+                        <button class="wishlist-btn" id="wishlistBtn">
+                            <i class="fas fa-heart"></i>
+                            <span class="wishlist-count" id="wishlistCount">0</span>
+                        </button>
                     </div>
-                    <div class="cart-total">
-                        Total: <span id="headerTotal">$0.00</span>
+                    
+                    <div class="cart-info">
+                        <div class="cart-icon" id="cartIcon">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-count" id="cartCount">0</span>
+                        </div>
+                        <div class="cart-total">
+                            Total: <span id="headerTotal">$0.00</span>
+                        </div>
                     </div>
+                    
+                    <button class="mobile-menu-btn" id="mobileMenuBtn">
+                        <i class="fas fa-bars"></i>
+                    </button>
                 </div>
             </div>
         </div>
     </header>
 
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav" id="mobileNav">
+        <ul>
+            <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="#"><i class="fas fa-record-vinyl"></i> New Releases</a></li>
+            <li><a href="#"><i class="fas fa-fire"></i> Trending</a></li>
+            <li><a href="#"><i class="fas fa-gift"></i> Deals</a></li>
+            <li><a href="#"><i class="fas fa-user"></i> Account</a></li>
+            <li><a href="#"><i class="fas fa-heart"></i> Wishlist</a></li>
+            <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+        </ul>
+    </nav>
+
     <!-- Main Content -->
     <main class="main">
         <div class="container">
+            <!-- Hero Section -->
+            <section class="hero">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <h2>Limited Edition <span>Vinyl Records</span></h2>
+                        <p>Collect exclusive pressings with retro-futuristic artwork. Free shipping on orders over $50.</p>
+                        <button class="hero-btn" id="exploreBtn">
+                            Explore Collection <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                    <div class="hero-image">
+                        <div class="vinyl-disc">
+                            <div class="vinyl-record">
+                                <div class="vinyl-lines"></div>
+                                <div class="vinyl-center"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stats Bar -->
+            <div class="stats-bar">
+                <div class="stat">
+                    <i class="fas fa-shipping-fast"></i>
+                    <div>
+                        <h4>Free Shipping</h4>
+                        <p>Orders over $50</p>
+                    </div>
+                </div>
+                <div class="stat">
+                    <i class="fas fa-undo-alt"></i>
+                    <div>
+                        <h4>30-Day Returns</h4>
+                        <p>No questions asked</p>
+                    </div>
+                </div>
+                <div class="stat">
+                    <i class="fas fa-shield-alt"></i>
+                    <div>
+                        <h4>Secure Payment</h4>
+                        <p>256-bit encryption</p>
+                    </div>
+                </div>
+                <div class="stat">
+                    <i class="fas fa-headset"></i>
+                    <div>
+                        <h4>24/7 Support</h4>
+                        <p>Music experts</p>
+                    </div>
+                </div>
+            </div>
+
             <div class="layout">
                 <!-- Products Section -->
                 <section class="products-section">
                     <div class="section-header">
-                        <h2><i class="fas fa-music"></i> Browse Albums</h2>
-                        <div class="filters">
-                            <div class="filter-group">
-                                <label for="genreFilter"><i class="fas fa-filter"></i> Genre</label>
-                                <select id="genreFilter">
-                                    <option value="all">All Genres</option>
-                                    <option value="synthwave">Synthwave</option>
-                                    <option value="electronic">Electronic</option>
-                                    <option value="rock">Rock</option>
-                                    <option value="pop">Pop</option>
-                                    <option value="jazz">Jazz</option>
-                                </select>
+                        <h2><i class="fas fa-record-vinyl"></i> Browse Albums</h2>
+                        <div class="controls">
+                            <div class="filters">
+                                <div class="filter-group">
+                                    <label for="genreFilter"><i class="fas fa-filter"></i> Genre</label>
+                                    <select id="genreFilter">
+                                        <option value="all">All Genres</option>
+                                        <option value="synthwave">Synthwave</option>
+                                        <option value="electronic">Electronic</option>
+                                        <option value="retrowave">Retrowave</option>
+                                        <option value="rock">Rock</option>
+                                        <option value="pop">Pop</option>
+                                        <option value="jazz">Jazz</option>
+                                        <option value="ambient">Ambient</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label for="sortFilter"><i class="fas fa-sort"></i> Sort By</label>
+                                    <select id="sortFilter">
+                                        <option value="featured">Featured</option>
+                                        <option value="name">Name A-Z</option>
+                                        <option value="price-low">Price: Low to High</option>
+                                        <option value="price-high">Price: High to Low</option>
+                                        <option value="rating">Highest Rated</option>
+                                        <option value="newest">Newest First</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="filter-group">
-                                <label for="sortFilter"><i class="fas fa-sort"></i> Sort By</label>
-                                <select id="sortFilter">
-                                    <option value="name">Name A-Z</option>
-                                    <option value="price-low">Price: Low to High</option>
-                                    <option value="price-high">Price: High to Low</option>
-                                    <option value="rating">Rating</option>
-                                </select>
-                            </div>
+                            
                             <div class="search-box">
                                 <i class="fas fa-search"></i>
-                                <input type="text" id="searchInput" placeholder="Search albums...">
+                                <input type="text" id="searchInput" placeholder="Search albums, artists...">
+                                <button class="search-btn" id="searchBtn">Search</button>
                             </div>
                         </div>
                     </div>
 
-                    <div class="products-grid" id="productsGrid">
-                        <!-- Products will be dynamically added here -->
+                    <div class="view-toggle">
+                        <button class="view-btn active" data-view="grid">
+                            <i class="fas fa-th"></i> Grid
+                        </button>
+                        <button class="view-btn" data-view="list">
+                            <i class="fas fa-list"></i> List
+                        </button>
+                    </div>
+
+                    <div class="products-container">
+                        <div class="products-grid active" id="productsGrid">
+                            <!-- Products loaded via JavaScript -->
+                        </div>
+                        
+                        <div class="products-list" id="productsList">
+                            <!-- List view loaded via JavaScript -->
+                        </div>
+                    </div>
+
+                    <div class="pagination" id="pagination">
+                        <button class="page-btn prev" id="prevPage">
+                            <i class="fas fa-chevron-left"></i> Previous
+                        </button>
+                        <div class="page-numbers" id="pageNumbers"></div>
+                        <button class="page-btn next" id="nextPage">
+                            Next <i class="fas fa-chevron-right"></i>
+                        </button>
                     </div>
                 </section>
 
                 <!-- Cart Section -->
                 <aside class="cart-section">
-                    <div class="cart-card">
+                    <div class="cart-card sticky">
                         <div class="cart-header">
-                            <h3><i class="fas fa-shopping-cart"></i> Your Cart</h3>
-                            <button class="clear-cart" id="clearCart">
-                                <i class="fas fa-trash"></i> Clear All
-                            </button>
+                            <h3><i class="fas fa-shopping-cart"></i> Shopping Cart</h3>
+                            <div class="cart-actions-top">
+                                <button class="save-cart" id="saveCart">
+                                    <i class="fas fa-save"></i> Save
+                                </button>
+                                <button class="clear-cart" id="clearCart">
+                                    <i class="fas fa-trash"></i> Clear All
+                                </button>
+                            </div>
                         </div>
 
                         <div class="cart-items" id="cartItems">
-                            <!-- Cart items will be dynamically added here -->
+                            <!-- Cart items loaded via JavaScript -->
                             <div class="empty-cart">
                                 <i class="fas fa-shopping-basket"></i>
                                 <p>Your cart is empty</p>
                                 <p class="small">Add some music to get started!</p>
                             </div>
+                        </div>
+
+                        <div class="coupon-section">
+                            <div class="coupon-input">
+                                <input type="text" id="couponCode" placeholder="Enter coupon code">
+                                <button class="apply-coupon" id="applyCoupon">Apply</button>
+                            </div>
+                            <div class="coupon-message" id="couponMessage"></div>
                         </div>
 
                         <div class="cart-summary">
@@ -98,6 +241,10 @@
                             <div class="summary-row">
                                 <span>Shipping</span>
                                 <span id="shipping">$4.99</span>
+                            </div>
+                            <div class="summary-row discount-row">
+                                <span>Discount <span id="discountCode"></span></span>
+                                <span id="discount">-$0.00</span>
                             </div>
                             <div class="summary-row">
                                 <span>Tax (10%)</span>
@@ -117,9 +264,17 @@
                                 </button>
                             </div>
 
+                            <div class="payment-methods">
+                                <i class="fab fa-cc-visa"></i>
+                                <i class="fab fa-cc-mastercard"></i>
+                                <i class="fab fa-cc-amex"></i>
+                                <i class="fab fa-cc-paypal"></i>
+                                <i class="fab fa-cc-apple-pay"></i>
+                            </div>
+                            
                             <div class="security-info">
                                 <i class="fas fa-shield-alt"></i>
-                                <span>Secure payment • 256-bit SSL encryption</span>
+                                <span>256-bit SSL encryption • 30-day return policy</span>
                             </div>
                         </div>
                     </div>
@@ -127,23 +282,16 @@
                     <!-- Featured Albums -->
                     <div class="featured-card">
                         <h4><i class="fas fa-star"></i> Featured Albums</h4>
-                        <div class="featured-list">
-                            <div class="featured-item">
-                                <img src="https://via.placeholder.com/50" alt="Album">
-                                <div>
-                                    <p class="featured-title">Chill Vibes</p>
-                                    <p class="featured-artist">Various Artists</p>
-                                </div>
-                                <span class="featured-price">$19.99</span>
-                            </div>
-                            <div class="featured-item">
-                                <img src="https://via.placeholder.com/50" alt="Album">
-                                <div>
-                                    <p class="featured-title">80s Retro</p>
-                                    <p class="featured-artist">Synth Legends</p>
-                                </div>
-                                <span class="featured-price">$24.99</span>
-                            </div>
+                        <div class="featured-list" id="featuredList">
+                            <!-- Featured items loaded via JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Recently Viewed -->
+                    <div class="recently-viewed-card">
+                        <h4><i class="fas fa-history"></i> Recently Viewed</h4>
+                        <div class="recent-list" id="recentList">
+                            <!-- Recently viewed items loaded via JavaScript -->
                         </div>
                     </div>
                 </aside>
@@ -151,7 +299,68 @@
         </div>
     </main>
 
-    <!-- Modal for Product Details -->
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-headphones-alt"></i>
+                        <h3>Synth<span>Wave</span>Music</h3>
+                    </div>
+                    <p>Curating the finest vinyl records and digital music since 2015. Retro sounds for modern listeners.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-spotify"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#">New Arrivals</a></li>
+                        <li><a href="#">Best Sellers</a></li>
+                        <li><a href="#">Pre-orders</a></li>
+                        <li><a href="#">Limited Editions</a></li>
+                        <li><a href="#">Gift Cards</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="#">Shipping Policy</a></li>
+                        <li><a href="#">Returns & Exchanges</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Track Order</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Newsletter</h4>
+                    <p>Subscribe for exclusive deals and new releases</p>
+                    <div class="newsletter-form">
+                        <input type="email" id="newsletterEmail" placeholder="Your email address">
+                        <button class="subscribe-btn" id="subscribeBtn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    <p class="newsletter-note">By subscribing you agree to our Privacy Policy</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2023 SynthWave Music Store. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+                <p class="credits">Made with <i class="fas fa-heart"></i> by Music Lovers</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Product Modal -->
     <div class="modal" id="productModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -159,15 +368,53 @@
                 <button class="close-modal">&times;</button>
             </div>
             <div class="modal-body" id="modalBody">
-                <!-- Content will be filled dynamically -->
+                <!-- Content loaded via JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="modal checkout-modal" id="checkoutModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-lock"></i> Secure Checkout</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="checkout-success" id="checkoutSuccess">
+                    <i class="fas fa-check-circle"></i>
+                    <h4>Order Confirmed!</h4>
+                    <p>Your order has been placed successfully.</p>
+                    <p class="order-id">Order ID: <span id="orderId">SWM-</span></p>
+                    <p>You will receive a confirmation email shortly.</p>
+                    <button class="continue-shopping" id="continueShopping">
+                        Continue Shopping
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Notification -->
     <div class="notification" id="notification">
-        <i class="fas fa-check-circle"></i>
-        <span id="notificationText">Item added to cart!</span>
+        <div class="notification-content">
+            <i class="fas fa-check-circle" id="notificationIcon"></i>
+            <div class="notification-text">
+                <span id="notificationTitle">Success!</span>
+                <span id="notificationText">Item added to cart!</span>
+            </div>
+        </div>
+        <button class="close-notification">&times;</button>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <div class="vinyl-spinner">
+                <div class="spinner-inner"></div>
+            </div>
+            <p>Loading music catalog...</p>
+        </div>
     </div>
 
     <script src="script.js"></script>

@@ -1,43 +1,601 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Photography Exhibit</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Global Photography Exhibit | Explore World's Beauty</title>
+    <meta name="description" content="An interactive photography exhibit showcasing the world's most beautiful locations. Like, save, and explore stunning photographs.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="https://img.icons8.com/color/96/000000/camera.png">
 </head>
-<body class="bg-gray-100 p-4">
-    <div class="main-container grid grid-cols-3 gap-6">
-        <div class="card rounded-lg p-4 bg-white shadow">
-            <img src="https://cdn.freecodecamp.org/curriculum/labs/colosseo.jpg" alt="Colosseum in Rome" class="rounded-lg mb-4">
-            <div class="subheading font-bold text-xl mb-2">Roman Colosseum</div>
-            <div class="description text-base text-gray-700 mb-4">Ancient Roman amphitheater in the center of Rome, Italy.</div>
-            <div class="flex space-x-2">
-                <button class="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded">Like</button>
-                <button class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded">View Details</button>
+<body>
+    <!-- Header & Navigation -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <i class="fas fa-camera-retro"></i>
+                    <div class="logo-text">
+                        <h1>Global<span>Exhibit</span></h1>
+                        <p class="tagline">World Through Lens</p>
+                    </div>
+                </div>
+                
+                <ul class="nav-links">
+                    <li><a href="#home" class="active"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="#gallery"><i class="fas fa-images"></i> Gallery</a></li>
+                    <li><a href="#categories"><i class="fas fa-tags"></i> Categories</a></li>
+                    <li><a href="#about"><i class="fas fa-info-circle"></i> About</a></li>
+                    <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
+                </ul>
+                
+                <div class="nav-actions">
+                    <div class="user-menu">
+                        <button class="user-btn" id="userBtn">
+                            <i class="fas fa-user"></i>
+                        </button>
+                        <div class="user-dropdown" id="userDropdown">
+                            <a href="#"><i class="fas fa-heart"></i> Liked Photos</a>
+                            <a href="#"><i class="fas fa-bookmark"></i> Saved</a>
+                            <a href="#"><i class="fas fa-upload"></i> Upload</a>
+                            <hr>
+                            <a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </div>
+                    </div>
+                    
+                    <div class="stats">
+                        <div class="stat-item">
+                            <i class="fas fa-heart"></i>
+                            <span id="totalLikes">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-eye"></i>
+                            <span id="totalViews">0</span>
+                        </div>
+                    </div>
+                    
+                    <button class="mobile-menu-btn" id="mobileMenuBtn">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav" id="mobileNav">
+        <ul>
+            <li><a href="#home"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="#gallery"><i class="fas fa-images"></i> Gallery</a></li>
+            <li><a href="#categories"><i class="fas fa-tags"></i> Categories</a></li>
+            <li><a href="#about"><i class="fas fa-info-circle"></i> About</a></li>
+            <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
+            <li><a href="#"><i class="fas fa-heart"></i> Liked Photos</a></li>
+            <li><a href="#"><i class="fas fa-bookmark"></i> Saved</a></li>
+            <li><a href="#"><i class="fas fa-upload"></i> Upload</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h2>Discover the World's <span>Most Beautiful</span> Places</h2>
+                    <p>An interactive photography exhibit showcasing stunning locations from around the globe. Explore, like, and save your favorite shots.</p>
+                    <div class="hero-buttons">
+                        <button class="primary-btn" id="exploreBtn">
+                            Explore Gallery <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <button class="secondary-btn" id="uploadBtn">
+                            <i class="fas fa-cloud-upload-alt"></i> Upload Photo
+                        </button>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="image-frame">
+                        <img src="https://cdn.freecodecamp.org/curriculum/labs/alps.jpg" alt="Swiss Alps" id="heroImage">
+                        <div class="image-overlay">
+                            <div class="image-info">
+                                <h3>Swiss Alps</h3>
+                                <p>Photographer: Alex Johnson</p>
+                                <div class="image-stats">
+                                    <span><i class="fas fa-heart"></i> 1,245</span>
+                                    <span><i class="fas fa-eye"></i> 8,921</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="card rounded-lg p-4 bg-white shadow">
-            <img src="https://cdn.freecodecamp.org/curriculum/labs/alps.jpg" alt="Swiss Alps mountains" class="rounded-lg mb-4">
-            <div class="subheading font-bold text-xl mb-2">Swiss Alps</div>
-            <div class="description text-base text-gray-700 mb-4">Mountain range in Switzerland with beautiful snowy peaks.</div>
-            <div class="flex space-x-2">
-                <button class="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded">Like</button>
-                <button class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded">View Details</button>
-            </div>
-        </div>
-        <div class="card rounded-lg p-4 bg-white shadow">
-            <img src="https://cdn.freecodecamp.org/curriculum/labs/sea.jpg" alt="Beautiful sea coast" class="rounded-lg mb-4">
-            <div class="subheading font-bold text-xl mb-2">Mediterranean Coast</div>
-            <div class="description text-base text-gray-700 mb-4">Coastal view of the Mediterranean Sea with clear blue water.</div>
-            <div class="flex space-x-2">
-                <button class="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded">Like</button>
-                <button class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded">View Details</button>
+    </section>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-mountain"></i>
+                    <div>
+                        <h3>2,847</h3>
+                        <p>Photos Uploaded</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-globe-americas"></i>
+                    <div>
+                        <h3>142</h3>
+                        <p>Countries Covered</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-users"></i>
+                    <div>
+                        <h3>15,328</h3>
+                        <p>Active Photographers</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-award"></i>
+                    <div>
+                        <h3>382</h3>
+                        <p>Awards Won</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- Main Gallery Section -->
+    <main class="main-content" id="gallery">
+        <div class="container">
+            <!-- Gallery Controls -->
+            <div class="gallery-controls">
+                <div class="controls-left">
+                    <h2><i class="fas fa-images"></i> Photography Exhibit</h2>
+                    <p class="subtitle">Explore stunning photographs from around the world</p>
+                </div>
+                
+                <div class="controls-right">
+                    <div class="filter-group">
+                        <label for="categoryFilter"><i class="fas fa-filter"></i> Category</label>
+                        <select id="categoryFilter">
+                            <option value="all">All Categories</option>
+                            <option value="landscape">Landscape</option>
+                            <option value="architecture">Architecture</option>
+                            <option value="nature">Nature</option>
+                            <option value="urban">Urban</option>
+                            <option value="wildlife">Wildlife</option>
+                            <option value="seascape">Seascape</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="sortFilter"><i class="fas fa-sort"></i> Sort By</label>
+                        <select id="sortFilter">
+                            <option value="featured">Featured</option>
+                            <option value="newest">Newest</option>
+                            <option value="popular">Most Popular</option>
+                            <option value="likes">Most Likes</option>
+                        </select>
+                    </div>
+                    
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Search photos...">
+                        <button id="searchBtn">Search</button>
+                    </div>
+                    
+                    <div class="view-toggle">
+                        <button class="view-btn active" data-view="grid">
+                            <i class="fas fa-th"></i>
+                        </button>
+                        <button class="view-btn" data-view="list">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gallery Grid -->
+            <div class="gallery-container">
+                <div class="gallery-grid" id="galleryGrid">
+                    <!-- Photo cards will be loaded dynamically via JavaScript -->
+                </div>
+                
+                <div class="gallery-list hidden" id="galleryList">
+                    <!-- List view will be loaded dynamically via JavaScript -->
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="pagination">
+                <button class="page-btn prev" id="prevPage">
+                    <i class="fas fa-chevron-left"></i> Previous
+                </button>
+                <div class="page-numbers" id="pageNumbers"></div>
+                <button class="page-btn next" id="nextPage">
+                    Next <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+
+            <!-- Categories Section -->
+            <section class="categories-section" id="categories">
+                <h2><i class="fas fa-tags"></i> Browse by Category</h2>
+                <p class="section-subtitle">Explore photos by specific categories</p>
+                
+                <div class="categories-grid">
+                    <div class="category-card" data-category="landscape">
+                        <div class="category-icon">
+                            <i class="fas fa-mountain"></i>
+                        </div>
+                        <h3>Landscape</h3>
+                        <p>1,245 photos</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="architecture">
+                        <div class="category-icon">
+                            <i class="fas fa-landmark"></i>
+                        </div>
+                        <h3>Architecture</h3>
+                        <p>892 photos</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="nature">
+                        <div class="category-icon">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <h3>Nature</h3>
+                        <p>1,532 photos</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="urban">
+                        <div class="category-icon">
+                            <i class="fas fa-city"></i>
+                        </div>
+                        <h3>Urban</h3>
+                        <p>743 photos</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="wildlife">
+                        <div class="category-icon">
+                            <i class="fas fa-paw"></i>
+                        </div>
+                        <h3>Wildlife</h3>
+                        <p>621 photos</p>
+                    </div>
+                    
+                    <div class="category-card" data-category="seascape">
+                        <div class="category-icon">
+                            <i class="fas fa-water"></i>
+                        </div>
+                        <h3>Seascape</h3>
+                        <p>457 photos</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Featured Photographers -->
+    <section class="photographers-section">
+        <div class="container">
+            <h2><i class="fas fa-camera"></i> Featured Photographers</h2>
+            <p class="section-subtitle">Meet the talented photographers behind these amazing shots</p>
+            
+            <div class="photographers-grid">
+                <div class="photographer-card">
+                    <div class="photographer-avatar">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Michael Chen">
+                    </div>
+                    <h3>Michael Chen</h3>
+                    <p class="specialty">Landscape & Nature</p>
+                    <div class="photographer-stats">
+                        <span><i class="fas fa-images"></i> 342 photos</span>
+                        <span><i class="fas fa-heart"></i> 12.5k likes</span>
+                    </div>
+                    <button class="follow-btn">Follow</button>
+                </div>
+                
+                <div class="photographer-card">
+                    <div class="photographer-avatar">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah Johnson">
+                    </div>
+                    <h3>Sarah Johnson</h3>
+                    <p class="specialty">Urban & Architecture</p>
+                    <div class="photographer-stats">
+                        <span><i class="fas fa-images"></i> 287 photos</span>
+                        <span><i class="fas fa-heart"></i> 9.8k likes</span>
+                    </div>
+                    <button class="follow-btn">Follow</button>
+                </div>
+                
+                <div class="photographer-card">
+                    <div class="photographer-avatar">
+                        <img src="https://randomuser.me/api/portraits/men/65.jpg" alt="David Rodriguez">
+                    </div>
+                    <h3>David Rodriguez</h3>
+                    <p class="specialty">Wildlife</p>
+                    <div class="photographer-stats">
+                        <span><i class="fas fa-images"></i> 198 photos</span>
+                        <span><i class="fas fa-heart"></i> 15.2k likes</span>
+                    </div>
+                    <button class="follow-btn">Follow</button>
+                </div>
+                
+                <div class="photographer-card">
+                    <div class="photographer-avatar">
+                        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Emma Wilson">
+                    </div>
+                    <h3>Emma Wilson</h3>
+                    <p class="specialty">Seascape & Adventure</p>
+                    <div class="photographer-stats">
+                        <span><i class="fas fa-images"></i> 412 photos</span>
+                        <span><i class="fas fa-heart"></i> 21.7k likes</span>
+                    </div>
+                    <button class="follow-btn">Follow</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section" id="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2><i class="fas fa-info-circle"></i> About Global Exhibit</h2>
+                    <p>Global Exhibit is a curated photography platform showcasing the world's most beautiful locations through the lenses of talented photographers from around the globe. Our mission is to inspire travel, appreciation for nature, and cultural understanding through stunning visual storytelling.</p>
+                    <p>Founded in 2015, we've grown to become one of the largest online photography communities, with contributors from over 140 countries and millions of visitors each month.</p>
+                    
+                    <div class="features">
+                        <div class="feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Curated quality photos</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Photographer credits</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>High-resolution downloads</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Weekly photo challenges</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <div class="image-stack">
+                        <div class="stacked-img img1">
+                            <img src="https://cdn.freecodecamp.org/curriculum/labs/colosseo.jpg" alt="Colosseum">
+                        </div>
+                        <div class="stacked-img img2">
+                            <img src="https://cdn.freecodecamp.org/curriculum/labs/sea.jpg" alt="Mediterranean Coast">
+                        </div>
+                        <div class="stacked-img img3">
+                            <img src="https://cdn.freecodecamp.org/curriculum/labs/alps.jpg" alt="Swiss Alps">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-camera-retro"></i>
+                        <h3>Global<span>Exhibit</span></h3>
+                    </div>
+                    <p>Discover the world's beauty through photography. Join our community of photographers and explorers.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-pinterest"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#gallery">Gallery</a></li>
+                        <li><a href="#categories">Categories</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#">Submit Photo</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Photography Tips</a></li>
+                        <li><a href="#">Camera Gear Guide</a></li>
+                        <li><a href="#">Editing Tutorials</a></li>
+                        <li><a href="#">Community Guidelines</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Newsletter</h4>
+                    <p>Subscribe to get weekly featured photos and photography tips</p>
+                    <div class="newsletter-form">
+                        <input type="email" id="newsletterEmail" placeholder="Your email address">
+                        <button class="subscribe-btn" id="subscribeBtn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    <p class="newsletter-note">By subscribing you agree to our Privacy Policy</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2023 Global Photography Exhibit. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+                <p class="credits">Made with <i class="fas fa-heart"></i> for photography lovers</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lightbox Modal -->
+    <div class="lightbox-modal" id="lightboxModal">
+        <div class="lightbox-content">
+            <button class="close-lightbox">&times;</button>
+            <div class="lightbox-body">
+                <div class="lightbox-image-container">
+                    <img id="lightboxImage" src="" alt="">
+                    <div class="lightbox-nav">
+                        <button class="lightbox-prev"><i class="fas fa-chevron-left"></i></button>
+                        <button class="lightbox-next"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+                <div class="lightbox-info">
+                    <h3 id="lightboxTitle"></h3>
+                    <p class="lightbox-photographer" id="lightboxPhotographer"></p>
+                    <p class="lightbox-description" id="lightboxDescription"></p>
+                    
+                    <div class="lightbox-stats">
+                        <div class="stat">
+                            <i class="fas fa-heart"></i>
+                            <span id="lightboxLikes">0</span>
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-eye"></i>
+                            <span id="lightboxViews">0</span>
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-calendar"></i>
+                            <span id="lightboxDate">Today</span>
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span id="lightboxLocation">Unknown</span>
+                        </div>
+                    </div>
+                    
+                    <div class="lightbox-actions">
+                        <button class="like-btn" id="lightboxLikeBtn">
+                            <i class="fas fa-heart"></i> Like
+                        </button>
+                        <button class="save-btn" id="lightboxSaveBtn">
+                            <i class="fas fa-bookmark"></i> Save
+                        </button>
+                        <button class="share-btn" id="lightboxShareBtn">
+                            <i class="fas fa-share-alt"></i> Share
+                        </button>
+                        <button class="download-btn" id="lightboxDownloadBtn">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                    </div>
+                    
+                    <div class="lightbox-tags" id="lightboxTags"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Modal -->
+    <div class="upload-modal" id="uploadModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-cloud-upload-alt"></i> Upload Photo</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="upload-area" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Drag & drop your photo here</p>
+                    <p class="upload-note">or click to browse</p>
+                    <input type="file" id="fileInput" accept="image/*" hidden>
+                    <button class="browse-btn" id="browseBtn">Browse Files</button>
+                    <p class="file-types">Supports: JPG, PNG, WebP up to 10MB</p>
+                </div>
+                
+                <div class="upload-form hidden" id="uploadForm">
+                    <div class="form-group">
+                        <label for="photoTitle">Photo Title</label>
+                        <input type="text" id="photoTitle" placeholder="Enter a descriptive title">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="photoDescription">Description</label>
+                        <textarea id="photoDescription" placeholder="Describe your photo, location, story..."></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="photoCategory">Category</label>
+                            <select id="photoCategory">
+                                <option value="landscape">Landscape</option>
+                                <option value="architecture">Architecture</option>
+                                <option value="nature">Nature</option>
+                                <option value="urban">Urban</option>
+                                <option value="wildlife">Wildlife</option>
+                                <option value="seascape">Seascape</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="photoLocation">Location</label>
+                            <input type="text" id="photoLocation" placeholder="Where was this taken?">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="photoTags">Tags (comma separated)</label>
+                        <input type="text" id="photoTags" placeholder="nature, mountain, sunset, etc.">
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button class="cancel-btn" id="cancelUpload">Cancel</button>
+                        <button class="submit-btn" id="submitUpload">Submit Photo</button>
+                    </div>
+                </div>
+                
+                <div class="upload-preview hidden" id="uploadPreview">
+                    <div class="preview-image">
+                        <img id="previewImg" src="" alt="Preview">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <div class="notification-content">
+            <i class="fas fa-check-circle" id="notificationIcon"></i>
+            <div class="notification-text">
+                <span id="notificationTitle">Success!</span>
+                <span id="notificationMessage">Operation completed successfully</span>
+            </div>
+        </div>
+        <button class="close-notification">&times;</button>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <div class="spinner">
+                <div class="camera-icon">
+                    <i class="fas fa-camera"></i>
+                </div>
+            </div>
+            <p>Loading photos...</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
-
-

@@ -9,6 +9,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Toast Notification Container -->
+    <div id="toastContainer"></div>
+    
     <div class="container">
         <!-- Header -->
         <header class="header">
@@ -63,21 +66,21 @@
                             <div class="form-group">
                                 <label for="guests"><i class="fas fa-users"></i> Number of Guests</label>
                                 <div class="number-input">
-                                    <button type="button" class="number-btn" data-action="decrease">-</button>
+                                    <button type="button" class="number-btn" data-action="decrease" aria-label="Decrease guest count">-</button>
                                     <input type="number" id="guests" min="1" max="10" value="1" readonly>
-                                    <button type="button" class="number-btn" data-action="increase">+</button>
+                                    <button type="button" class="number-btn" data-action="increase" aria-label="Increase guest count">+</button>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="status"><i class="fas fa-calendar-alt"></i> Attendance Status *</label>
                                 <div class="status-buttons">
-                                    <button type="button" class="status-btn active" data-status="attending">
+                                    <button type="button" class="status-btn active" data-status="attending" aria-label="Attending">
                                         <i class="fas fa-check"></i> Attending
                                     </button>
-                                    <button type="button" class="status-btn" data-status="maybe">
+                                    <button type="button" class="status-btn" data-status="maybe" aria-label="Maybe attending">
                                         <i class="fas fa-question"></i> Maybe
                                     </button>
-                                    <button type="button" class="status-btn" data-status="not-attending">
+                                    <button type="button" class="status-btn" data-status="not-attending" aria-label="Not attending">
                                         <i class="fas fa-times"></i> Can't Attend
                                     </button>
                                 </div>
@@ -162,6 +165,14 @@
                                 <option value="not-attending">Can't Attend</option>
                             </select>
                         </div>
+                        <div class="sort-dropdown">
+                            <select id="sortGuests">
+                                <option value="newest">Newest First</option>
+                                <option value="oldest">Oldest First</option>
+                                <option value="name-asc">Name (A-Z)</option>
+                                <option value="name-desc">Name (Z-A)</option>
+                            </select>
+                        </div>
                         <button id="exportBtn" class="export-btn">
                             <i class="fas fa-download"></i> Export List
                         </button>
@@ -176,6 +187,12 @@
                         <p>Be the first to RSVP to this event!</p>
                     </div>
                 </div>
+                
+                <!-- Loading Spinner -->
+                <div class="loading-spinner" id="loadingSpinner" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Loading guests...</p>
+                </div>
             </div>
         </main>
 
@@ -187,9 +204,15 @@
                     <p>A modern event management tool built with vanilla JavaScript.</p>
                 </div>
                 <div class="footer-links">
-                    <a href="#"><i class="fas fa-share-alt"></i> Share Event</a>
-                    <a href="#"><i class="fas fa-question-circle"></i> Help</a>
-                    <a href="#"><i class="fas fa-envelope"></i> Contact Host</a>
+                    <button id="shareBtnFooter" class="share-btn">
+                        <i class="fas fa-share-alt"></i> Share Event
+                    </button>
+                    <button id="backupBtn" class="backup-btn">
+                        <i class="fas fa-database"></i> Backup Data
+                    </button>
+                    <button id="clearBtn" class="clear-btn">
+                        <i class="fas fa-trash"></i> Clear All
+                    </button>
                 </div>
             </div>
             <div class="footer-bottom">
@@ -203,7 +226,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3><i class="fas fa-check-circle"></i> RSVP Submitted!</h3>
-                <button class="close-modal">&times;</button>
+                <button class="close-modal" aria-label="Close modal">&times;</button>
             </div>
             <div class="modal-body">
                 <p>Thank you for your RSVP! Your response has been recorded.</p>
@@ -214,6 +237,69 @@
                 <button class="btn-primary" id="shareBtn">
                     <i class="fas fa-share"></i> Share Event
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-content">
+            <div class="modal-header" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+                <h3><i class="fas fa-exclamation-triangle"></i> Confirm Delete</h3>
+                <button class="close-modal" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to remove this guest from the list?</p>
+                <div class="delete-details" id="deleteDetails"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelDeleteBtn">Cancel</button>
+                <button class="btn-danger" id="confirmDeleteBtn">
+                    <i class="fas fa-trash"></i> Delete
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Backup/Restore Modal -->
+    <div class="modal" id="backupModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-database"></i> Data Management</h3>
+                <button class="close-modal" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="backup-options">
+                    <div class="backup-section">
+                        <h4><i class="fas fa-download"></i> Backup Data</h4>
+                        <p>Export all guest data as a JSON file.</p>
+                        <button class="btn-primary" id="exportJsonBtn">
+                            <i class="fas fa-file-export"></i> Export JSON
+                        </button>
+                    </div>
+                    
+                    <div class="backup-section">
+                        <h4><i class="fas fa-upload"></i> Restore Data</h4>
+                        <p>Import guest data from a JSON file.</p>
+                        <div class="file-input">
+                            <input type="file" id="importFile" accept=".json">
+                            <label for="importFile" class="btn-secondary">
+                                <i class="fas fa-file-import"></i> Choose File
+                            </label>
+                        </div>
+                        <button class="btn-secondary" id="importBtn" disabled>
+                            <i class="fas fa-upload"></i> Import Data
+                        </button>
+                    </div>
+                    
+                    <div class="backup-section">
+                        <h4><i class="fas fa-trash-alt"></i> Clear All Data</h4>
+                        <p>Remove all guests from the system.</p>
+                        <button class="btn-danger" id="clearAllBtn">
+                            <i class="fas fa-broom"></i> Clear All Guests
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
