@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Frontend Projects</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 30px; }
+        .container { background: white; max-width: 1200px; margin: 0 auto; border-radius: 20px; padding: 40px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        h1 { color: #2d3436; text-align: center; margin-bottom: 40px; }
+        .projects { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
+        .project-card { background: #f8f9fa; border-radius: 15px; padding: 25px; border-left: 5px solid #6c5ce7; }
+        .project-card h3 { color: #2d3436; margin-bottom: 10px; }
+        .project-card p { color: #636e72; margin-bottom: 15px; }
+        .btn { display: inline-block; background: #6c5ce7; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold; transition: 0.3s; }
+        .btn:hover { background: #5b4fcf; transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>My Frontend Projects Portfolio</h1>
+        <div class="projects">
+            <!-- Folosește EXACT numele folderelor din captura ta -->
+            <div class="project-card">
+                <h3>Currency Converter</h3>
+                <p>Convertor de valută cu rate în timp real.</p>
+                <a href="Currency-Converter/index.html" class="btn">View Project</a>
+            </div>
+            <div class="project-card">
+                <h3>Event RSVP</h3>
+                <p>Sistem de confirmare participare evenimente.</p>
+                <a href="Event-rsvp/index.html" class="btn">View Project</a>
+            </div>
+            <div class="project-card">
+                <h3>Music Shopping Cart</h3>
+                <p>Coș de cumpărături pentru magazin muzical.</p>
+                <a href="Music-shopping-cart-page/index.html" class="btn">View Project</a>
+            </div>
+            <div class="project-card">
+                <h3>Photography Exhibit</h3>
+                <p>Expoziție foto interactivă.</p>
+                <a href="Lab-photography-exibit/index.html" class="btn">View Project</a>
+            </div>
+            <div class="project-card">
+                <h3>Tic Tac Toe Game</h3>
+                <p>Joc clasic X și O cu AI.</p>
+                <a href="Tic-Tac-Toe-Game/index.html" class="btn">View Project</a>
+            </div>
+            <div class="project-card">
+                <h3>Lab Music Cart</h3>
+                <p>Alt coș de cumpărături pentru exercițiu.</p>
+                <a href="Lab-music-shopping-cart-page/index.html" class="btn">View Project</a>
+            </div>
+        </div>
+        <p style="margin-top: 40px; text-align: center; color: #636e72;">
+            <strong>GitHub Repository:</strong> 
+            <a href="https://github.com/LupasteanRaoul/frontend-projects" target="_blank">
+                github.com/LupasteanRaoul/frontend-projects
+            </a>
+        </p>
+    </div>
+</body>
+</html>
