@@ -1,28 +1,41 @@
-# 🚀 Frontend Projects Portfolio
+# 🚀 Portofoliu Frontend - Proiecte Interactive
 
-## 🌐 Live Demo
-[View Live Portfolio](https://lupasteanraoul.github.io/frontend-projects/)
+![GitHub](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![GitHub](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![GitHub](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![GitHub](https://img.shields.io/badge/GitHub_Pages-222222?style=for-the-badge&logo=githubpages&logoColor=white)
+![GitHub](https://img.shields.io/badge/Responsive-Yes-brightgreen?style=for-the-badge)
 
-## 📋 Projects Overview
+## 🌐 Demo Live
+**👉 [Vezi Portofoliul Live](https://lupasteanraoul.github.io/my-frontend-projects/)**
 
-| # | Project | Technologies | Status | Live Demo |
-|---|---------|--------------|---------|-----------|
-| 1 | JavaScript Calculator | HTML, CSS, JS | ✅ Complete | [View](project-1-js-calculator) |
-| 2 | Weather App | HTML, CSS, JS, API | 🔄 In Progress | Coming Soon |
-| 3 | Quiz Game | HTML, CSS, JS | 🔄 In Progress | Coming Soon |
-| 4 | Todo List App | HTML, CSS, JS | 🔄 In Progress | Coming Soon |
-| 5 | Pomodoro Timer | HTML, CSS, JS | 🔄 In Progress | Coming Soon |
-| 6 | Memory Game | HTML, CSS, JS | 🔄 In Progress | Coming Soon |
+## 📋 Proiecte Include
 
-## 🛠️ Setup
-Each project is self-contained. Open the `index.html` file in any browser.
+| Proiect | Tehnologii | Descriere |
+|---------|-----------|-----------|
+| **Currency Converter** | JavaScript, API | Convertor valută cu rate live |
+| **Event RSVP System** | HTML5, LocalStorage | Sistem de gestionare evenimente |
+| **Music Shopping Cart** | JavaScript, UI/UX | Coș de cumpărături pentru magazin muzical |
+| **Photography Exhibit** | CSS Grid, Animations | Galerie foto interactivă |
+| **Tic Tac Toe Game** | Game Logic, AI | Joc X și O cu inteligență artificială |
+| **Lab Music Cart** | JavaScript, Design | Versiune alternativă coș cumpărături |
 
-## 📬 Contact
-LupasteanRaoul - lupasteanraul@gmail.com
+## 🛠️ Tehnologii
 
----
+- **HTML5** - Structură semantică
+- **CSS3** - Stilizare modernă, Grid, Flexbox
+- **JavaScript (ES6+)** - Logică interactivă
+- **GitHub Pages** - Hosting gratuit
+- **Font Awesome** - Icoane
+- **Google Fonts** - Tipografie
 
-## 📊 Repository Stats
-![GitHub last commit](https://img.shields.io/github/last-commit/LupasteanRaoul/frontend-projects)
-![GitHub repo size](https://img.shields.io/github/repo-size/LupasteanRaoul/frontend-projects)
-![GitHub repo size](https://img.shields.io/github/repo-size/LupasteanRaoul/frontend-projects)
+## 🚀 Cum să Rulezi Local
+
+```bash
+# Clonează repository-ul
+git clone https://github.com/LupasteanRaoul/my-frontend-projects.git
+
+# Deschide în browser
+open index.html
+# SAU
+python -m http.server 8000
