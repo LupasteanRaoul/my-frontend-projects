@@ -1,32 +1,223 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>Event RSVP</title>
-    <link rel="stylesheet" href="styles.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.development.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.development.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.26.5/babel.min.js"></script>
-    <script
-      data-plugins="transform-modules-umd"
-      type="text/babel"
-      src="index.jsx"
-    ></script>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event RSVP Manager | Modern Event Management</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-calendar-check"></i> Event RSVP Manager</h1>
+                <p class="subtitle">Manage your event attendees with style and efficiency</p>
+                <div class="event-stats">
+                    <div class="stat">
+                        <i class="fas fa-users"></i>
+                        <div>
+                            <span class="stat-number" id="totalAttendees">0</span>
+                            <span class="stat-label">Total Attendees</span>
+                        </div>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <span class="stat-number" id="confirmedCount">0</span>
+                            <span class="stat-label">Confirmed</span>
+                        </div>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <span class="stat-number" id="maybeCount">0</span>
+                            <span class="stat-label">Maybe</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
 
-  <body>
-    <div id="root"></div>
-    <script
-      data-plugins="transform-modules-umd"
-      type="text/babel"
-      data-presets="react"
-      data-type="module"
-    >
-      import { EventRSVPForm } from './index.jsx';
-      ReactDOM.createRoot(document.getElementById('root')).render(
-        <EventRSVPForm />
-      );
-    </script>
-  </body>
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="form-section">
+                <!-- RSVP Form -->
+                <div class="form-card">
+                    <h2><i class="fas fa-user-plus"></i> Submit Your RSVP</h2>
+                    <form id="rsvpForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="fullName"><i class="fas fa-user"></i> Full Name *</label>
+                                <input type="text" id="fullName" required placeholder="Enter your full name">
+                            </div>
+                            <div class="form-group">
+                                <label for="email"><i class="fas fa-envelope"></i> Email Address *</label>
+                                <input type="email" id="email" required placeholder="your@email.com">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="guests"><i class="fas fa-users"></i> Number of Guests</label>
+                                <div class="number-input">
+                                    <button type="button" class="number-btn" data-action="decrease">-</button>
+                                    <input type="number" id="guests" min="1" max="10" value="1" readonly>
+                                    <button type="button" class="number-btn" data-action="increase">+</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="status"><i class="fas fa-calendar-alt"></i> Attendance Status *</label>
+                                <div class="status-buttons">
+                                    <button type="button" class="status-btn active" data-status="attending">
+                                        <i class="fas fa-check"></i> Attending
+                                    </button>
+                                    <button type="button" class="status-btn" data-status="maybe">
+                                        <i class="fas fa-question"></i> Maybe
+                                    </button>
+                                    <button type="button" class="status-btn" data-status="not-attending">
+                                        <i class="fas fa-times"></i> Can't Attend
+                                    </button>
+                                </div>
+                                <input type="hidden" id="status" value="attending" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="dietary"><i class="fas fa-utensils"></i> Dietary Preferences</label>
+                            <textarea id="dietary" rows="3" placeholder="Any dietary restrictions? (vegetarian, gluten-free, allergies, etc.)"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message"><i class="fas fa-comment"></i> Message to Host (Optional)</label>
+                            <textarea id="message" rows="2" placeholder="Leave a message for the event host..."></textarea>
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                            <input type="checkbox" id="newsletter" checked>
+                            <label for="newsletter">
+                                <i class="fas fa-bell"></i> Receive event updates and reminders
+                            </label>
+                        </div>
+
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-paper-plane"></i> Submit RSVP
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Event Details -->
+                <div class="info-card">
+                    <h3><i class="fas fa-info-circle"></i> Event Information</h3>
+                    <div class="event-details">
+                        <div class="detail">
+                            <i class="fas fa-calendar-day"></i>
+                            <div>
+                                <strong>Date & Time</strong>
+                                <p>June 15, 2024 | 7:00 PM - 11:00 PM</p>
+                            </div>
+                        </div>
+                        <div class="detail">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <strong>Location</strong>
+                                <p>Grand Conference Center, Downtown</p>
+                                <a href="#" class="map-link">View on Map <i class="fas fa-external-link-alt"></i></a>
+                            </div>
+                        </div>
+                        <div class="detail">
+                            <i class="fas fa-tags"></i>
+                            <div>
+                                <strong>Event Type</strong>
+                                <p>Networking Mixer & Tech Talk</p>
+                            </div>
+                        </div>
+                        <div class="detail">
+                            <i class="fas fa-user-tie"></i>
+                            <div>
+                                <strong>Host</strong>
+                                <p>Tech Community Association</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Guest List -->
+            <div class="guest-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-list-alt"></i> Guest List</h2>
+                    <div class="controls">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchGuests" placeholder="Search guests...">
+                        </div>
+                        <div class="filter-dropdown">
+                            <select id="statusFilter">
+                                <option value="all">All Statuses</option>
+                                <option value="attending">Attending</option>
+                                <option value="maybe">Maybe</option>
+                                <option value="not-attending">Can't Attend</option>
+                            </select>
+                        </div>
+                        <button id="exportBtn" class="export-btn">
+                            <i class="fas fa-download"></i> Export List
+                        </button>
+                    </div>
+                </div>
+
+                <div class="guest-list" id="guestList">
+                    <!-- Guest cards will be inserted here by JavaScript -->
+                    <div class="empty-state">
+                        <i class="fas fa-user-friends"></i>
+                        <h3>No guests yet</h3>
+                        <p>Be the first to RSVP to this event!</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <h3><i class="fas fa-calendar-check"></i> Event RSVP Manager</h3>
+                    <p>A modern event management tool built with vanilla JavaScript.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#"><i class="fas fa-share-alt"></i> Share Event</a>
+                    <a href="#"><i class="fas fa-question-circle"></i> Help</a>
+                    <a href="#"><i class="fas fa-envelope"></i> Contact Host</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; <span id="currentYear"></span> Event Management System. All RSVPs are stored locally in your browser.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal" id="confirmationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-check-circle"></i> RSVP Submitted!</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Thank you for your RSVP! Your response has been recorded.</p>
+                <div class="confirmation-details" id="confirmationDetails"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="closeModalBtn">Close</button>
+                <button class="btn-primary" id="shareBtn">
+                    <i class="fas fa-share"></i> Share Event
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
 </html>
