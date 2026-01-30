@@ -25,3 +25,4 @@ LupasteanRaoul - lupasteanraul@gmail.com
 ## 📊 Repository Stats
 ![GitHub last commit](https://img.shields.io/github/last-commit/LupasteanRaoul/frontend-projects)
 ![GitHub repo size](https://img.shields.io/github/repo-size/LupasteanRaoul/frontend-projects)
+![GitHub repo size](https://img.shields.io/github/repo-size/LupasteanRaoul/frontend-projects)
