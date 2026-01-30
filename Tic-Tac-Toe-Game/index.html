@@ -1,32 +1,291 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>Advanced Tic-Tac-Toe</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Advanced Tic-Tac-Toe game with AI opponent built with React">
-    <link rel="stylesheet" href="./styles.css" />
+    <title>Tic-Tac-Toe Game</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            color: white;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+        
+        .subtitle {
+            color: #a9b7c6;
+            margin-bottom: 30px;
+        }
+        
+        .status {
+            color: white;
+            font-size: 1.5rem;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 30px auto;
+            max-width: 300px;
+        }
+        
+        .cell {
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            font-size: 2.5rem;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .cell:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .cell.x {
+            color: #667eea;
+        }
+        
+        .cell.o {
+            color: #f5576c;
+        }
+        
+        .winning {
+            background: #f6d365 !important;
+            color: #333 !important;
+        }
+        
+        button {
+            padding: 12px 25px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 10px;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #764ba2;
+        }
+        
+        .score {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            color: white;
+        }
+        
+        .score-item {
+            text-align: center;
+        }
+        
+        .score-value {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            color: #a9b7c6;
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
 <body>
-    <div id="root"></div>
-    
-    <!-- Load React and ReactDOM -->
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    
-    <!-- Load Babel for JSX transformation -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    
-    <!-- Main App Script -->
-    <script type="text/babel" data-type="module">
-        // Import Board component from external file
-        import { Board } from './script.js';
+    <div class="container">
+        <h1><i class="fas fa-gamepad"></i> Tic-Tac-Toe</h1>
+        <div class="subtitle">A simple and fun game</div>
         
-        // Render the app
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<Board />);
+        <div class="status" id="status">Player X's turn</div>
+        
+        <div class="score">
+            <div class="score-item">
+                <div>X Wins</div>
+                <div class="score-value" id="scoreX">0</div>
+            </div>
+            <div class="score-item">
+                <div>Draws</div>
+                <div class="score-value" id="scoreDraw">0</div>
+            </div>
+            <div class="score-item">
+                <div>O Wins</div>
+                <div class="score-value" id="scoreO">0</div>
+            </div>
+        </div>
+        
+        <div class="board" id="board">
+            <div class="cell" data-index="0"></div>
+            <div class="cell" data-index="1"></div>
+            <div class="cell" data-index="2"></div>
+            <div class="cell" data-index="3"></div>
+            <div class="cell" data-index="4"></div>
+            <div class="cell" data-index="5"></div>
+            <div class="cell" data-index="6"></div>
+            <div class="cell" data-index="7"></div>
+            <div class="cell" data-index="8"></div>
+        </div>
+        
+        <div>
+            <button onclick="resetGame()"><i class="fas fa-redo"></i> New Game</button>
+            <button onclick="resetScore()"><i class="fas fa-trash"></i> Reset Score</button>
+        </div>
+        
+        <div class="footer">
+            <p>Made with <i class="fas fa-heart" style="color: #f5576c;"></i> by Raoul Lupastean</p>
+            <p><a href="https://github.com/LupasteanRaoul" target="_blank" style="color: #667eea;">
+                <i class="fab fa-github"></i> GitHub
+            </a></p>
+        </div>
+    </div>
+
+    <script>
+        let currentPlayer = 'X';
+        let gameBoard = ['', '', '', '', '', '', '', '', ''];
+        let gameActive = true;
+        let scores = { X: 0, O: 0, draw: 0 };
+        
+        // Load scores from localStorage
+        if (localStorage.getItem('ticTacToeScores')) {
+            scores = JSON.parse(localStorage.getItem('ticTacToeScores'));
+            updateScoreDisplay();
+        }
+        
+        const winPatterns = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6]
+        ];
+        
+        // Add click events to cells
+        document.querySelectorAll('.cell').forEach(cell => {
+            cell.addEventListener('click', handleCellClick);
+        });
+        
+        function handleCellClick(e) {
+            if (!gameActive) return;
+            
+            const index = parseInt(e.target.getAttribute('data-index'));
+            
+            if (gameBoard[index] !== '') return;
+            
+            // Make move
+            gameBoard[index] = currentPlayer;
+            e.target.textContent = currentPlayer;
+            e.target.classList.add(currentPlayer.toLowerCase());
+            
+            // Check for win
+            const winner = checkWinner();
+            if (winner) {
+                gameActive = false;
+                scores[currentPlayer]++;
+                updateScoreDisplay();
+                saveScores();
+                document.getElementById('status').textContent = `Player ${currentPlayer} Wins!`;
+                highlightWinningCells(winner);
+                return;
+            }
+            
+            // Check for draw
+            if (!gameBoard.includes('')) {
+                gameActive = false;
+                scores.draw++;
+                updateScoreDisplay();
+                saveScores();
+                document.getElementById('status').textContent = "It's a Draw!";
+                return;
+            }
+            
+            // Switch player
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            document.getElementById('status').textContent = `Player ${currentPlayer}'s turn`;
+        }
+        
+        function checkWinner() {
+            for (let pattern of winPatterns) {
+                const [a, b, c] = pattern;
+                if (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
+                    return pattern;
+                }
+            }
+            return null;
+        }
+        
+        function highlightWinningCells(pattern) {
+            pattern.forEach(index => {
+                const cell = document.querySelector(`.cell[data-index="${index}"]`);
+                cell.classList.add('winning');
+            });
+        }
+        
+        function resetGame() {
+            gameBoard = ['', '', '', '', '', '', '', '', ''];
+            gameActive = true;
+            currentPlayer = 'X';
+            document.getElementById('status').textContent = "Player X's turn";
+            
+            document.querySelectorAll('.cell').forEach(cell => {
+                cell.textContent = '';
+                cell.classList.remove('x', 'o', 'winning');
+            });
+        }
+        
+        function resetScore() {
+            scores = { X: 0, O: 0, draw: 0 };
+            updateScoreDisplay();
+            localStorage.removeItem('ticTacToeScores');
+        }
+        
+        function updateScoreDisplay() {
+            document.getElementById('scoreX').textContent = scores.X;
+            document.getElementById('scoreO').textContent = scores.O;
+            document.getElementById('scoreDraw').textContent = scores.draw;
+        }
+        
+        function saveScores() {
+            localStorage.setItem('ticTacToeScores', JSON.stringify(scores));
+        }
+        
+        // Initialize
+        updateScoreDisplay();
     </script>
 </body>
 </html>
