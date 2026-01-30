@@ -23,104 +23,164 @@ document.addEventListener('DOMContentLoaded', function() {
     searchInput.addEventListener('input', debouncedRender);
     
     // Products Data
-    const products = [
-        {
-            id: 1,
-            title: "Days of Thunder",
-            artist: "The Midnight",
-            price: 24.99,
-            genre: "synthwave",
-            year: 2014,
-            tracks: 10,
-            rating: 4.8,
-            duration: "48:22",
-            description: "A synthwave masterpiece blending 80s nostalgia with modern production."
-        },
-        {
-            id: 2,
-            title: "Random Access Memories",
-            artist: "Daft Punk",
-            price: 29.99,
-            genre: "electronic",
-            year: 2013,
-            tracks: 13,
-            rating: 4.9,
-            duration: "74:28",
-            description: "Grammy-winning electronic album that revolutionized modern dance music."
-        },
-        {
-            id: 3,
-            title: "AM",
-            artist: "Arctic Monkeys",
-            price: 22.99,
-            genre: "rock",
-            year: 2013,
-            tracks: 12,
-            rating: 4.7,
-            duration: "41:43",
-            description: "Critically acclaimed rock album with infectious riffs and clever lyrics."
-        },
-        {
-            id: 4,
-            title: "Future Nostalgia",
-            artist: "Dua Lipa",
-            price: 26.99,
-            genre: "pop",
-            year: 2020,
-            tracks: 11,
-            rating: 4.6,
-            duration: "43:11",
-            description: "Disco-infused pop perfection with chart-topping hits."
-        },
-        {
-            id: 5,
-            title: "Kind of Blue",
-            artist: "Miles Davis",
-            price: 19.99,
-            genre: "jazz",
-            year: 1959,
-            tracks: 5,
-            rating: 5.0,
-            duration: "45:44",
-            description: "The best-selling jazz album of all time, a timeless classic."
-        },
-        {
-            id: 6,
-            title: "After Hours",
-            artist: "The Weeknd",
-            price: 27.99,
-            genre: "pop",
-            year: 2020,
-            tracks: 14,
-            rating: 4.5,
-            duration: "56:19",
-            description: "A dark synth-pop journey through heartbreak and redemption."
-        },
-        {
-            id: 7,
-            title: "Discovery",
-            artist: "Daft Punk",
-            price: 28.99,
-            genre: "electronic",
-            year: 2001,
-            tracks: 14,
-            rating: 4.8,
-            duration: "61:00",
-            description: "Influential electronic album that defined a generation of dance music."
-        },
-        {
-            id: 8,
-            title: "Synthwave Essentials",
-            artist: "Various Artists",
-            price: 34.99,
-            genre: "synthwave",
-            year: 2022,
-            tracks: 20,
-            rating: 4.7,
-            duration: "78:15",
-            description: "A comprehensive collection of modern synthwave classics."
-        }
-    ];
+const products = [
+    {
+        id: 1,
+        title: "Days of Thunder",
+        artist: "The Midnight",
+        price: 24.99,
+        genre: "synthwave",
+        year: 2014,
+        tracks: 10,
+        rating: 4.8,
+        duration: "48:22",
+        description: "A synthwave masterpiece blending 80s nostalgia with modern production.",
+        image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+    },
+    {
+        id: 2,
+        title: "Random Access Memories",
+        artist: "Daft Punk",
+        price: 29.99,
+        genre: "electronic",
+        year: 2013,
+        tracks: 13,
+        rating: 4.9,
+        duration: "74:28",
+        description: "Grammy-winning electronic album that revolutionized modern dance music.",
+        image: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+    },
+    {
+        id: 3,
+        title: "AM",
+        artist: "Arctic Monkeys",
+        price: 22.99,
+        genre: "rock",
+        year: 2013,
+        tracks: 12,
+        rating: 4.7,
+        duration: "41:43",
+        description: "Critically acclaimed rock album with infectious riffs and clever lyrics.",
+        image: "https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+    },
+    {
+        id: 4,
+        title: "Future Nostalgia",
+        artist: "Dua Lipa",
+        price: 26.99,
+        genre: "pop",
+        year: 2020,
+        tracks: 11,
+        rating: 4.6,
+        duration: "43:11",
+        description: "Disco-infused pop perfection with chart-topping hits.",
+        image: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+    },
+    {
+        id: 5,
+        title: "Kind of Blue",
+        artist: "Miles Davis",
+        price: 19.99,
+        genre: "jazz",
+        year: 1959,
+        tracks: 5,
+        rating: 5.0,
+        duration: "45:44",
+        description: "The best-selling jazz album of all time, a timeless classic.",
+        image: "https://images.unsplash.com/photo-1511192336575-5a79af67a629?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+    },
+    {
+        id: 6,
+        title: "After Hours",
+        artist: "The Weeknd",
+        price: 27.99,
+        genre: "pop",
+        year: 2020,
+        tracks: 14,
+        rating: 4.5,
+        duration: "56:19",
+        description: "A dark synth-pop journey through heartbreak and redemption.",
+        image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+    },
+    {
+        id: 7,
+        title: "Discovery",
+        artist: "Daft Punk",
+        price: 28.99,
+        genre: "electronic",
+        year: 2001,
+        tracks: 14,
+        rating: 4.8,
+        duration: "61:00",
+        description: "Influential electronic album that defined a generation of dance music.",
+        image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60"
+    },
+    {
+        id: 8,
+        title: "Synthwave Essentials",
+        artist: "Various Artists",
+        price: 34.99,
+        genre: "synthwave",
+        year: 2022,
+        tracks: 20,
+        rating: 4.7,
+        duration: "78:15",
+        description: "A comprehensive collection of modern synthwave classics.",
+        image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+    },
+    {
+        id: 9,
+        title: "Chill Vibes",
+        artist: "Various Artists",
+        price: 19.99,
+        genre: "electronic",
+        year: 2021,
+        tracks: 12,
+        rating: 4.5,
+        duration: "45:22",
+        description: "A collection of relaxing electronic tunes for your chill moments.",
+        image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60"
+    },
+    {
+        id: 10,
+        title: "80s Retro",
+        artist: "Synth Legends",
+        price: 24.99,
+        genre: "synthwave",
+        year: 2020,
+        tracks: 10,
+        rating: 4.7,
+        duration: "48:15",
+        description: "Bring back the 80s with this retro synthwave collection.",
+        image: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60"
+    },
+    {
+        id: 11,
+        title: "Electric Dreams",
+        artist: "FM-84",
+        price: 26.99,
+        genre: "synthwave",
+        year: 2016,
+        tracks: 12,
+        rating: 4.8,
+        duration: "52:30",
+        description: "Dreamy synthwave with nostalgic 80s vibes and modern production.",
+        image: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+    },
+    {
+        id: 12,
+        title: "Jazz Classics",
+        artist: "Various Artists",
+        price: 32.99,
+        genre: "jazz",
+        year: 2019,
+        tracks: 15,
+        rating: 4.9,
+        duration: "68:45",
+        description: "Essential jazz recordings from the golden era of jazz music.",
+        image: "https://images.unsplash.com/photo-1511192336575-5a79af67a629?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+    }
+];
     
     // Cart State
     let cart = JSON.parse(localStorage.getItem('musicCart')) || [];
@@ -140,8 +200,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Filters
         genreFilter.addEventListener('change', renderProducts);
         sortFilter.addEventListener('change', renderProducts);
-        searchInput.addEventListener('input', renderProducts);
-        
+        searchInput.addEventListener('input', () => {
+            debouncedRender();
+        });        
         // Cart buttons
         clearCartBtn.addEventListener('click', clearCart);
         checkoutBtn.addEventListener('click', checkout);
@@ -166,8 +227,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 productModal.classList.remove('active');
             }
         });
-    }
-    
+    };
+
+// Debounce function pentru search
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
     // Render products
     function renderProducts() {
         const genre = genreFilter.value;
@@ -208,59 +282,59 @@ document.addEventListener('DOMContentLoaded', function() {
             const cartQuantity = cartItem ? cartItem.quantity : 0;
             
             productCard.innerHTML = `
-                <div class="product-image">
-                    <i class="fas fa-compact-disc"></i>
+            <div class="product-image">
+                <img src="${product.image}" alt="${product.title}" loading="lazy">
+            </div>
+            <div class="product-content">
+                <div class="product-header">
+                    <div>
+                        <h3 class="product-title">${product.title}</h3>
+                        <p class="product-artist">${product.artist}</p>
+                    </div>
+                    <div class="product-price">$${product.price.toFixed(2)}</div>
                 </div>
-                <div class="product-content">
-                    <div class="product-header">
-                        <div>
-                            <h3 class="product-title">${product.title}</h3>
-                            <p class="product-artist">${product.artist}</p>
-                        </div>
-                        <div class="product-price">$${product.price.toFixed(2)}</div>
+                
+                <div class="product-details">
+                    <div class="product-detail">
+                        <i class="fas fa-calendar"></i>
+                        <span>${product.year}</span>
                     </div>
-                    
-                    <div class="product-details">
-                        <div class="product-detail">
-                            <i class="fas fa-calendar"></i>
-                            <span>Released: ${product.year}</span>
-                        </div>
-                        <div class="product-detail">
-                            <i class="fas fa-list-ol"></i>
-                            <span>${product.tracks} tracks • ${product.duration}</span>
-                        </div>
-                        <div class="product-detail">
-                            <i class="fas fa-star"></i>
-                            <div class="rating">
-                                <span class="stars">${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5 - Math.floor(product.rating))}</span>
-                                <span>${product.rating.toFixed(1)}</span>
-                            </div>
-                        </div>
-                        <div class="product-detail">
-                            <i class="fas fa-tag"></i>
-                            <span>${product.genre.charAt(0).toUpperCase() + product.genre.slice(1)}</span>
+                    <div class="product-detail">
+                        <i class="fas fa-list-ol"></i>
+                        <span>${product.tracks} tracks • ${product.duration}</span>
+                    </div>
+                    <div class="product-detail">
+                        <i class="fas fa-star"></i>
+                        <div class="rating">
+                            <span class="stars">${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5 - Math.floor(product.rating))}</span>
+                            <span>${product.rating.toFixed(1)}</span>
                         </div>
                     </div>
-                    
-                    <div class="product-actions">
-                        ${cartQuantity > 0 ? `
-                            <button class="btn btn-secondary" onclick="showProductDetails(${product.id})">
-                                <i class="fas fa-info-circle"></i> Details
-                            </button>
-                            <button class="btn btn-primary" onclick="updateCart(${product.id}, 1)">
-                                <i class="fas fa-plus"></i> Add More (${cartQuantity})
-                            </button>
-                        ` : `
-                            <button class="btn btn-secondary" onclick="showProductDetails(${product.id})">
-                                <i class="fas fa-info-circle"></i> Details
-                            </button>
-                            <button class="btn btn-primary" onclick="addToCart(${product.id})">
-                                <i class="fas fa-cart-plus"></i> Add to Cart
-                            </button>
-                        `}
+                    <div class="product-detail">
+                        <i class="fas fa-tag"></i>
+                        <span>${product.genre.charAt(0).toUpperCase() + product.genre.slice(1)}</span>
                     </div>
                 </div>
-            `;
+                
+                <div class="product-actions">
+                    ${cartQuantity > 0 ? `
+                        <button class="btn btn-secondary" onclick="showProductDetails(${product.id})">
+                            <i class="fas fa-info-circle"></i> Details
+                        </button>
+                        <button class="btn btn-primary" onclick="updateCart(${product.id}, 1)">
+                            <i class="fas fa-plus"></i> Add More (${cartQuantity})
+                        </button>
+                    ` : `
+                        <button class="btn btn-secondary" onclick="showProductDetails(${product.id})">
+                            <i class="fas fa-info-circle"></i> Details
+                        </button>
+                        <button class="btn btn-primary" onclick="addToCart(${product.id})">
+                            <i class="fas fa-cart-plus"></i> Add to Cart
+                        </button>
+                    `}
+                </div>
+            </div>
+        `;
             
             productsGrid.appendChild(productCard);
         });
@@ -396,29 +470,29 @@ document.addEventListener('DOMContentLoaded', function() {
             const cartItem = document.createElement('div');
             cartItem.className = 'cart-item';
             cartItem.innerHTML = `
-                <div class="cart-item-image">
-                    <i class="fas fa-compact-disc"></i>
+            <div class="cart-item-image">
+                <img src="${item.image}" alt="${item.title}">
+            </div>
+            <div class="cart-item-content">
+                <div class="cart-item-header">
+                    <div class="cart-item-title">${item.title}</div>
+                    <div class="cart-item-price">$${itemTotal.toFixed(2)}</div>
                 </div>
-                <div class="cart-item-content">
-                    <div class="cart-item-header">
-                        <div class="cart-item-title">${item.title}</div>
-                        <div class="cart-item-price">$${itemTotal.toFixed(2)}</div>
-                    </div>
-                    <div class="cart-item-details">
-                        <div>${item.artist} • $${item.price.toFixed(2)} each</div>
-                    </div>
-                    <div class="cart-item-actions">
-                        <div class="quantity-control">
-                            <button class="quantity-btn" onclick="updateCart(${item.id}, -1)">-</button>
-                            <span class="quantity">${item.quantity}</span>
-                            <button class="quantity-btn" onclick="updateCart(${item.id}, 1)">+</button>
-                        </div>
-                        <button class="remove-item" onclick="removeFromCart(${item.id})">
-                            <i class="fas fa-trash"></i> Remove
-                        </button>
-                    </div>
+                <div class="cart-item-details">
+                    <div>${item.artist} • $${item.price.toFixed(2)} each</div>
                 </div>
-            `;
+                <div class="cart-item-actions">
+                    <div class="quantity-control">
+                        <button class="quantity-btn" onclick="updateCart(${item.id}, -1)">-</button>
+                        <span class="quantity">${item.quantity}</span>
+                        <button class="quantity-btn" onclick="updateCart(${item.id}, 1)">+</button>
+                    </div>
+                    <button class="remove-item" onclick="removeFromCart(${item.id})">
+                        <i class="fas fa-trash"></i> Remove
+                    </button>
+                </div>
+            </div>
+        `;
             
             cartItems.appendChild(cartItem);
         });

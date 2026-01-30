@@ -355,18 +355,36 @@ function saveToLocalStorage() {
 // ===== EVENT LISTENERS =====
 function setupEventListeners() {
     // Mobile menu
-    elements.mobileMenuBtn.addEventListener('click', toggleMobileMenu);
-    
+    elements.mobileMenuBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        elements.mobileNav.classList.toggle('active');
+        
+        // Close user dropdown if open
+        elements.userDropdown.classList.remove('show');
+    });   // Close upload modal
+document.getElementById('closeUploadModal')?.addEventListener('click', () => {
+    elements.uploadModal.classList.remove('active');
+    document.body.style.overflow = '';
+    resetUploadModal();
+});
+
+document.addEventListener('click', (e) => {
+    if (!elements.mobileMenuBtn.contains(e.target) && !elements.mobileNav.contains(e.target)) {
+        elements.mobileNav.classList.remove('active');
+    }
+});
     // User dropdown
     elements.userBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        elements.userDropdown.style.display = 
-            elements.userDropdown.style.display === 'block' ? 'none' : 'block';
+        elements.userDropdown.classList.toggle('show');
+
     });
     
     // Close dropdown when clicking outside
-    document.addEventListener('click', () => {
-        elements.userDropdown.style.display = 'none';
+    document.addEventListener('click', (e) => {
+        if (!elements.userBtn.contains(e.target) && !elements.userDropdown.contains(e.target)) {
+            elements.userDropdown.classList.remove('show');
+        }
     });
     
     // Hero buttons
@@ -456,14 +474,17 @@ function setupEventListeners() {
     });
     
     // Close buttons
-    document.querySelectorAll('.close-modal').forEach(btn => {
+    // Close buttons
+document.querySelectorAll('.close-modal').forEach(btn => {
+    if (btn.id !== 'closeUploadModal') { // Skip upload modal close button as we handle it separately
         btn.addEventListener('click', () => {
             document.querySelectorAll('.modal').forEach(modal => {
                 modal.classList.remove('active');
             });
             document.body.style.overflow = '';
         });
-    });
+    }
+});
     
     // Notification
     elements.closeNotification.addEventListener('click', hideNotification);

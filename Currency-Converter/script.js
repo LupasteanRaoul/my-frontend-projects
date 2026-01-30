@@ -19,14 +19,15 @@ class CurrencyConverter {
             convertBtn: document.getElementById('convertBtn'),
             reverseBtn: document.getElementById('reverseBtn'),
             clearAmount: document.getElementById('clearAmount'),
-            
+ 
             // Display Elements
             sourceAmount: document.getElementById('sourceAmount'),
             convertedAmount: document.getElementById('convertedAmount'),
             rateInfo: document.getElementById('rateInfo'),
             updateTime: document.getElementById('updateTime'),
             lastUpdated: document.getElementById('lastUpdated'),
-            
+            infoBtn: document.getElementById('infoBtn'),
+
             // UI Elements
             fromFlag: document.getElementById('fromFlag'),
             toFlag: document.getElementById('toFlag'),
@@ -38,7 +39,12 @@ class CurrencyConverter {
             loadingScreen: document.getElementById('loadingScreen'),
             toast: document.getElementById('toast'),
             toastMessage: document.getElementById('toastMessage'),
-            toastClose: document.getElementById('toastClose')
+            toastClose: document.getElementById('toastClose'),
+            historyBtn: document.getElementById('historyBtn'),
+            calculatorBtn: document.getElementById('calculatorBtn'),
+            alertsBtn: document.getElementById('alertsBtn'),
+            newsBtn: document.getElementById('newsBtn')
+
         };
     }
 
@@ -476,9 +482,14 @@ class CurrencyConverter {
     // Setup Event Listeners
     setupEventListeners() {
         // Convert on input change
-        this.elements.amountInput.addEventListener('input', () => this.convert());
-        this.elements.fromCurrency.addEventListener('change', () => this.convert());
-        this.elements.toCurrency.addEventListener('change', () => this.convert());
+        const comingSoon = (feature) => {
+            this.showToast(`${feature} feature coming soon 🚧`, 'warning');
+        };
+        
+        this.elements.historyBtn.addEventListener('click', () => comingSoon('History'));
+        this.elements.calculatorBtn.addEventListener('click', () => comingSoon('Calculator'));
+        this.elements.alertsBtn.addEventListener('click', () => comingSoon('Rate alerts'));
+        this.elements.newsBtn.addEventListener('click', () => comingSoon('Market news'));
         
         // Convert on button click
         this.elements.convertBtn.addEventListener('click', () => this.convert());
@@ -492,7 +503,14 @@ class CurrencyConverter {
             this.elements.amountInput.value = '';
             this.elements.amountInput.focus();
         });
-        
+
+        this.elements.infoBtn.addEventListener('click', () => {
+            this.showToast(
+                'Rates are indicative only. Data from ExchangeRate API / fallback.',
+                'info'
+            );
+        });
+         
         // Copy result
         this.elements.copyResult.addEventListener('click', () => this.copyResultToClipboard());
         

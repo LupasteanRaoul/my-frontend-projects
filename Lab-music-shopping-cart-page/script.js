@@ -355,6 +355,22 @@ function setupEventListeners() {
     // Mobile Menu
     elements.mobileMenuBtn.addEventListener('click', toggleMobileMenu);
     
+    const mobileUserBtn = document.getElementById('mobileUserBtn');
+    if (mobileUserBtn) {
+        mobileUserBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            elements.mobileNav.classList.remove('active');
+            showNotification('Account', 'User profile feature coming soon!', 'info');
+        });
+    }
+    
+    // Smooth scroll for explore button
+    if (elements.exploreBtn) {
+        elements.exploreBtn.addEventListener('click', () => {
+            scrollToSection('products-section');
+        });
+    }
+
     // Filters & Search
     elements.genreFilter.addEventListener('change', handleFilterChange);
     elements.sortFilter.addEventListener('change', handleSortChange);
@@ -1348,3 +1364,275 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+// ===== NAVIGATION FUNCTIONS =====
+function setupNavigation() {
+    // Navigation links
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const section = link.dataset.section;
+            
+            switch(section) {
+                case 'hero':
+                    scrollToSection('hero');
+                    break;
+                case 'new-releases':
+                    scrollToSection('products-section');
+                    setFilterForNewReleases();
+                    break;
+                case 'trending':
+                    scrollToSection('products-section');
+                    setFilterForTrending();
+                    break;
+                case 'deals':
+                    scrollToSection('products-section');
+                    setFilterForDeals();
+                    break;
+                default:
+                    scrollToSection('products-section');
+            }
+        });
+    });
+    
+    // Mobile navigation links
+    const mobileLinks = document.querySelectorAll('.mobile-nav .nav-link');
+    mobileLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const section = link.dataset.section;
+            
+            // Close mobile menu
+            elements.mobileNav.classList.remove('active');
+            
+            switch(section) {
+                case 'hero':
+                    scrollToSection('hero');
+                    break;
+                case 'new-releases':
+                    scrollToSection('products-section');
+                    setFilterForNewReleases();
+                    break;
+                case 'trending':
+                    scrollToSection('products-section');
+                    setFilterForTrending();
+                    break;
+                case 'deals':
+                    scrollToSection('products-section');
+                    setFilterForDeals();
+                    break;
+                default:
+                    scrollToSection('products-section');
+            }
+        });
+    });
+    
+    // Footer links
+    const footerLinks = document.querySelectorAll('.footer-section a[href^="#"]');
+    footerLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const href = link.getAttribute('href');
+            
+            if (href.startsWith('#') && href.length > 1) {
+                const targetId = href.substring(1);
+                const targetSection = link.dataset.section;
+                
+                if (targetId && document.getElementById(targetId)) {
+                    scrollToSection(targetId);
+                    
+                    // Apply filter if specified
+                    if (targetSection) {
+                        switch(targetSection) {
+                            case 'trending':
+                                setFilterForTrending();
+                                break;
+                            case 'deals':
+                                setFilterForDeals();
+                                break;
+                        }
+                    }
+                }
+            }
+        });
+    });
+}
+
+function scrollToSection(sectionId) {
+    const element = document.getElementById(sectionId);
+    if (element) {
+        const headerHeight = document.querySelector('.header').offsetHeight;
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerHeight - 20;
+        
+        window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+        });
+    }
+}
+
+function setFilterForNewReleases() {
+    elements.sortFilter.value = 'newest';
+    state.currentSort = 'newest';
+    renderProducts();
+    
+    // Show notification
+    setTimeout(() => {
+        showNotification('New Releases', 'Showing the newest albums in our collection', 'info');
+    }, 500);
+}
+
+function setFilterForTrending() {
+    elements.sortFilter.value = 'rating';
+    state.currentSort = 'rating';
+    renderProducts();
+    
+    // Show notification
+    setTimeout(() => {
+        showNotification('Trending Now', 'Showing our highest rated albums', 'info');
+    }, 500);
+}
+
+function setFilterForDeals() {
+    // For deals, we'll show discounted items
+    // In a real app, you would filter by discount property
+    elements.sortFilter.value = 'price-low';
+    state.currentSort = 'price-low';
+    renderProducts();
+    
+    // Show notification
+    setTimeout(() => {
+        showNotification('Special Deals', 'Showing albums starting from lowest price', 'info');
+    }, 500);
+}
+
+// ===== ENHANCED CART FUNCTIONALITY =====
+function setupEnhancedCart() {
+    // Save cart functionality
+    elements.saveCart.addEventListener('click', () => {
+        if (state.cart.length === 0) {
+            showNotification('Cannot Save', 'Your cart is empty', 'warning');
+            return;
+        }
+        
+        const cartData = {
+            items: state.cart,
+            timestamp: new Date().toISOString(),
+            total: calculateCartTotal()
+        };
+        
+        // Save to localStorage
+        localStorage.setItem('savedCart', JSON.stringify(cartData));
+        
+        // Create downloadable JSON file
+        const dataStr = JSON.stringify(cartData, null, 2);
+        const dataBlob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(dataBlob);
+        
+        const downloadLink = document.createElement('a');
+        downloadLink.href = url;
+        downloadLink.download = `synthwave-cart-${Date.now()}.json`;
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        
+        showNotification('Cart Saved', 'Your cart has been saved and downloaded', 'success');
+    });
+    
+    // Clear cart with confirmation
+    elements.clearCart.addEventListener('click', () => {
+        if (state.cart.length === 0) {
+            showNotification('Cart Empty', 'Your cart is already empty', 'info');
+            return;
+        }
+        
+        // Create custom confirmation modal
+        const confirmClear = confirm('Are you sure you want to clear your cart? This action cannot be undone.');
+        if (confirmClear) {
+            state.cart = [];
+            state.discountAmount = 0;
+            state.appliedCoupon = null;
+            elements.couponCode.value = '';
+            elements.couponMessage.textContent = '';
+            elements.discountCode.textContent = '';
+            
+            saveToLocalStorage();
+            renderCart();
+            updateCartSummary();
+            updateHeaderCart();
+            
+            showNotification('Cart Cleared', 'All items removed from cart', 'info');
+        }
+    });
+}
+
+// ===== ENHANCED SCROLLING =====
+function setupSmoothScrolling() {
+    // Handle hash changes
+    window.addEventListener('hashchange', () => {
+        const hash = window.location.hash.substring(1);
+        if (hash && document.getElementById(hash)) {
+            scrollToSection(hash);
+        }
+    });
+    
+    // Initial hash handling
+    if (window.location.hash) {
+        setTimeout(() => {
+            const hash = window.location.hash.substring(1);
+            if (hash && document.getElementById(hash)) {
+                scrollToSection(hash);
+            }
+        }, 100);
+    }
+}
+
+// ===== MODIFIED INITIALIZATION =====
+// Înlocuiește funcția initializeApp cu aceasta:
+function initializeApp() {
+    // Simulate loading
+    showLoading();
+    
+    // Initialize state
+    state.products = [...productsData];
+    state.filteredProducts = [...productsData];
+    
+    // Load data from localStorage
+    loadFromLocalStorage();
+    
+    // Render initial views
+    renderProducts();
+    renderCart();
+    renderFeatured();
+    renderRecentlyViewed();
+    updateCartSummary();
+    updateHeaderCart();
+    updateWishlistCount();
+    
+    // Setup enhanced features
+    setupNavigation();
+    setupEnhancedCart();
+    setupSmoothScrolling();
+    
+    // Hide loading
+    setTimeout(() => {
+        hideLoading();
+        showNotification('Welcome to SynthWave Music!', 'Ready to explore our vinyl collection?', 'success');
+    }, 1500);
+}
+
+// ===== UTILITY FUNCTIONS =====
+function calculateCartTotal() {
+    return state.cart.reduce((sum, item) => {
+        const product = state.products.find(p => p.id === item.id);
+        return sum + (product.price * item.quantity);
+    }, 0);
+}
+
+// Initialize the app
+document.addEventListener('DOMContentLoaded', () => {
+    initializeApp();
+    setupEventListeners();
+});

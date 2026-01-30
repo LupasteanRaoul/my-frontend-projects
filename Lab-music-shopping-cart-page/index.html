@@ -25,10 +25,10 @@
                 
                 <nav class="main-nav">
                     <ul>
-                        <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
-                        <li><a href="#"><i class="fas fa-record-vinyl"></i> New Releases</a></li>
-                        <li><a href="#"><i class="fas fa-fire"></i> Trending</a></li>
-                        <li><a href="#"><i class="fas fa-gift"></i> Deals</a></li>
+                        <li><a href="#hero" class="nav-link" data-section="hero"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="#products-section" class="nav-link" data-section="new-releases"><i class="fas fa-record-vinyl"></i> New Releases</a></li>
+                        <li><a href="#products-section" class="nav-link" data-section="trending"><i class="fas fa-fire"></i> Trending</a></li>
+                        <li><a href="#products-section" class="nav-link" data-section="deals"><i class="fas fa-gift"></i> Deals</a></li>
                     </ul>
                 </nav>
                 
@@ -64,13 +64,13 @@
     <!-- Mobile Navigation -->
     <nav class="mobile-nav" id="mobileNav">
         <ul>
-            <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
-            <li><a href="#"><i class="fas fa-record-vinyl"></i> New Releases</a></li>
-            <li><a href="#"><i class="fas fa-fire"></i> Trending</a></li>
-            <li><a href="#"><i class="fas fa-gift"></i> Deals</a></li>
-            <li><a href="#"><i class="fas fa-user"></i> Account</a></li>
-            <li><a href="#"><i class="fas fa-heart"></i> Wishlist</a></li>
-            <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+            <li><a href="#hero" class="nav-link" data-section="hero"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="#products-section" class="nav-link" data-section="new-releases"><i class="fas fa-record-vinyl"></i> New Releases</a></li>
+            <li><a href="#products-section" class="nav-link" data-section="trending"><i class="fas fa-fire"></i> Trending</a></li>
+            <li><a href="#products-section" class="nav-link" data-section="deals"><i class="fas fa-gift"></i> Deals</a></li>
+            <li><a href="#" id="mobileUserBtn"><i class="fas fa-user"></i> Account</a></li>
+            <li><a href="#wishlistBtn"><i class="fas fa-heart"></i> Wishlist</a></li>
+            <li><a href="#cart-section"><i class="fas fa-shopping-cart"></i> Cart</a></li>
         </ul>
     </nav>
 
@@ -78,7 +78,7 @@
     <main class="main">
         <div class="container">
             <!-- Hero Section -->
-            <section class="hero">
+            <section class="hero" id="hero">
                 <div class="hero-content">
                     <div class="hero-text">
                         <h2>Limited Edition <span>Vinyl Records</span></h2>
@@ -132,7 +132,7 @@
 
             <div class="layout">
                 <!-- Products Section -->
-                <section class="products-section">
+                <section class="products-section" id="products-section">
                     <div class="section-header">
                         <h2><i class="fas fa-record-vinyl"></i> Browse Albums</h2>
                         <div class="controls">
@@ -202,26 +202,30 @@
                 </section>
 
                 <!-- Cart Section -->
-                <aside class="cart-section">
+                <aside class="cart-section" id="cart-section">
                     <div class="cart-card sticky">
                         <div class="cart-header">
                             <h3><i class="fas fa-shopping-cart"></i> Shopping Cart</h3>
-                            <div class="cart-actions-top">
-                                <button class="save-cart" id="saveCart">
-                                    <i class="fas fa-save"></i> Save
-                                </button>
-                                <button class="clear-cart" id="clearCart">
-                                    <i class="fas fa-trash"></i> Clear All
-                                </button>
-                            </div>
                         </div>
 
-                        <div class="cart-items" id="cartItems">
-                            <!-- Cart items loaded via JavaScript -->
-                            <div class="empty-cart">
-                                <i class="fas fa-shopping-basket"></i>
-                                <p>Your cart is empty</p>
-                                <p class="small">Add some music to get started!</p>
+                        <div class="cart-items-container">
+                            <div class="cart-items" id="cartItems">
+                                <!-- Cart items loaded via JavaScript -->
+                                <div class="empty-cart">
+                                    <i class="fas fa-shopping-basket"></i>
+                                    <p>Your cart is empty</p>
+                                    <p class="small">Add some music to get started!</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Moved Save and Clear buttons here -->
+                            <div class="cart-manage-buttons">
+                                <button class="save-cart" id="saveCart">
+                                    <i class="fas fa-save"></i> Save Cart
+                                </button>
+                                <button class="clear-cart" id="clearCart">
+                                    <i class="fas fa-trash-alt"></i> Clear All
+                                </button>
                             </div>
                         </div>
 
@@ -321,11 +325,11 @@
                 <div class="footer-section">
                     <h4>Quick Links</h4>
                     <ul>
-                        <li><a href="#">New Arrivals</a></li>
-                        <li><a href="#">Best Sellers</a></li>
-                        <li><a href="#">Pre-orders</a></li>
-                        <li><a href="#">Limited Editions</a></li>
-                        <li><a href="#">Gift Cards</a></li>
+                        <li><a href="#hero">Home</a></li>
+                        <li><a href="#products-section">New Releases</a></li>
+                        <li><a href="#products-section" data-section="trending">Trending</a></li>
+                        <li><a href="#products-section" data-section="deals">Special Deals</a></li>
+                        <li><a href="#cart-section">View Cart</a></li>
                     </ul>
                 </div>
                 

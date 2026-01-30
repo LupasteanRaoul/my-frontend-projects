@@ -60,8 +60,11 @@
                                 </select>
                             </div>
                             <div class="search-box">
-                                <i class="fas fa-search"></i>
-                                <input type="text" id="searchInput" placeholder="Search albums...">
+                                <label for="searchInput"><i class="fas fa-search"></i> Search</label>
+                                <div class="search-input-wrapper">
+                                    <i class="fas fa-search"></i>
+                                    <input type="text" id="searchInput" placeholder="Search albums...">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -124,31 +127,35 @@
                         </div>
                     </div>
 
-                    <!-- Featured Albums -->
                     <div class="featured-card">
                         <h4><i class="fas fa-star"></i> Featured Albums</h4>
                         <div class="featured-list">
-                            <div class="featured-item">
-                                <img src="https://via.placeholder.com/50" alt="Chill Vibes Album Cover" class="featured-img">
+                            <div class="featured-item" data-id="9">
+                                <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" 
+                                     alt="Chill Vibes Album Cover" class="featured-img">
                                 <div>
                                     <p class="featured-title">Chill Vibes</p>
                                     <p class="featured-artist">Various Artists</p>
                                 </div>
                                 <span class="featured-price">$19.99</span>
+                                <button class="featured-add-btn" onclick="addToCart(9)">
+                                    <i class="fas fa-plus"></i>
+                                </button>
                             </div>
-                            <div class="featured-item">
-                                <img src="https://via.placeholder.com/50" alt="80s Retro Album Cover" class="featured-img">
+                            <div class="featured-item" data-id="10">
+                                <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" 
+                                     alt="80s Retro Album Cover" class="featured-img">
                                 <div>
                                     <p class="featured-title">80s Retro</p>
                                     <p class="featured-artist">Synth Legends</p>
                                 </div>
                                 <span class="featured-price">$24.99</span>
+                                <button class="featured-add-btn" onclick="addToCart(10)">
+                                    <i class="fas fa-plus"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
-                </aside>
-            </div>
-        </div>
     </main>
 
     <!-- Modal for Product Details -->

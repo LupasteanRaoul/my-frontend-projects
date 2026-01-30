@@ -334,6 +334,7 @@ body {
 
 .currency-select-wrapper {
     position: relative;
+    overflow: hidden;
 }
 
 .currency-select {
