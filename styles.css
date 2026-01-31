@@ -1,6 +1,3 @@
-
-
-
 /* ===== VARIABLES & RESET ===== */
 :root {
     --primary: #2563eb;
@@ -444,7 +441,12 @@ h1, h2, h3, h4 {
 }
 
 .tech-item i {
-    font-size: 1.25rem;
+    font-size: 1.8rem;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* ===== FEATURED PROJECTS ===== */
@@ -729,42 +731,69 @@ h1, h2, h3, h4 {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     color: var(--primary);
+    flex-shrink: 0;
+}
+
+.skill-info {
+    flex: 1;
+    min-width: 0; /* Important pentru flexbox overflow */
 }
 
 .skill-info h4 {
     font-size: 1.25rem;
     margin-bottom: 8px;
     color: var(--dark);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .skill-level {
     display: flex;
     align-items: center;
     gap: 12px;
+    width: 100%;
 }
 
 .level-bar {
     flex: 1;
-    height: 8px;
+    height: 10px;
     background: var(--gray-light);
-    border-radius: 4px;
+    border-radius: 5px;
     overflow: hidden;
+    position: relative;
+    min-width: 150px;
+}
+
+[data-theme="dark"] .level-bar {
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .level-progress {
+    position: absolute;
+    top: 0;
+    left: 0;
     height: 100%;
     background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
-    border-radius: 4px;
-    width: 0; /* Start from 0 */
-    transition: width 2s ease-in-out; /* Smooth transition */
+    border-radius: 5px;
+    /* Elimină orice animație */
+    transition: none !important;
+    animation: none !important;
 }
+
+/* Forțează dimensiunile exacte în CSS, nu prin HTML */
+.skill-item:nth-child(1) .level-progress { width: 95% !important; }
+.skill-item:nth-child(2) .level-progress { width: 90% !important; }
+.skill-item:nth-child(3) .level-progress { width: 88% !important; }
 
 .skill-level span {
     font-size: 0.875rem;
     font-weight: 600;
     color: var(--primary);
+    min-width: 35px;
+    text-align: right;
 }
 
 .tools-grid {
@@ -792,9 +821,16 @@ h1, h2, h3, h4 {
 }
 
 .tool-item i {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
     color: var(--primary);
     margin-bottom: 16px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .tool-item h4 {
@@ -1074,6 +1110,37 @@ h1, h2, h3, h4 {
     margin: 0 4px;
 }
 
+/* ===== FIXED ICON SIZES (nu se schimbă cu ecranul) ===== */
+.tech-item i {
+    font-size: 1.8rem !important;
+    width: 30px !important;
+    height: 30px !important;
+}
+
+.skill-icon i {
+    font-size: 1.8rem !important;
+    width: 30px !important;
+    height: 30px !important;
+}
+
+.tool-item i {
+    font-size: 2.2rem !important;
+    width: 40px !important;
+    height: 40px !important;
+}
+
+.project-image i {
+    font-size: 4rem !important;
+    width: 60px !important;
+    height: 60px !important;
+}
+
+.card-icon i {
+    font-size: 2.5rem !important;
+    width: 40px !important;
+    height: 40px !important;
+}
+
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 1024px) {
     .hero-content {
@@ -1167,6 +1234,30 @@ h1, h2, h3, h4 {
     .footer-links {
         grid-template-columns: repeat(2, 1fr);
     }
+    
+    /* Icon fixes for tablets */
+    .tech-stack {
+        gap: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .tech-item {
+        min-width: 120px;
+        padding: 10px 15px;
+    }
+    
+    .skill-icon i {
+        font-size: 1.6rem !important;
+    }
+    
+    .tool-item i {
+        font-size: 2rem !important;
+    }
+    
+    .project-image i {
+        font-size: 3.5rem !important;
+    }
 }
 
 @media (max-width: 480px) {
@@ -1194,6 +1285,15 @@ h1, h2, h3, h4 {
     
     .tech-stack {
         flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .tech-item {
+        flex: 0 0 calc(50% - 10px);
+        min-width: auto;
+        justify-content: center;
+        text-align: center;
+        padding: 8px 12px;
     }
     
     .footer-links {
@@ -1211,69 +1311,49 @@ h1, h2, h3, h4 {
     .tools-grid {
         grid-template-columns: 1fr;
     }
-/* FORȚEARE BARE PROGRES - SOLUTION FINAL */
-.level-progress {
-    width: var(--target-width, auto) !important;
-    transition: none !important;
-    animation: none !important;
+    
+    /* Icon fixes for mobile */
+    .skill-icon i {
+        font-size: 1.5rem !important;
+    }
+    
+    .tool-item i {
+        font-size: 1.8rem !important;
+    }
+    
+    .project-image i {
+        font-size: 3rem !important;
+    }
+    
+    .card-icon i {
+        font-size: 2.2rem !important;
+    }
 }
 
-/* Asigură-te că fundalul este vizibil */
-.level-bar {
+/* ===== FINAL PROGRESS BAR FIX ===== */
+/* Această regulă va suprascrie orice altă regulă pentru barele de progres */
+.skill-item .level-bar {
+    width: 100% !important;
+    display: block !important;
     background: var(--gray-light) !important;
-    border: 1px solid rgba(0, 0, 0, 0.1) !important;
 }
 
-[data-theme="dark"] .level-bar {
-    background: rgba(255, 255, 255, 0.1) !important;
-    border-color: rgba(255, 255, 255, 0.2) !important;
-}
-
-/* Forțează dimensiunile specifice */
-.level-progress[style*="width: 95%"] {
-    width: 95% !important;
-    background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%) !important;
-}
-
-.level-progress[style*="width: 90%"] {
-    width: 90% !important;
-    background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%) !important;
-}
-
-.level-progress[style*="width: 88%"] {
-    width: 88% !important;
-    background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%) !important;
-}/* SOLUȚIE CSS-ONLY PENTRU BARELE DE PROGRES */
-.skills-grid .skill-item:nth-child(1) .level-progress {
-    width: 95% !important;
-    background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%) !important;
-}
-
-.skills-grid .skill-item:nth-child(2) .level-progress {
-    width: 90% !important;
-    background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%) !important;
-}
-
-.skills-grid .skill-item:nth-child(3) .level-progress {
-    width: 88% !important;
-    background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%) !important;
-}
-
-/* Asigură-te că containerul barei este vizibil */
-.level-bar {
-    height: 10px !important;
-    min-height: 10px !important;
-    background: var(--gray-light) !important;
-    border-radius: 5px !important;
-    overflow: visible !important;
-    position: relative !important;
-}
-
-.level-progress {
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
+.skill-item .level-progress {
+    display: block !important;
     height: 100% !important;
+    background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%) !important;
     border-radius: 5px !important;
-    z-index: 1 !important;
-}}
+}
+
+/* Forțează dimensiunile exacte pentru fiecare skill */
+.skills-grid > .skill-item:nth-child(1) .level-progress {
+    width: 95% !important;
+}
+
+.skills-grid > .skill-item:nth-child(2) .level-progress {
+    width: 90% !important;
+}
+
+.skills-grid > .skill-item:nth-child(3) .level-progress {
+    width: 88% !important;
+}
