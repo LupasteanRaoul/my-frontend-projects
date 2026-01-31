@@ -774,7 +774,29 @@ function saveScores() {
     localStorage.setItem('ticTacToeScores', JSON.stringify(scores));
 }
 
-// ===== INITIALIZE GAME =====
-document.addEventListener('DOMContentLoaded', () => {
-    initGame();
+
+// Fallback function if board doesn't exist initially
+function ensureBoardExists() {
+    if (!boardElement || boardElement.children.length === 0) {
+        console.log("Board not found or empty, recreating...");
+        setupBoard();
+    }
+}
+
+// Call this multiple times to ensure board loads
+setTimeout(ensureBoardExists, 500);
+setTimeout(ensureBoardExists, 1500);
+setTimeout(ensureBoardExists, 3000);
+
+window.addEventListener('load', function() {
+    setTimeout(function() {
+        if (typeof firebase !== 'undefined') {
+            console.log("Firebase loaded, initializing game...");
+            initGame();
+        } else {
+            console.error("Firebase not loaded!");
+            // Încearcă din nou după 1 secundă
+            setTimeout(initGame, 1000);
+        }
+    }, 1000);
 });
