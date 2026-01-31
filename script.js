@@ -150,31 +150,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Animate progress bars
-    function animateProgressBars() {
-        const progressBars = document.querySelectorAll('.level-progress');
-        
-        // Așteaptă ca pagina să se încarce complet
-        window.addEventListener('load', function() {
-            setTimeout(() => {
-                progressBars.forEach((bar, index) => {
-                    // Obține valoarea direct din atributul data-width
-                    const targetWidth = bar.getAttribute('data-width') || bar.style.width;
-                    
-                    // Setează la 0
-                    bar.style.width = '0%';
-                    
-                    // Forțează reflow
-                    bar.getBoundingClientRect();
-                    
-                    // Animează după un scurt delay
-                    setTimeout(() => {
-                        bar.style.width = targetWidth;
-                    }, 300 + (index * 200));
-                });
-            }, 300);
-        });
-    }
+
+function initializeProgressBars() {
+    const progressBars = document.querySelectorAll('.level-progress');
+    progressBars.forEach(bar => {
+        // Forțează afișarea corectă
+        bar.style.opacity = '1';
+        bar.style.visibility = 'visible';
+    });
+}
+
+
+     initializeProgressBars();
     
     function animateNumber(element, target) {
         let current = 0;
