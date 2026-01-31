@@ -40,7 +40,190 @@ let gameState = {
     updateStatus();
     updateScoreDisplay();
   }
+ 
+// ===== GAME MODE MANAGEMENT =====
+
+// Initialize game mode
+function initGameModes() {
+  // Mode selector buttons
+  document.querySelectorAll('.mode-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+          const mode = this.dataset.mode;
+          changeGameMode(mode);
+      });
+  });
   
+  // Online controls
+  document.getElementById('createRoomBtn').addEventListener('click', createRoomHandler);
+  document.getElementById('joinRoomBtn').addEventListener('click', joinRoomHandler);
+  document.getElementById('leaveRoomBtn').addEventListener('click', leaveRoomHandler);
+  
+  // Initialize with AI mode
+  changeGameMode('ai');
+}
+
+// Change game mode
+function changeGameMode(mode) {
+  // Update active button
+  document.querySelectorAll('.mode-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.mode === mode);
+  });
+  
+  // Update mode display
+  document.getElementById('currentMode').textContent = 
+      mode === 'ai' ? 'VS AI' : 
+      mode === 'local' ? '2 Players Local' : 
+      'Online Multiplayer';
+  
+  // Update global mode
+  if (window.firebaseFunctions) {
+      window.firebaseFunctions.setGameMode(mode);
+  }
+  
+  // Show/hide online controls
+  const onlineControls = document.querySelector('.online-controls');
+  if (mode === 'online') {
+      onlineControls.style.display = 'block';
+  } else {
+      onlineControls.style.display = 'none';
+      
+      // Leave room if in online mode
+      if (window.firebaseFunctions && window.firebaseFunctions.leaveRoom) {
+          window.firebaseFunctions.leaveRoom();
+      }
+  }
+  
+  // Reset game for new mode
+  resetGame();
+}
+
+// Online room handlers
+function createRoomHandler() {
+  if (window.firebaseFunctions && window.firebaseFunctions.createRoom) {
+      const roomCode = window.firebaseFunctions.createRoom();
+      alert(`Room created! Code: ${roomCode}\nShare this code with your friend!`);
+  }
+}
+
+function joinRoomHandler() {
+  const roomCode = document.getElementById('roomCodeInput').value.trim();
+  if (!roomCode) {
+      alert('Please enter a room code!');
+      return;
+  }
+  
+  if (window.firebaseFunctions && window.firebaseFunctions.joinRoom) {
+      window.firebaseFunctions.joinRoom(roomCode);
+  }
+}
+
+function leaveRoomHandler() {
+  if (window.firebaseFunctions && window.firebaseFunctions.leaveRoom) {
+      window.firebaseFunctions.leaveRoom();
+      document.querySelector('.room-info').style.display = 'none';
+  }
+}
+
+// ===== MODIFY EXISTING GAME LOGIC =====
+
+// Modify your existing cell click handler to support all modes
+function handleCellClick(index) {
+  // Check if cell is already occupied
+  if (gameBoard[index] !== '') return;
+  
+  // Check if game is over
+  if (checkWinner() || isBoardFull()) return;
+  
+  const gameMode = window.firebaseFunctions ? window.firebaseFunctions.getGameMode() : 'ai';
+  
+  // Handle different game modes
+  if (gameMode === 'ai') {
+      // Your existing AI logic
+      gameBoard[index] = currentPlayer;
+      updateBoard();
+      
+      if (!checkWinner() && !isBoardFull()) {
+          // AI's turn
+          setTimeout(makeAIMove, 500);
+      }
+      
+  } else if (gameMode === 'local') {
+      // Local 2 players
+      gameBoard[index] = currentPlayer;
+      updateBoard();
+      
+      if (!checkWinner() && !isBoardFull()) {
+          // Switch player
+          currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+          updateGameStatus();
+      }
+      
+  } else if (gameMode === 'online') {
+      // Online multiplayer
+      const playerSymbol = window.firebaseFunctions.getCurrentPlayerSymbol();
+      
+      // Only allow move if it's this player's turn
+      // (You'll need to implement turn checking based on Firebase data)
+      gameBoard[index] = playerSymbol;
+      
+      // Send move to Firebase
+      if (window.firebaseFunctions.sendMoveToFirebase) {
+          window.firebaseFunctions.sendMoveToFirebase(index, playerSymbol);
+      }
+      
+      updateBoard();
+  }
+  
+  // Check for winner
+  const winner = checkWinner();
+  if (winner) {
+      handleWin(winner);
+  } else if (isBoardFull()) {
+      handleDraw();
+  }
+}
+
+// Update game board from Firebase
+function updateGameBoardFromFirebase(board) {
+  gameBoard = [...board];
+  updateBoard();
+}
+
+// Update current player from Firebase
+function updateCurrentPlayerFromFirebase(player) {
+  currentPlayer = player;
+  updateGameStatus();
+}
+
+// Check winner from Firebase
+function checkWinnerFromFirebase(winner) {
+  if (winner && winner !== 'draw') {
+      handleWin(winner);
+  } else if (winner === 'draw') {
+      handleDraw();
+  }
+}
+
+// Expose functions to global scope for Firebase
+window.updateGameBoard = updateGameBoardFromFirebase;
+window.updateCurrentPlayer = updateCurrentPlayerFromFirebase;
+window.checkWinnerFromFirebase = checkWinnerFromFirebase;
+window.checkWinnerFunction = checkWinner;
+
+// ===== INITIALIZE EVERYTHING =====
+// Call this when your game loads
+document.addEventListener('DOMContentLoaded', function() {
+  // Your existing initialization code...
+  
+  // Add mode initialization
+  initGameModes();
+  
+  // Initialize Firebase functions
+  if (typeof firebase !== 'undefined') {
+      console.log('Firebase loaded successfully!');
+  }
+});
+
   // Setup the game board
   function setupBoard() {
     boardElement.innerHTML = '';

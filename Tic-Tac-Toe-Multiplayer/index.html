@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
 </head>
 <body>
     <div class="game-container">
@@ -14,7 +17,50 @@
             <h1><i class="fas fa-gamepad"></i> Advanced Tic-Tac-Toe</h1>
             <p class="subtitle">Play against AI or with a friend</p>
         </header>
+        <!-- Game Mode Selector -->
+<div class="mode-selector">
+    <div class="mode-buttons">
+        <button class="mode-btn active" data-mode="ai">
+            <i class="fas fa-robot"></i> VS AI
+        </button>
+        <button class="mode-btn" data-mode="local">
+            <i class="fas fa-users"></i> 2 Players Local
+        </button>
+        <button class="mode-btn" data-mode="online">
+            <i class="fas fa-globe"></i> Online Multiplayer
+        </button>
+    </div>
+    
+    <!-- Online Controls (hidden by default) -->
+    <div class="online-controls" style="display: none;">
+        <div class="room-controls">
+            <button id="createRoomBtn" class="room-btn">
+                <i class="fas fa-plus-circle"></i> Create Room
+            </button>
+            <div class="join-room">
+                <input type="text" id="roomCodeInput" placeholder="Enter room code">
+                <button id="joinRoomBtn" class="room-btn">
+                    <i class="fas fa-sign-in-alt"></i> Join
+                </button>
+            </div>
+        </div>
         
+        <div class="room-info" style="display: none;">
+            <p>Room Code: <span id="roomCodeDisplay" class="room-code"></span></p>
+            <p>Share this code with your friend!</p>
+            <p>Status: <span id="roomStatus">Waiting for player...</span></p>
+            <button id="leaveRoomBtn" class="room-btn">
+                <i class="fas fa-sign-out-alt"></i> Leave Room
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Game Status -->
+<div class="game-status">
+    <p>Mode: <span id="currentMode">VS AI</span></p>
+    <p>Turn: <span id="currentPlayer">X</span></p>
+</div>
         <div class="game-info">
             <div class="game-controls">
                 <div class="control-group">
@@ -113,5 +159,6 @@
     </div>
 
     <script src="script.js"></script>
+    <script src="firebase.js"></script>
 </body>
 </html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Firebase</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+</head>
+<body>
+    <h1>Firebase Connection Test</h1>
+    <button onclick="testConnection()">Test Connection</button>
+    <div id="result"></div>
+    
+    <script>
+        // Your Firebase config here
+        const firebaseConfig = {
+            apiKey: "AIzaSyA1B2c3D4e5F6g7H8i9J0kL1M2n3O4p5Q6r7S",
+            authDomain: "tic-tac-toe-multiplayer.firebaseapp.com",
+            projectId: "tic-tac-toe-multiplayer",
+            storageBucket: "tic-tac-toe-multiplayer.appspot.com",
+            messagingSenderId: "123456789012",
+            appId: "1:123456789012:web:abc123def456ghi789jkl",
+            databaseURL: "https://tic-tac-toe-multiplayer-default-rtdb.europe-west1.firebasedatabase.app/"
+        };
+        
+        function testConnection() {
+            try {
+                firebase.initializeApp(firebaseConfig);
+                const database = firebase.database();
+                
+                // Write test data
+                database.ref('test').set({
+                    message: 'Hello from Firebase!',
+                    timestamp: Date.now()
+                }).then(() => {
+                    // Read test data
+                    database.ref('test').once('value').then(snapshot => {
+                        const data = snapshot.val();
+                        document.getElementById('result').innerHTML = 
+                            `<p style="color: green;">✅ Firebase connected successfully!</p>
+                             <p>Message: ${data.message}</p>
+                             <p>Database URL is working!</p>`;
+                    });
+                }).catch(error => {
+                    document.getElementById('result').innerHTML = 
+                        `<p style="color: red;">❌ Error: ${error.message}</p>`;
+                });
+            } catch (error) {
+                document.getElementById('result').innerHTML = 
+                    `<p style="color: red;">❌ Error: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
