@@ -3,289 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tic-Tac-Toe Game</title>
+    <title>Tic-Tac-Toe Game with AI</title>
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        
-        .container {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 30px;
-            border-radius: 20px;
-            text-align: center;
-            max-width: 500px;
-            width: 100%;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        }
-        
-        h1 {
-            color: white;
-            margin-bottom: 10px;
-            font-size: 2.5rem;
-        }
-        
-        .subtitle {
-            color: #a9b7c6;
-            margin-bottom: 30px;
-        }
-        
-        .status {
-            color: white;
-            font-size: 1.5rem;
-            margin: 20px 0;
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-        }
-        
-        .board {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin: 30px auto;
-            max-width: 300px;
-        }
-        
-        .cell {
-            width: 100px;
-            height: 100px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            font-size: 2.5rem;
-            color: white;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .cell:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-        
-        .cell.x {
-            color: #667eea;
-        }
-        
-        .cell.o {
-            color: #f5576c;
-        }
-        
-        .winning {
-            background: #f6d365 !important;
-            color: #333 !important;
-        }
-        
-        button {
-            padding: 12px 25px;
-            background: #667eea;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            cursor: pointer;
-            margin: 10px;
-            transition: background 0.3s;
-        }
-        
-        button:hover {
-            background: #764ba2;
-        }
-        
-        .score {
-            display: flex;
-            justify-content: space-around;
-            margin: 20px 0;
-            color: white;
-        }
-        
-        .score-item {
-            text-align: center;
-        }
-        
-        .score-value {
-            font-size: 2rem;
-            font-weight: bold;
-        }
-        
-        .footer {
-            margin-top: 30px;
-            color: #a9b7c6;
-            font-size: 0.9rem;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <h1><i class="fas fa-gamepad"></i> Tic-Tac-Toe</h1>
-        <div class="subtitle">A simple and fun game</div>
+    <div class="game-container">
+        <header>
+            <h1><i class="fas fa-gamepad"></i> Advanced Tic-Tac-Toe</h1>
+            <p class="subtitle">Play against AI or with a friend</p>
+        </header>
         
-        <div class="status" id="status">Player X's turn</div>
-        
-        <div class="score">
-            <div class="score-item">
-                <div>X Wins</div>
-                <div class="score-value" id="scoreX">0</div>
+        <div class="game-info">
+            <div class="game-controls">
+                <div class="control-group">
+                    <label><i class="fas fa-users"></i> Game Mode</label>
+                    <div class="mode-buttons">
+                        <button class="mode-btn active" id="mode-player">
+                            <i class="fas fa-user-friends"></i> 2 Players
+                        </button>
+                        <button class="mode-btn" id="mode-ai">
+                            <i class="fas fa-robot"></i> vs AI
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="control-group" id="ai-controls" style="display: none;">
+                    <label><i class="fas fa-brain"></i> AI Difficulty</label>
+                    <div class="difficulty-buttons">
+                        <button class="difficulty-btn active" data-difficulty="easy">
+                            <i class="fas fa-baby"></i> Easy
+                        </button>
+                        <button class="difficulty-btn" data-difficulty="medium">
+                            <i class="fas fa-user-graduate"></i> Medium
+                        </button>
+                        <button class="difficulty-btn" data-difficulty="hard">
+                            <i class="fas fa-crown"></i> Hard
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div class="score-item">
-                <div>Draws</div>
-                <div class="score-value" id="scoreDraw">0</div>
+            
+            <div class="score-board">
+                <div class="score-title">Score Board</div>
+                <div class="score-grid">
+                    <div class="score-item">
+                        <span class="score-label x-label">X Wins</span>
+                        <span class="score-value" id="scoreX">0</span>
+                    </div>
+                    <div class="score-item">
+                        <span class="score-label draw-label">Draws</span>
+                        <span class="score-value" id="scoreDraw">0</span>
+                    </div>
+                    <div class="score-item">
+                        <span class="score-label o-label">O Wins</span>
+                        <span class="score-value" id="scoreO">0</span>
+                    </div>
+                </div>
             </div>
-            <div class="score-item">
-                <div>O Wins</div>
-                <div class="score-value" id="scoreO">0</div>
+        </div>
+        
+        <div class="game-status">
+            <div class="status-text" id="status">Player X's Turn</div>
+            <div class="ai-thinking" id="ai-thinking" style="display: none;">
+                <i class="fas fa-robot"></i> AI is thinking...
             </div>
         </div>
         
-        <div class="board" id="board">
-            <div class="cell" data-index="0"></div>
-            <div class="cell" data-index="1"></div>
-            <div class="cell" data-index="2"></div>
-            <div class="cell" data-index="3"></div>
-            <div class="cell" data-index="4"></div>
-            <div class="cell" data-index="5"></div>
-            <div class="cell" data-index="6"></div>
-            <div class="cell" data-index="7"></div>
-            <div class="cell" data-index="8"></div>
+        <div class="game-board">
+            <div class="board" id="board">
+                <!-- Cells will be generated by JavaScript -->
+            </div>
         </div>
         
-        <div>
-            <button onclick="resetGame()"><i class="fas fa-redo"></i> New Game</button>
-            <button onclick="resetScore()"><i class="fas fa-trash"></i> Reset Score</button>
+        <div class="action-buttons">
+            <button class="action-btn reset-btn" id="reset-btn">
+                <i class="fas fa-redo"></i> New Game
+            </button>
+            <button class="action-btn score-reset-btn" id="score-reset-btn">
+                <i class="fas fa-trash-alt"></i> Reset Score
+            </button>
         </div>
         
-        <div class="footer">
-            <p>Made with <i class="fas fa-heart" style="color: #f5576c;"></i> by Raoul Lupastean</p>
-            <p><a href="https://github.com/LupasteanRaoul" target="_blank" style="color: #667eea;">
-                <i class="fab fa-github"></i> GitHub
-            </a></p>
+        <div class="instructions">
+            <h3><i class="fas fa-info-circle"></i> How to Play</h3>
+            <ul>
+                <li>Players take turns placing X and O on a 3x3 grid</li>
+                <li>First to get 3 in a row (horizontally, vertically, or diagonally) wins</li>
+                <li>Click on any empty cell to make your move</li>
+                <li>In AI mode, you play as X and AI plays as O</li>
+                <li>Easy AI: Makes random moves</li>
+                <li>Medium AI: Tries to win or block you</li>
+                <li>Hard AI: Uses advanced strategy</li>
+            </ul>
         </div>
+        
+        <footer>
+            <p>Made with <i class="fas fa-heart"></i> by Raoul Lupastean</p>
+            <p>
+                <a href="https://github.com/LupasteanRaoul" target="_blank">
+                    <i class="fab fa-github"></i> GitHub Profile
+                </a> | 
+                <a href="https://lupasteanraoul.github.io" target="_blank">
+                    <i class="fas fa-external-link-alt"></i> View Portfolio
+                </a>
+            </p>
+        </footer>
     </div>
 
-    <script>
-        let currentPlayer = 'X';
-        let gameBoard = ['', '', '', '', '', '', '', '', ''];
-        let gameActive = true;
-        let scores = { X: 0, O: 0, draw: 0 };
-        
-        // Load scores from localStorage
-        if (localStorage.getItem('ticTacToeScores')) {
-            scores = JSON.parse(localStorage.getItem('ticTacToeScores'));
-            updateScoreDisplay();
-        }
-        
-        const winPatterns = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8],
-            [0, 3, 6], [1, 4, 7], [2, 5, 8],
-            [0, 4, 8], [2, 4, 6]
-        ];
-        
-        // Add click events to cells
-        document.querySelectorAll('.cell').forEach(cell => {
-            cell.addEventListener('click', handleCellClick);
-        });
-        
-        function handleCellClick(e) {
-            if (!gameActive) return;
-            
-            const index = parseInt(e.target.getAttribute('data-index'));
-            
-            if (gameBoard[index] !== '') return;
-            
-            // Make move
-            gameBoard[index] = currentPlayer;
-            e.target.textContent = currentPlayer;
-            e.target.classList.add(currentPlayer.toLowerCase());
-            
-            // Check for win
-            const winner = checkWinner();
-            if (winner) {
-                gameActive = false;
-                scores[currentPlayer]++;
-                updateScoreDisplay();
-                saveScores();
-                document.getElementById('status').textContent = `Player ${currentPlayer} Wins!`;
-                highlightWinningCells(winner);
-                return;
-            }
-            
-            // Check for draw
-            if (!gameBoard.includes('')) {
-                gameActive = false;
-                scores.draw++;
-                updateScoreDisplay();
-                saveScores();
-                document.getElementById('status').textContent = "It's a Draw!";
-                return;
-            }
-            
-            // Switch player
-            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-            document.getElementById('status').textContent = `Player ${currentPlayer}'s turn`;
-        }
-        
-        function checkWinner() {
-            for (let pattern of winPatterns) {
-                const [a, b, c] = pattern;
-                if (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
-                    return pattern;
-                }
-            }
-            return null;
-        }
-        
-        function highlightWinningCells(pattern) {
-            pattern.forEach(index => {
-                const cell = document.querySelector(`.cell[data-index="${index}"]`);
-                cell.classList.add('winning');
-            });
-        }
-        
-        function resetGame() {
-            gameBoard = ['', '', '', '', '', '', '', '', ''];
-            gameActive = true;
-            currentPlayer = 'X';
-            document.getElementById('status').textContent = "Player X's turn";
-            
-            document.querySelectorAll('.cell').forEach(cell => {
-                cell.textContent = '';
-                cell.classList.remove('x', 'o', 'winning');
-            });
-        }
-        
-        function resetScore() {
-            scores = { X: 0, O: 0, draw: 0 };
-            updateScoreDisplay();
-            localStorage.removeItem('ticTacToeScores');
-        }
-        
-        function updateScoreDisplay() {
-            document.getElementById('scoreX').textContent = scores.X;
-            document.getElementById('scoreO').textContent = scores.O;
-            document.getElementById('scoreDraw').textContent = scores.draw;
-        }
-        
-        function saveScores() {
-            localStorage.setItem('ticTacToeScores', JSON.stringify(scores));
-        }
-        
-        // Initialize
-        updateScoreDisplay();
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
