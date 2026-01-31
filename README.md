@@ -14,13 +14,13 @@
 
 | Project | Description | Technologies | Live Demo |
 |---------|-------------|--------------|-----------|
-| **Currency Converter** | Real-time currency converter with exchange rates | JavaScript, API, CSS3 | [Demo](Currency-Converter/index.html) |
-| **Event RSVP System** | Event management with RSVP functionality | HTML5, LocalStorage, Forms | [Demo](Event-rsvp/index.html) |
-| **Music Shopping Cart** | E-commerce cart for music store | JavaScript, Cart Logic, UI/UX | [Demo](Music-shopping-cart-page/index.html) |
-| **Photography Exhibit** | Interactive photography gallery | CSS Grid, Lightbox, Animations | [Demo](Lab-photography-exibit/index.html) |
-| **Tic Tac Toe AI** | Classic Tic Tac Toe with intelligent AI opponent | Game Logic, AI, Animations | [Demo](Tic-Tac-Toe-AI/index.html) |
-| **Tic Tac Toe Multiplayer** | Real-time multiplayer Tic Tac Toe experience | JavaScript, Game Logic, UI | [Demo](Tic-Tac-Toe-Multiplayer/index.html) |
-| **Lab Music Cart** | Alternative music store cart experiment | JavaScript, Design, Experiments | [Demo](Lab-music-shopping-cart-page/index.html) |
+| **Currency Converter** | Real-time currency converter with exchange rates | HTML5, CSS3, JavaScript, Fetch API, DOM Manipulation | [Demo](Currency-Converter/index.html) |
+| **Event RSVP System** | Event management with RSVP functionality | HTML5, CSS3, JavaScript, LocalStorage, Forms, DOM Manipulation | [Demo](Event-rsvp/index.html) |
+| **Music Shopping Cart** | E-commerce cart for music store | HTML5, CSS3, JavaScript, DOM Manipulation, Cart Logic, UI/UX | [Demo](Music-shopping-cart-page/index.html) |
+| **Photography Exhibit** | Interactive photography gallery | HTML5, CSS3, CSS Grid, JavaScript, Lightbox, Animations | [Demo](Lab-photography-exibit/index.html) |
+| **Tic Tac Toe AI** | Classic Tic Tac Toe with intelligent AI opponent | HTML5, CSS3, JavaScript, Game Logic, AI, Animations, Local Storage | [Demo](Tic-Tac-Toe-AI/index.html) |
+| **Tic Tac Toe Multiplayer** | Real-time multiplayer Tic Tac Toe experience | HTML5, CSS3, JavaScript, Game Logic, UI/UX, Firebase, Event Listeners, Local Storage | [Demo](Tic-Tac-Toe-Multiplayer/index.html) |
+| **Lab Music Cart** | Alternative music store cart experiment | HTML5, CSS3, JavaScript, DOM Manipulation, UI/UX, Experiments | [Demo](Lab-music-shopping-cart-page/index.html) |
 
 ## 🛠️ Features
 
