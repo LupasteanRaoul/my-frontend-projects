@@ -421,7 +421,7 @@ h1, h2, h3, h4 {
 .tech-item {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
     padding: 12px 20px;
     background: white;
     border-radius: 10px;
@@ -429,8 +429,6 @@ h1, h2, h3, h4 {
     color: var(--dark);
     box-shadow: var(--shadow);
     transition: var(--transition);
-    min-width: 140px;
-    justify-content: center;
 }
 
 [data-theme="dark"] .tech-item {
@@ -807,13 +805,6 @@ h1, h2, h3, h4 {
     font-size: 2.2rem;
     color: var(--primary);
     margin-bottom: 16px;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .tool-item h4 {
@@ -1093,6 +1084,80 @@ h1, h2, h3, h4 {
     margin: 0 4px;
 }
 
+/* ===== FIXED ICON SIZES (nu se schimbă cu ecranul) ===== */
+/* Aceste dimensiuni vor rămâne aceleași pe toate dispozitivele */
+
+/* Tech stack icons */
+.tech-item i {
+    font-size: 1.8rem !important;
+    width: 30px !important;
+    height: 30px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Skill icons */
+.skill-icon i {
+    font-size: 1.8rem !important;
+    width: 30px !important;
+    height: 30px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Tool icons */
+.tool-item i {
+    font-size: 2.2rem !important;
+    width: 40px !important;
+    height: 40px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px !important;
+}
+
+/* Project image icons */
+.project-image i {
+    font-size: 4rem !important;
+    width: 60px !important;
+    height: 60px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Card icons */
+.card-icon i {
+    font-size: 2.5rem !important;
+    width: 40px !important;
+    height: 40px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Info icons */
+.info-icon i {
+    font-size: 1.5rem !important;
+    width: 30px !important;
+    height: 30px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Principle icons */
+.principle-icon i {
+    font-size: 1.25rem !important;
+    width: 25px !important;
+    height: 25px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 1024px) {
     .hero-content {
@@ -1109,16 +1174,6 @@ h1, h2, h3, h4 {
     
     .projects-showcase {
         grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .tech-item {
-        min-width: 130px;
-    }
-    
-    .tech-item i {
-        font-size: 1.6rem;
-        width: 26px;
-        height: 26px;
     }
 }
 
@@ -1197,7 +1252,7 @@ h1, h2, h3, h4 {
         grid-template-columns: repeat(2, 1fr);
     }
     
-    /* Icon fixes for tablets */
+    /* Layout adjustments for mobile */
     .tech-stack {
         gap: 15px;
         flex-wrap: wrap;
@@ -1207,26 +1262,6 @@ h1, h2, h3, h4 {
     .tech-item {
         min-width: 120px;
         padding: 10px 15px;
-    }
-    
-    .tech-item i {
-        font-size: 1.5rem;
-        width: 24px;
-        height: 24px;
-    }
-    
-    .skill-icon i {
-        font-size: 1.6rem;
-    }
-    
-    .tool-item i {
-        font-size: 2rem;
-        width: 35px;
-        height: 35px;
-    }
-    
-    .project-image i {
-        font-size: 3.5rem;
     }
 }
 
@@ -1266,12 +1301,6 @@ h1, h2, h3, h4 {
         padding: 8px 12px;
     }
     
-    .tech-item i {
-        font-size: 1.4rem;
-        width: 22px;
-        height: 22px;
-    }
-    
     .footer-links {
         grid-template-columns: 1fr;
     }
@@ -1286,25 +1315,6 @@ h1, h2, h3, h4 {
     
     .tools-grid {
         grid-template-columns: 1fr;
-    }
-    
-    /* Icon fixes for mobile */
-    .skill-icon i {
-        font-size: 1.5rem;
-    }
-    
-    .tool-item i {
-        font-size: 1.8rem;
-        width: 32px;
-        height: 32px;
-    }
-    
-    .project-image i {
-        font-size: 3rem;
-    }
-    
-    .card-icon i {
-        font-size: 2.2rem;
     }
 }
 
