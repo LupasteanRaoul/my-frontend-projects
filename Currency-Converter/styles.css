@@ -359,7 +359,6 @@ body {
 
 .currency-flag {
     width: 24px;
-    margin-left:auto;
     height: auto;
     right: 1rem;
     top: 50%;
@@ -635,7 +634,7 @@ input:checked + .slider:before {
 .currency-option {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 0.5rem;
   }
   
 .currency-grid {
@@ -651,6 +650,9 @@ input:checked + .slider:before {
     border: 1px solid var(--border-color);
     cursor: pointer;
     transition: var(--transition-fast);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
 .currency-item:hover {
