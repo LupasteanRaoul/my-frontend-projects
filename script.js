@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Animations
     function setupAnimations() {
         // Animate numbers
-        const numberElements = document.querySelectorAll('.stat-number[data-target]');
+        const numberElements = document.querySelectorAll('.stat-number[data-target], .stat-value[data-target]');
         numberElements.forEach(element => {
             const target = parseInt(element.getAttribute('data-target'));
             animateNumber(element, target);
@@ -181,17 +181,5 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.key === 'Home') {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-    }
-    
-    // Update project count in code preview
-    const codeElement = document.querySelector('.code-content code');
-    if (codeElement) {
-        const projectCount = document.querySelectorAll('.project-card').length;
-        const codeText = codeElement.textContent;
-        const updatedText = codeText.replace(
-            'projects: 8,',
-            `projects: ${projectCount},`
-        );
-        codeElement.textContent = updatedText;
     }
 });
