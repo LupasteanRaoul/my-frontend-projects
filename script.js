@@ -154,18 +154,24 @@ document.addEventListener('DOMContentLoaded', function() {
     function animateProgressBars() {
         const progressBars = document.querySelectorAll('.level-progress');
         
-        // Așteaptă puțin pentru ca DOM-ul să se încarce complet
-        setTimeout(() => {
-            progressBars.forEach(bar => {
-                // Salvează valoarea inițială
-                const targetWidth = bar.style.width;
-                // Setează la 0
+           setTimeout(() => {
+            progressBars.forEach((bar, index) => {
+                const styleAttribute = bar.getAttribute('style');
+                if (!styleAttribute) return;
+                
+                const match = styleAttribute.match(/width:\s*(\d+)%/);
+                if (!match) return;
+                
+                const targetWidth = match[1] + '%';
+                
                 bar.style.width = '0%';
                 
-                // Animație cu delay diferit pentru fiecare bară
+                void bar.offsetWidth;
+                
+
                 setTimeout(() => {
                     bar.style.width = targetWidth;
-                }, Math.random() * 500 + 300); // Delay aleatoriu între 300-800ms
+                }, 300 + (index * 200)); // Delay crescător: 300ms, 500ms, 700ms
             });
         }, 500);
     }
