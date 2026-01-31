@@ -421,7 +421,7 @@ h1, h2, h3, h4 {
 .tech-item {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
     padding: 12px 20px;
     background: white;
     border-radius: 10px;
@@ -429,6 +429,8 @@ h1, h2, h3, h4 {
     color: var(--dark);
     box-shadow: var(--shadow);
     transition: var(--transition);
+    min-width: 140px;
+    justify-content: center;
 }
 
 [data-theme="dark"] .tech-item {
@@ -441,7 +443,12 @@ h1, h2, h3, h4 {
 }
 
 .tech-item i {
-    font-size: 1.25rem;
+    font-size: 1.8rem;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* ===== FEATURED PROJECTS ===== */
@@ -726,7 +733,7 @@ h1, h2, h3, h4 {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     color: var(--primary);
 }
 
@@ -745,8 +752,8 @@ h1, h2, h3, h4 {
 
 .level-bar {
     flex: 1;
-    height: 10px; /* Mărește înălțimea */
-    background: rgba(0, 0, 0, 0.1); /* Fundal mai vizibil */
+    height: 10px;
+    background: rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     overflow: hidden;
     min-width: 200px;
@@ -762,8 +769,8 @@ h1, h2, h3, h4 {
     height: 100%;
     background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
     border-radius: 5px;
-    width: 0; /* Setează inițial la 0 */
-    transition: width 2s ease-out; /* Animație mai lentă */
+    width: 0;
+    transition: width 2s ease-out;
 }
 
 .skill-level span {
@@ -797,9 +804,16 @@ h1, h2, h3, h4 {
 }
 
 .tool-item i {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
     color: var(--primary);
     margin-bottom: 16px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .tool-item h4 {
@@ -1096,6 +1110,16 @@ h1, h2, h3, h4 {
     .projects-showcase {
         grid-template-columns: repeat(2, 1fr);
     }
+    
+    .tech-item {
+        min-width: 130px;
+    }
+    
+    .tech-item i {
+        font-size: 1.6rem;
+        width: 26px;
+        height: 26px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -1172,6 +1196,38 @@ h1, h2, h3, h4 {
     .footer-links {
         grid-template-columns: repeat(2, 1fr);
     }
+    
+    /* Icon fixes for tablets */
+    .tech-stack {
+        gap: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .tech-item {
+        min-width: 120px;
+        padding: 10px 15px;
+    }
+    
+    .tech-item i {
+        font-size: 1.5rem;
+        width: 24px;
+        height: 24px;
+    }
+    
+    .skill-icon i {
+        font-size: 1.6rem;
+    }
+    
+    .tool-item i {
+        font-size: 2rem;
+        width: 35px;
+        height: 35px;
+    }
+    
+    .project-image i {
+        font-size: 3.5rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -1199,6 +1255,21 @@ h1, h2, h3, h4 {
     
     .tech-stack {
         flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .tech-item {
+        flex: 0 0 calc(50% - 10px);
+        min-width: auto;
+        justify-content: center;
+        text-align: center;
+        padding: 8px 12px;
+    }
+    
+    .tech-item i {
+        font-size: 1.4rem;
+        width: 22px;
+        height: 22px;
     }
     
     .footer-links {
@@ -1216,4 +1287,39 @@ h1, h2, h3, h4 {
     .tools-grid {
         grid-template-columns: 1fr;
     }
+    
+    /* Icon fixes for mobile */
+    .skill-icon i {
+        font-size: 1.5rem;
+    }
+    
+    .tool-item i {
+        font-size: 1.8rem;
+        width: 32px;
+        height: 32px;
+    }
+    
+    .project-image i {
+        font-size: 3rem;
+    }
+    
+    .card-icon i {
+        font-size: 2.2rem;
+    }
 }
+
+/* ===== ANIMATIONS FOR PROGRESS BARS ===== */
+@keyframes progressAnimation {
+    0% { width: 0; }
+    100% { width: var(--target-width); }
+}
+
+/* Ensure progress bars are animated properly */
+.level-progress[style*="width"] {
+    animation: progressAnimation 2s ease-out forwards;
+}
+
+/* For browsers that don't support CSS custom properties in animations */
+.level-progress[style*="width: 95%"] { --target-width: 95%; }
+.level-progress[style*="width: 90%"] { --target-width: 90%; }
+.level-progress[style*="width: 88%"] { --target-width: 88%; }
