@@ -358,7 +358,8 @@ body {
 }
 
 .currency-flag {
-    position: absolute;
+    width: 24px;
+    height: auto;
     right: 1rem;
     top: 50%;
     transform: translateY(-50%);
@@ -630,6 +631,12 @@ input:checked + .slider:before {
     color: var(--text-tertiary);
 }
 
+.currency-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
 .currency-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
