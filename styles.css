@@ -759,6 +759,11 @@ h1, h2, h3, h4 {
     border-radius: 4px;
 }
 
+.level-progress:not([style*="width: 100%"]){
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0%;
+}
+
 .skill-level span {
     font-size: 0.875rem;
     font-weight: 600;
