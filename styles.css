@@ -757,9 +757,8 @@ h1, h2, h3, h4 {
     height: 100%;
     background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
     border-radius: 4px;
-    transition: none !important;
-    opacity: 1 !important;
-    visibility: visible !important;
+    width: 0; /* Start from 0 */
+    transition: width 2s ease-in-out; /* Smooth transition */
 }
 
 .skill-level span {
@@ -1212,4 +1211,36 @@ h1, h2, h3, h4 {
     .tools-grid {
         grid-template-columns: 1fr;
     }
+/* FORȚEARE BARE PROGRES - SOLUTION FINAL */
+.level-progress {
+    width: var(--target-width, auto) !important;
+    transition: none !important;
+    animation: none !important;
 }
+
+/* Asigură-te că fundalul este vizibil */
+.level-bar {
+    background: var(--gray-light) !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-theme="dark"] .level-bar {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Forțează dimensiunile specifice */
+.level-progress[style*="width: 95%"] {
+    width: 95% !important;
+    background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%) !important;
+}
+
+.level-progress[style*="width: 90%"] {
+    width: 90% !important;
+    background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%) !important;
+}
+
+.level-progress[style*="width: 88%"] {
+    width: 88% !important;
+    background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%) !important;
+}}
