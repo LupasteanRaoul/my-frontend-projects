@@ -745,18 +745,25 @@ h1, h2, h3, h4 {
 
 .level-bar {
     flex: 1;
-    height: 8px;
-    background: var(--gray-light);
-    border-radius: 4px;
+    height: 10px; /* Mărește înălțimea */
+    background: rgba(0, 0, 0, 0.1); /* Fundal mai vizibil */
+    border-radius: 5px;
     overflow: hidden;
-    min-width: 150px; /* Lățime minimă pentru bare */
+    min-width: 200px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] .level-bar {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 .level-progress {
     height: 100%;
     background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
-    border-radius: 4px;
-    transition: width 1.5s ease-in-out;
+    border-radius: 5px;
+    width: 0; /* Setează inițial la 0 */
+    transition: width 2s ease-out; /* Animație mai lentă */
 }
 
 .skill-level span {

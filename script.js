@@ -10,8 +10,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize
     initTheme();
     setupEventListeners();
-    setupAnimations();
     updateCurrentYear();
+    updateAllStats();
+    updateFooterName();
+    setupAnimations();
+    animateProgressBars(); // Adaugă această linie
     
     // Theme Management
     function initTheme() {
@@ -115,12 +118,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Animations
     function setupAnimations() {
-        // Animate numbers
-        const numberElements = document.querySelectorAll('.stat-number[data-target], .stat-value[data-target]');
-        numberElements.forEach(element => {
-            const target = parseInt(element.getAttribute('data-target'));
-            animateNumber(element, target);
-        });
+        // Animate numbers - asteapta putin pentru a se incarca DOM-ul
+        setTimeout(() => {
+            const numberElements = document.querySelectorAll('.stat-number[data-target], .stat-value[data-target]');
+            numberElements.forEach(element => {
+                const target = parseInt(element.getAttribute('data-target'));
+                if (!isNaN(target)) {
+                    animateNumber(element, target);
+                }
+            });
+        }, 300);
         
         // Intersection Observer for fade-in animations
         const observerOptions = {
@@ -143,9 +150,32 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // Animate progress bars
+    function animateProgressBars() {
+        const progressBars = document.querySelectorAll('.level-progress');
+        
+        // Așteaptă puțin pentru ca DOM-ul să se încarce complet
+        setTimeout(() => {
+            progressBars.forEach(bar => {
+                // Salvează valoarea inițială
+                const targetWidth = bar.style.width;
+                // Setează la 0
+                bar.style.width = '0%';
+                
+                // Animație cu delay diferit pentru fiecare bară
+                setTimeout(() => {
+                    bar.style.width = targetWidth;
+                }, Math.random() * 500 + 300); // Delay aleatoriu între 300-800ms
+            });
+        }, 500);
+    }
+    
     function animateNumber(element, target) {
         let current = 0;
-        const increment = target / 50;
+        const increment = target / 100;
+        const duration = 1500; // 1.5 seconds
+        const stepTime = duration / 100;
+        
         const timer = setInterval(() => {
             current += increment;
             if (current >= target) {
@@ -153,13 +183,64 @@ document.addEventListener('DOMContentLoaded', function() {
                 clearInterval(timer);
             }
             element.textContent = Math.floor(current);
-        }, 30);
+        }, stepTime);
     }
     
     // Update Current Year
     function updateCurrentYear() {
         if (currentYear) {
             currentYear.textContent = new Date().getFullYear();
+        }
+    }
+    
+    // Update All Stats
+    function updateAllStats() {
+        const projectCount = document.querySelectorAll('.project-card').length;
+        
+        // 1. Actualizează în hero stats
+        const heroProjectElement = document.querySelector('.hero-stats .stat-number[data-target]');
+        if (heroProjectElement) {
+            heroProjectElement.setAttribute('data-target', projectCount);
+            // Nu anima aici, va fi animat în setupAnimations
+        }
+        
+        // 2. Actualizează în about stats
+        const aboutStatBoxes = document.querySelectorAll('.about-stats .stat-box');
+        aboutStatBoxes.forEach(box => {
+            const statValue = box.querySelector('.stat-value');
+            const statLabel = box.querySelector('.stat-label');
+            
+            if (statLabel.textContent === 'Projects') {
+                statValue.setAttribute('data-target', projectCount);
+            } else if (statLabel.textContent === 'Technologies') {
+                // Setează numărul de tehnologii utilizate
+                // HTML, CSS, JS, Git, Responsive Design, Clean Code = 6
+                statValue.setAttribute('data-target', 6);
+            }
+        });
+        
+        // 3. Actualizează codul JavaScript afișat
+        const codeElement = document.querySelector('.code-content code');
+        if (codeElement) {
+            const codeText = codeElement.textContent;
+            const updatedText = codeText.replace(
+                /projects: \d+,/,
+                `projects: ${projectCount},`
+            );
+            codeElement.textContent = updatedText;
+        }
+    }
+    
+    // Update Footer Name
+    function updateFooterName() {
+        const footerName = document.querySelector('.footer-brand h3');
+        if (footerName) {
+            footerName.textContent = 'Lupastean Raoul';
+        }
+        
+        const copyright = document.querySelector('.footer-bottom p');
+        if (copyright) {
+            copyright.innerHTML = copyright.innerHTML.replace('Raoul Lupastean', 'Lupastean Raoul');
         }
     }
     
