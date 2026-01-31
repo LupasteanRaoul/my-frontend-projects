@@ -18,8 +18,9 @@
 | **Event RSVP System** | Event management with RSVP functionality | HTML5, LocalStorage, Forms | [Demo](Event-rsvp/index.html) |
 | **Music Shopping Cart** | E-commerce cart for music store | JavaScript, Cart Logic, UI/UX | [Demo](Music-shopping-cart-page/index.html) |
 | **Photography Exhibit** | Interactive photography gallery | CSS Grid, Lightbox, Animations | [Demo](Lab-photography-exibit/index.html) |
-| **Tic Tac Toe Game** | Classic game with AI opponent | Game Logic, AI, Animations | [Demo](Tic-Tac-Toe-Game/index.html) |
-| **Lab Music Cart** | Alternative music store cart | JavaScript, Design, Experiments | [Demo](Lab-music-shopping-cart-page/index.html) |
+| **Tic Tac Toe AI** | Classic Tic Tac Toe with intelligent AI opponent | Game Logic, AI, Animations | [Demo](Tic-Tac-Toe-AI/index.html) |
+| **Tic Tac Toe Multiplayer** | Real-time multiplayer Tic Tac Toe experience | JavaScript, Game Logic, UI | [Demo](Tic-Tac-Toe-Multiplayer/index.html) |
+| **Lab Music Cart** | Alternative music store cart experiment | JavaScript, Design, Experiments | [Demo](Lab-music-shopping-cart-page/index.html) |
 
 ## 🛠️ Features
 
