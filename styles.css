@@ -1,5 +1,6 @@
 
 
+
 /* ===== VARIABLES & RESET ===== */
 :root {
     --primary: #2563eb;
@@ -443,12 +444,7 @@ h1, h2, h3, h4 {
 }
 
 .tech-item i {
-    font-size: 1.8rem !important;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    font-size: 1.25rem;
 }
 
 /* ===== FEATURED PROJECTS ===== */
@@ -733,10 +729,9 @@ h1, h2, h3, h4 {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.8rem !important;
+    font-size: 1.5rem;
     color: var(--primary);
 }
-
 
 .skill-info h4 {
     font-size: 1.25rem;
@@ -795,16 +790,9 @@ h1, h2, h3, h4 {
 }
 
 .tool-item i {
-    font-size: 2.2rem !important;
+    font-size: 2.5rem;
     color: var(--primary);
     margin-bottom: 16px;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .tool-item h4 {
@@ -1220,34 +1208,5 @@ h1, h2, h3, h4 {
     
     .tools-grid {
         grid-template-columns: 1fr;
-    }
-}
-/* ===== FIXED ICON SIZES - nu se schimbă cu ecranul ===== */
-.tech-item i,
-.skill-icon i,
-.tool-item i,
-.project-image i,
-.card-icon i,
-.info-icon i,
-.principle-icon i {
-    font-size: inherit !important;
-    min-width: 30px;
-    min-height: 30px;
-}
-
-/* Anulează orice modificare din media queries pentru iconițe */
-@media (max-width: 768px) {
-    .tech-item i,
-    .skill-icon i,
-    .tool-item i {
-        font-size: inherit !important;
-    }
-}
-
-@media (max-width: 480px) {
-    .tech-item i,
-    .skill-icon i,
-    .tool-item i {
-        font-size: inherit !important;
     }
 }
