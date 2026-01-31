@@ -359,6 +359,7 @@ body {
 
 .currency-flag {
     width: 24px;
+    margin-left:auto;
     height: auto;
     right: 1rem;
     top: 50%;
