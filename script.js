@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', function() {
     updateAllStats();
     updateFooterName();
     setupAnimations();
-    animateProgressBars(); // Adaugă această linie
     
     // Theme Management
     function initTheme() {
@@ -150,22 +149,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    function animateProgressBars() {
-        const progressBars = document.querySelectorAll('.level-progress');
-        
-        // Use requestAnimationFrame to ensure the initial 0% is rendered
-        requestAnimationFrame(() => {
-            progressBars.forEach(bar => {
-                const targetWidth = bar.getAttribute('data-width'); // Get target from data attribute
-                if (targetWidth) {
-                    // Set the width to the target value, triggering the transition
-                    setTimeout(() => {
-                        bar.style.width = targetWidth + '%';
-                    }, 300); // Small delay to ensure the initial state is rendered
-                }
-            });
-        });
-    }
+    
+    
 function initializeProgressBars() {
     const progressBars = document.querySelectorAll('.level-progress');
     progressBars.forEach(bar => {
