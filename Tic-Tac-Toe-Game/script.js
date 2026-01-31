@@ -1,582 +1,474 @@
-// Main Tic-Tac-Toe Game Component
-const { useState, useEffect, useRef } = React;
+// Game state
+let gameState = {
+  board: ['', '', '', '', '', '', '', '', ''],
+  currentPlayer: 'X',
+  gameActive: true,
+  gameMode: 'player', // 'player' or 'ai'
+  aiDifficulty: 'medium', // 'easy', 'medium', 'hard'
+  scores: { X: 0, O: 0, draw: 0 },
+  aiThinking: false
+};
 
-// Export Board component
-export function Board() {
-  const [squares, setSquares] = useState(Array(9).fill(null));
-  const [xIsNext, setXIsNext] = useState(true);
-  const [winner, setWinner] = useState(null);
-  const [winningLine, setWinningLine] = useState([]);
-  const [score, setScore] = useState({ X: 0, O: 0, draws: 0 });
-  const [gameMode, setGameMode] = useState('player');
-  const [difficulty, setDifficulty] = useState('easy');
-  const [gameHistory, setGameHistory] = useState([]);
-  const [currentMove, setCurrentMove] = useState(0);
-  const [isThinking, setIsThinking] = useState(false);
-  const [showInstructions, setShowInstructions] = useState(false);
-  const [gameStarted, setGameStarted] = useState(false);
-  
-  // Refs for sound
-  const clickSoundRef = useRef(null);
-  const winSoundRef = useRef(null);
-  const drawSoundRef = useRef(null);
-  
-  // Initialize sounds
-  useEffect(() => {
-    clickSoundRef.current = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3');
-    winSoundRef.current = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3');
-    drawSoundRef.current = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-game-show-wrong-answer-buzz-950.mp3');
-    
-    // Short sounds, preload
-    [clickSoundRef.current, winSoundRef.current, drawSoundRef.current].forEach(sound => {
-      sound.volume = 0.3;
-      sound.load();
-    });
-  }, []);
-  
-  // Load saved data
-  useEffect(() => {
-    const savedScore = localStorage.getItem('ticTacToeScore');
-    if (savedScore) {
-      try {
-        setScore(JSON.parse(savedScore));
-      } catch (e) {
-        console.error('Error loading score:', e);
-      }
-    }
-    
-    const savedGameMode = localStorage.getItem('ticTacToeGameMode');
-    if (savedGameMode) {
-      setGameMode(savedGameMode);
-    }
-    
-    const savedDifficulty = localStorage.getItem('ticTacToeDifficulty');
-    if (savedDifficulty) {
-      setDifficulty(savedDifficulty);
-    }
-  }, []);
-  
-  // Save score when changed
-  useEffect(() => {
-    localStorage.setItem('ticTacToeScore', JSON.stringify(score));
-  }, [score]);
-  
-  // AI Move Logic
-  useEffect(() => {
-    if (gameMode === 'ai' && !xIsNext && !winner && !isThinking && gameStarted) {
-      const timer = setTimeout(() => {
-        makeAIMove();
-      }, 600);
-      return () => clearTimeout(timer);
-    }
-  }, [xIsNext, winner, gameMode, squares, gameStarted]);
-  
-  const playSound = (soundType) => {
-    if (!clickSoundRef.current) return;
-    
-    try {
-      const soundMap = {
-        click: clickSoundRef.current,
-        win: winSoundRef.current,
-        draw: drawSoundRef.current
-      };
-      
-      const sound = soundMap[soundType];
-      if (sound) {
-        sound.currentTime = 0;
-        sound.play().catch(e => console.log('Audio play failed:', e));
-      }
-    } catch (e) {
-      console.log('Sound error:', e);
-    }
-  };
-  
-  const makeAIMove = () => {
-    if (winner || isThinking || !gameStarted) return;
-    
-    setIsThinking(true);
-    
-    setTimeout(() => {
-      const availableMoves = squares
-        .map((square, index) => square === null ? index : null)
-        .filter(index => index !== null);
-      
-      if (availableMoves.length === 0) {
-        setIsThinking(false);
-        return;
-      }
-      
-      let aiMove;
-      
-      switch (difficulty) {
-        case 'easy':
-          aiMove = getRandomMove(availableMoves);
-          break;
-        case 'medium':
-          aiMove = getMediumMove(availableMoves, squares);
-          break;
-        case 'hard':
-          aiMove = getBestMove(squares, false);
-          break;
-        default:
-          aiMove = getRandomMove(availableMoves);
-      }
-      
-      if (aiMove !== null && aiMove !== undefined) {
-        handleClick(aiMove, false);
-      }
-      
-      setIsThinking(false);
-    }, 300);
-  };
-  
-  const getRandomMove = (moves) => {
-    return moves[Math.floor(Math.random() * moves.length)];
-  };
-  
-  const getMediumMove = (availableMoves, board) => {
-    // Try to win
-    for (let move of availableMoves) {
-      const newBoard = [...board];
-      newBoard[move] = 'O';
-      if (calculateWinner(newBoard).winner === 'O') {
-        return move;
-      }
-    }
-    
-    // Block player
-    for (let move of availableMoves) {
-      const newBoard = [...board];
-      newBoard[move] = 'X';
-      if (calculateWinner(newBoard).winner === 'X') {
-        return move;
-      }
-    }
-    
-    // Take center
-    if (availableMoves.includes(4)) return 4;
-    
-    // Take corners
-    const corners = [0, 2, 6, 8];
-    const availableCorners = corners.filter(corner => availableMoves.includes(corner));
-    if (availableCorners.length > 0) {
-      return availableCorners[Math.floor(Math.random() * availableCorners.length)];
-    }
-    
-    // Random move
-    return getRandomMove(availableMoves);
-  };
-  
-  const getBestMove = (board, isMaximizing, depth = 0) => {
-    const result = calculateWinner(board);
-    
-    if (result.winner === 'X') return { score: -10 + depth };
-    if (result.winner === 'O') return { score: 10 - depth };
-    if (!board.includes(null)) return { score: 0 };
-    
-    const availableMoves = board
-      .map((square, index) => square === null ? index : null)
-      .filter(index => index !== null);
-    
-    const moves = [];
-    
-    for (let move of availableMoves) {
-      const newBoard = [...board];
-      newBoard[move] = isMaximizing ? 'O' : 'X';
-      const score = getBestMove(newBoard, !isMaximizing, depth + 1).score;
-      moves.push({ move, score });
-    }
-    
-    if (isMaximizing) {
-      const bestMove = moves.reduce((best, current) => 
-        current.score > best.score ? current : best, { score: -Infinity }
-      );
-      return bestMove;
-    } else {
-      const bestMove = moves.reduce((best, current) => 
-        current.score < best.score ? current : best, { score: Infinity }
-      );
-      return bestMove;
-    }
-  };
-  
-  const handleClick = (i, playSoundFlag = true) => {
-    if (winner || squares[i] || (gameMode === 'ai' && !xIsNext) || isThinking || !gameStarted) {
-      return;
-    }
-    
-    if (playSoundFlag) {
-      playSound('click');
-    }
-    
-    const newSquares = squares.slice();
-    newSquares[i] = xIsNext ? 'X' : 'O';
-    
-    // Save to history
-    const newGameHistory = gameHistory.slice(0, currentMove);
-    newGameHistory.push([...newSquares]);
-    setGameHistory(newGameHistory);
-    setCurrentMove(newGameHistory.length);
-    
-    setSquares(newSquares);
-    
-    const result = calculateWinner(newSquares);
-    if (result.winner) {
-      setWinner(result.winner);
-      setWinningLine(result.line);
-      playSound('win');
-      
-      setScore(prev => ({
-        ...prev,
-        [result.winner]: prev[result.winner] + 1
-      }));
-    } else if (newSquares.every(square => square !== null)) {
-      setWinner('draw');
-      playSound('draw');
-      setScore(prev => ({
-        ...prev,
-        draws: prev.draws + 1
-      }));
-    } else {
-      setXIsNext(!xIsNext);
-    }
-  };
-  
-  const startGame = () => {
-    setGameStarted(true);
-    resetGame();
-  };
-  
-  const resetGame = () => {
-    setSquares(Array(9).fill(null));
-    setXIsNext(true);
-    setWinner(null);
-    setWinningLine([]);
-    setGameHistory([]);
-    setCurrentMove(0);
-    setIsThinking(false);
-  };
-  
-  const resetScore = () => {
-    setScore({ X: 0, O: 0, draws: 0 });
-    localStorage.removeItem('ticTacToeScore');
-  };
-  
-  const jumpToMove = (move) => {
-    if (move < gameHistory.length) {
-      setSquares(gameHistory[move]);
-      setCurrentMove(move);
-      setXIsNext(move % 2 === 0);
-      setWinner(null);
-      setWinningLine([]);
-      setIsThinking(false);
-    }
-  };
-  
-  const getStatusMessage = () => {
-    if (!gameStarted) {
-      return (
-        <div className="status start-prompt">
-          <i className="fas fa-play-circle"></i> Click "Start Game" to begin!
-        </div>
-      );
-    }
-    
-    if (winner === 'X' || winner === 'O') {
-      return (
-        <div className="status winner">
-          <i className="fas fa-trophy"></i> Winner: {winner}
-        </div>
-      );
-    } else if (winner === 'draw') {
-      return (
-        <div className="status draw">
-          <i className="fas fa-handshake"></i> It's a draw!
-        </div>
-      );
-    } else {
-      return (
-        <div className="status next-player">
-          {isThinking ? (
-            <><i className="fas fa-robot"></i> AI is thinking...</>
-          ) : (
-            <>Next player: <span className={xIsNext ? 'player-x' : 'player-o'}>{xIsNext ? 'X' : 'O'}</span></>
-          )}
-        </div>
-      );
-    }
-  };
-  
-  const renderSquare = (i) => {
-    const isWinningSquare = winningLine.includes(i);
-    const value = squares[i];
-    const isEmpty = !value && !winner && gameStarted;
-    
-    let squareClass = 'square';
-    if (isWinningSquare) squareClass += ' winning';
-    if (value === 'X') squareClass += ' x-move';
-    if (value === 'O') squareClass += ' o-move';
-    if (isEmpty) squareClass += ' hoverable';
-    
-    return (
-      <button 
-        className={squareClass}
-        onClick={() => handleClick(i)}
-        disabled={!!winner || (gameMode === 'ai' && !xIsNext) || isThinking || !gameStarted}
-        aria-label={`Square ${i + 1} ${value ? `contains ${value}` : 'empty'}`}
-      >
-        {value}
-        {isEmpty && xIsNext && (
-          <span className="hint-x"><i className="fas fa-times"></i></span>
-        )}
-        {isEmpty && !xIsNext && (
-          <span className="hint-o"><i className="far fa-circle"></i></span>
-        )}
-      </button>
-    );
-  };
-  
-  return (
-    <div className="board-container">
-      <div className="header">
-        <h1><i className="fas fa-gamepad"></i> Advanced Tic-Tac-Toe</h1>
-        <div className="subtitle">React-Powered Game with AI Opponent</div>
-      </div>
-      
-      {!gameStarted ? (
-        <div className="start-screen">
-          <div className="welcome-message">
-            <h2><i className="fas fa-chess-board"></i> Welcome!</h2>
-            <p>Experience the classic game with modern features and AI opponent.</p>
-            
-            <div className="feature-list">
-              <div className="feature">
-                <i className="fas fa-robot"></i>
-                <span>3 AI Difficulty Levels</span>
-              </div>
-              <div className="feature">
-                <i className="fas fa-history"></i>
-                <span>Game History & Undo</span>
-              </div>
-              <div className="feature">
-                <i className="fas fa-chart-line"></i>
-                <span>Score Tracking</span>
-              </div>
-              <div className="feature">
-                <i className="fas fa-users"></i>
-                <span>2-Player Mode</span>
-              </div>
-            </div>
-            
-            <button className="start-game-btn" onClick={startGame}>
-              <i className="fas fa-play"></i> Start Game
-            </button>
-            
-            <button 
-              className="instructions-btn" 
-              onClick={() => setShowInstructions(!showInstructions)}
-            >
-              <i className="fas fa-info-circle"></i> How to Play
-            </button>
-            
-            {showInstructions && (
-              <div className="instructions">
-                <h3><i className="fas fa-graduation-cap"></i> Game Instructions</h3>
-                <ul>
-                  <li>Players take turns placing X and O on a 3x3 grid</li>
-                  <li>First player to get 3 in a row (horizontally, vertically, or diagonally) wins</li>
-                  <li>Choose between 2-player mode or play against AI</li>
-                  <li>AI has three difficulty levels: Easy, Medium, Hard</li>
-                  <li>Use Game History to review or undo moves</li>
-                </ul>
-              </div>
-            )}
-          </div>
-        </div>
-      ) : (
-        <>
-          <div className="game-info">
-            <div className="score-board">
-              <div className="score-item">
-                <span className="score-label x-label">
-                  <i className="fas fa-times"></i> X Wins
-                </span>
-                <span className="score-value">{score.X}</span>
-              </div>
-              <div className="score-item">
-                <span className="score-label draw-label">
-                  <i className="fas fa-equals"></i> Draws
-                </span>
-                <span className="score-value">{score.draws}</span>
-              </div>
-              <div className="score-item">
-                <span className="score-label o-label">
-                  <i className="far fa-circle"></i> O Wins
-                </span>
-                <span className="score-value">{score.O}</span>
-              </div>
-            </div>
-            
-            {getStatusMessage()}
-            
-            <div className="game-controls">
-              <div className="control-group">
-                <label><i className="fas fa-users"></i> Game Mode</label>
-                <div className="mode-buttons">
-                  <button 
-                    className={`mode-btn ${gameMode === 'player' ? 'active' : ''}`}
-                    onClick={() => {
-                      setGameMode('player');
-                      localStorage.setItem('ticTacToeGameMode', 'player');
-                      resetGame();
-                    }}
-                  >
-                    <i className="fas fa-user-friends"></i> 2 Players
-                  </button>
-                  <button 
-                    className={`mode-btn ${gameMode === 'ai' ? 'active' : ''}`}
-                    onClick={() => {
-                      setGameMode('ai');
-                      localStorage.setItem('ticTacToeGameMode', 'ai');
-                      resetGame();
-                    }}
-                  >
-                    <i className="fas fa-robot"></i> vs AI
-                  </button>
-                </div>
-              </div>
-              
-              {gameMode === 'ai' && (
-                <div className="control-group">
-                  <label><i className="fas fa-brain"></i> AI Difficulty</label>
-                  <div className="difficulty-buttons">
-                    <button 
-                      className={`difficulty-btn ${difficulty === 'easy' ? 'active' : ''}`}
-                      onClick={() => {
-                        setDifficulty('easy');
-                        localStorage.setItem('ticTacToeDifficulty', 'easy');
-                        resetGame();
-                      }}
-                    >
-                      <i className="fas fa-baby"></i> Easy
-                    </button>
-                    <button 
-                      className={`difficulty-btn ${difficulty === 'medium' ? 'active' : ''}`}
-                      onClick={() => {
-                        setDifficulty('medium');
-                        localStorage.setItem('ticTacToeDifficulty', 'medium');
-                        resetGame();
-                      }}
-                    >
-                      <i className="fas fa-user-graduate"></i> Medium
-                    </button>
-                    <button 
-                      className={`difficulty-btn ${difficulty === 'hard' ? 'active' : ''}`}
-                      onClick={() => {
-                        setDifficulty('hard');
-                        localStorage.setItem('ticTacToeDifficulty', 'hard');
-                        resetGame();
-                      }}
-                    >
-                      <i className="fas fa-crown"></i> Hard
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-          
-          <div className="game-board">
-            <div className="board">
-              <div className="board-row">
-                {renderSquare(0)}
-                {renderSquare(1)}
-                {renderSquare(2)}
-              </div>
-              <div className="board-row">
-                {renderSquare(3)}
-                {renderSquare(4)}
-                {renderSquare(5)}
-              </div>
-              <div className="board-row">
-                {renderSquare(6)}
-                {renderSquare(7)}
-                {renderSquare(8)}
-              </div>
-            </div>
-          </div>
-          
-          <div className="action-buttons">
-            <button className="action-btn reset-btn" onClick={resetGame}>
-              <i className="fas fa-redo"></i> New Game
-            </button>
-            <button className="action-btn menu-btn" onClick={() => setGameStarted(false)}>
-              <i className="fas fa-home"></i> Main Menu
-            </button>
-            <button className="action-btn score-reset-btn" onClick={resetScore}>
-              <i className="fas fa-trash-alt"></i> Reset Score
-            </button>
-          </div>
-          
-          {gameHistory.length > 0 && (
-            <div className="game-history">
-              <h3><i className="fas fa-history"></i> Game History</h3>
-              <div className="history-list">
-                <button 
-                  className={`history-btn ${currentMove === 0 ? 'active' : ''}`}
-                  onClick={() => jumpToMove(0)}
-                >
-                  <i className="fas fa-flag"></i> Start
-                </button>
-                {gameHistory.map((_, move) => (
-                  move > 0 && (
-                    <button 
-                      key={move}
-                      className={`history-btn ${currentMove === move ? 'active' : ''}`}
-                      onClick={() => jumpToMove(move)}
-                    >
-                      <i className="fas fa-step-forward"></i> Move #{move}
-                    </button>
-                  )
-                ))}
-              </div>
-            </div>
-          )}
-        </>
-      )}
-      
-      <div className="footer">
-        <p>
-          Made with <i className="fas fa-heart"></i> using React 
-          | <a href="https://github.com/LupasteanRaoul" target="_blank" rel="noopener">
-            <i className="fab fa-github"></i> GitHub
-          </a>
-        </p>
-        <p className="view-live-note">
-          <i className="fas fa-external-link-alt"></i> View Live on GitHub Pages
-        </p>
-      </div>
-    </div>
-  );
+// Winning combinations
+const winPatterns = [
+  [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
+  [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
+  [0, 4, 8], [2, 4, 6] // diagonals
+];
+
+// DOM elements
+const boardElement = document.getElementById('board');
+const statusElement = document.getElementById('status');
+const aiThinkingElement = document.getElementById('ai-thinking');
+const scoreXElement = document.getElementById('scoreX');
+const scoreOElement = document.getElementById('scoreO');
+const scoreDrawElement = document.getElementById('scoreDraw');
+const resetBtn = document.getElementById('reset-btn');
+const scoreResetBtn = document.getElementById('score-reset-btn');
+
+// Mode buttons
+const modePlayerBtn = document.getElementById('mode-player');
+const modeAiBtn = document.getElementById('mode-ai');
+const aiControls = document.getElementById('ai-controls');
+const difficultyBtns = document.querySelectorAll('.difficulty-btn');
+
+// Initialize game
+function initGame() {
+  loadScores();
+  setupBoard();
+  setupEventListeners();
+  updateStatus();
+  updateScoreDisplay();
 }
 
-// Helper function to calculate winner
-function calculateWinner(squares) {
-  const lines = [
-    [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
-    [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
-    [0, 4, 8], [2, 4, 6] // diagonals
-  ];
+// Setup the game board
+function setupBoard() {
+  boardElement.innerHTML = '';
   
-  for (let i = 0; i < lines.length; i++) {
-    const [a, b, c] = lines[i];
-    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return {
-        winner: squares[a],
-        line: lines[i]
-      };
-    }
+  for (let i = 0; i < 9; i++) {
+      const cell = document.createElement('div');
+      cell.className = 'cell';
+      cell.dataset.index = i;
+      cell.addEventListener('click', () => handleCellClick(i));
+      
+      // Add visual hint for next move
+      const hint = document.createElement('span');
+      hint.className = `hint hint-${gameState.currentPlayer.toLowerCase()}`;
+      hint.innerHTML = gameState.currentPlayer === 'X' ? 
+          '<i class="fas fa-times"></i>' : 
+          '<i class="far fa-circle"></i>';
+      cell.appendChild(hint);
+      
+      boardElement.appendChild(cell);
+  }
+}
+
+// Setup event listeners
+function setupEventListeners() {
+  // Mode buttons
+  modePlayerBtn.addEventListener('click', () => {
+      setGameMode('player');
+      resetGame();
+  });
+  
+  modeAiBtn.addEventListener('click', () => {
+      setGameMode('ai');
+      resetGame();
+  });
+  
+  // Difficulty buttons
+  difficultyBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+          setDifficulty(btn.dataset.difficulty);
+      });
+  });
+  
+  // Action buttons
+  resetBtn.addEventListener('click', resetGame);
+  scoreResetBtn.addEventListener('click', resetScores);
+}
+
+// Set game mode
+function setGameMode(mode) {
+  gameState.gameMode = mode;
+  
+  // Update UI
+  if (mode === 'player') {
+      modePlayerBtn.classList.add('active');
+      modeAiBtn.classList.remove('active');
+      aiControls.style.display = 'none';
+  } else {
+      modePlayerBtn.classList.remove('active');
+      modeAiBtn.classList.add('active');
+      aiControls.style.display = 'block';
+  }
+}
+
+// Set AI difficulty
+function setDifficulty(difficulty) {
+  gameState.aiDifficulty = difficulty;
+  
+  // Update UI
+  difficultyBtns.forEach(btn => {
+      if (btn.dataset.difficulty === difficulty) {
+          btn.classList.add('active');
+      } else {
+          btn.classList.remove('active');
+      }
+  });
+}
+
+// Handle cell click
+function handleCellClick(index) {
+  // Check if move is valid
+  if (!gameState.gameActive || 
+      gameState.board[index] !== '' || 
+      gameState.aiThinking ||
+      (gameState.gameMode === 'ai' && gameState.currentPlayer === 'O')) {
+      return;
   }
   
-  return { winner: null, line: [] };
+  // Make the move
+  makeMove(index, gameState.currentPlayer);
+  
+  // Check for game end
+  const winner = checkWinner();
+  if (winner) {
+      handleWin(winner);
+      return;
+  }
+  
+  if (checkDraw()) {
+      handleDraw();
+      return;
+  }
+  
+  // Switch player
+  switchPlayer();
+  
+  // If AI's turn, make AI move
+  if (gameState.gameMode === 'ai' && gameState.currentPlayer === 'O') {
+      makeAiMove();
+  }
 }
+
+// Make a move on the board
+function makeMove(index, player) {
+  gameState.board[index] = player;
+  
+  // Update UI
+  const cell = boardElement.children[index];
+  cell.textContent = player;
+  cell.classList.add(player.toLowerCase());
+  
+  // Remove hint
+  const hint = cell.querySelector('.hint');
+  if (hint) {
+      hint.remove();
+  }
+  
+  // Add hints to empty cells
+  updateHints();
+}
+
+// Update hints on empty cells
+function updateHints() {
+  const cells = boardElement.children;
+  for (let i = 0; i < cells.length; i++) {
+      if (gameState.board[i] === '') {
+          let hint = cells[i].querySelector('.hint');
+          if (!hint) {
+              hint = document.createElement('span');
+              hint.className = `hint hint-${gameState.currentPlayer.toLowerCase()}`;
+              cells[i].appendChild(hint);
+          }
+          hint.innerHTML = gameState.currentPlayer === 'X' ? 
+              '<i class="fas fa-times"></i>' : 
+              '<i class="far fa-circle"></i>';
+      }
+  }
+}
+
+// Switch current player
+function switchPlayer() {
+  gameState.currentPlayer = gameState.currentPlayer === 'X' ? 'O' : 'X';
+  updateStatus();
+}
+
+// Make AI move
+function makeAiMove() {
+  if (!gameState.gameActive) return;
+  
+  // Show thinking indicator
+  gameState.aiThinking = true;
+  aiThinkingElement.style.display = 'block';
+  
+  // AI makes move after delay
+  setTimeout(() => {
+      let aiMove;
+      
+      switch (gameState.aiDifficulty) {
+          case 'easy':
+              aiMove = getEasyAiMove();
+              break;
+          case 'medium':
+              aiMove = getMediumAiMove();
+              break;
+          case 'hard':
+              aiMove = getHardAiMove();
+              break;
+          default:
+              aiMove = getMediumAiMove();
+      }
+      
+      if (aiMove !== -1) {
+          makeMove(aiMove, 'O');
+          
+          // Check for game end
+          const winner = checkWinner();
+          if (winner) {
+              handleWin(winner);
+              gameState.aiThinking = false;
+              aiThinkingElement.style.display = 'none';
+              return;
+          }
+          
+          if (checkDraw()) {
+              handleDraw();
+              gameState.aiThinking = false;
+              aiThinkingElement.style.display = 'none';
+              return;
+          }
+          
+          switchPlayer();
+      }
+      
+      gameState.aiThinking = false;
+      aiThinkingElement.style.display = 'none';
+  }, 500);
+}
+
+// Easy AI: Random move
+function getEasyAiMove() {
+  const availableMoves = [];
+  for (let i = 0; i < 9; i++) {
+      if (gameState.board[i] === '') {
+          availableMoves.push(i);
+      }
+  }
+  
+  if (availableMoves.length > 0) {
+      return availableMoves[Math.floor(Math.random() * availableMoves.length)];
+  }
+  return -1;
+}
+
+// Medium AI: Try to win or block
+function getMediumAiMove() {
+  // Try to win
+  for (let pattern of winPatterns) {
+      const [a, b, c] = pattern;
+      const board = gameState.board;
+      
+      if (board[a] === 'O' && board[b] === 'O' && board[c] === '') return c;
+      if (board[a] === 'O' && board[c] === 'O' && board[b] === '') return b;
+      if (board[b] === 'O' && board[c] === 'O' && board[a] === '') return a;
+  }
+  
+  // Try to block player
+  for (let pattern of winPatterns) {
+      const [a, b, c] = pattern;
+      const board = gameState.board;
+      
+      if (board[a] === 'X' && board[b] === 'X' && board[c] === '') return c;
+      if (board[a] === 'X' && board[c] === 'X' && board[b] === '') return b;
+      if (board[b] === 'X' && board[c] === 'X' && board[a] === '') return a;
+  }
+  
+  // Take center if available
+  if (gameState.board[4] === '') return 4;
+  
+  // Take corners
+  const corners = [0, 2, 6, 8];
+  const availableCorners = corners.filter(corner => gameState.board[corner] === '');
+  if (availableCorners.length > 0) {
+      return availableCorners[Math.floor(Math.random() * availableCorners.length)];
+  }
+  
+  // Random move
+  return getEasyAiMove();
+}
+
+// Hard AI: Minimax algorithm
+function getHardAiMove() {
+  const result = minimax(gameState.board, 'O');
+  return result.index;
+}
+
+function minimax(board, player) {
+  const availableMoves = board.map((cell, index) => cell === '' ? index : null)
+      .filter(index => index !== null);
+  
+  // Check for terminal state
+  const winner = checkWinnerForBoard(board);
+  if (winner === 'X') return { score: -10 };
+  if (winner === 'O') return { score: 10 };
+  if (availableMoves.length === 0) return { score: 0 };
+  
+  const moves = [];
+  
+  for (let move of availableMoves) {
+      const newBoard = [...board];
+      newBoard[move] = player;
+      
+      const result = minimax(newBoard, player === 'O' ? 'X' : 'O');
+      moves.push({
+          index: move,
+          score: result.score
+      });
+  }
+  
+  // Choose best move
+  let bestMove;
+  if (player === 'O') {
+      let bestScore = -Infinity;
+      for (let move of moves) {
+          if (move.score > bestScore) {
+              bestScore = move.score;
+              bestMove = move;
+          }
+      }
+  } else {
+      let bestScore = Infinity;
+      for (let move of moves) {
+          if (move.score < bestScore) {
+              bestScore = move.score;
+              bestMove = move;
+          }
+      }
+  }
+  
+  return bestMove;
+}
+
+// Check winner for a specific board state (for minimax)
+function checkWinnerForBoard(board) {
+  for (let pattern of winPatterns) {
+      const [a, b, c] = pattern;
+      if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+          return board[a];
+      }
+  }
+  return null;
+}
+
+// Check for winner
+function checkWinner() {
+  for (let pattern of winPatterns) {
+      const [a, b, c] = pattern;
+      if (gameState.board[a] && 
+          gameState.board[a] === gameState.board[b] && 
+          gameState.board[a] === gameState.board[c]) {
+          return {
+              winner: gameState.board[a],
+              pattern: pattern
+          };
+      }
+  }
+  return null;
+}
+
+// Check for draw
+function checkDraw() {
+  return gameState.board.every(cell => cell !== '');
+}
+
+// Handle win
+function handleWin(winnerInfo) {
+  gameState.gameActive = false;
+  gameState.scores[winnerInfo.winner]++;
+  
+  // Highlight winning cells
+  winnerInfo.pattern.forEach(index => {
+      boardElement.children[index].classList.add('win');
+  });
+  
+  // Update status
+  statusElement.textContent = `Player ${winnerInfo.winner} Wins!`;
+  
+  saveScores();
+  updateScoreDisplay();
+}
+
+// Handle draw
+function handleDraw() {
+  gameState.gameActive = false;
+  gameState.scores.draw++;
+  
+  statusElement.textContent = "It's a Draw!";
+  
+  saveScores();
+  updateScoreDisplay();
+}
+
+// Reset game
+function resetGame() {
+  gameState.board = ['', '', '', '', '', '', '', '', ''];
+  gameState.currentPlayer = 'X';
+  gameState.gameActive = true;
+  gameState.aiThinking = false;
+  aiThinkingElement.style.display = 'none';
+  
+  // Clear board UI
+  const cells = boardElement.children;
+  for (let i = 0; i < cells.length; i++) {
+      cells[i].textContent = '';
+      cells[i].className = 'cell';
+      cells[i].classList.remove('x', 'o', 'win');
+  }
+  
+  // Re-add hints
+  updateHints();
+  updateStatus();
+}
+
+// Reset scores
+function resetScores() {
+  gameState.scores = { X: 0, O: 0, draw: 0 };
+  localStorage.removeItem('ticTacToeScores');
+  updateScoreDisplay();
+}
+
+// Update status display
+function updateStatus() {
+  if (!gameState.gameActive) return;
+  
+  if (gameState.gameMode === 'ai' && gameState.currentPlayer === 'O') {
+      statusElement.textContent = "AI's Turn";
+  } else {
+      statusElement.textContent = `Player ${gameState.currentPlayer}'s Turn`;
+  }
+}
+
+// Update score display
+function updateScoreDisplay() {
+  scoreXElement.textContent = gameState.scores.X;
+  scoreOElement.textContent = gameState.scores.O;
+  scoreDrawElement.textContent = gameState.scores.draw;
+}
+
+// Load scores from localStorage
+function loadScores() {
+  const savedScores = localStorage.getItem('ticTacToeScores');
+  if (savedScores) {
+      gameState.scores = JSON.parse(savedScores);
+  }
+}
+
+// Save scores to localStorage
+function saveScores() {
+  localStorage.setItem('ticTacToeScores', JSON.stringify(gameState.scores));
+}
+
+// Initialize the game when page loads
+document.addEventListener('DOMContentLoaded', initGame);
