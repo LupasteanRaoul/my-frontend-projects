@@ -7,9 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❌⭕</text></svg>">
 </head>
 <body>
     <div class="game-container">
@@ -17,64 +15,59 @@
             <h1><i class="fas fa-gamepad"></i> Advanced Tic-Tac-Toe</h1>
             <p class="subtitle">Play against AI or with a friend</p>
         </header>
+
         <!-- Game Mode Selector -->
-<div class="mode-selector">
-    <div class="mode-buttons">
-        <button class="mode-btn active" data-mode="ai">
-            <i class="fas fa-robot"></i> VS AI
-        </button>
-        <button class="mode-btn" data-mode="local">
-            <i class="fas fa-users"></i> 2 Players Local
-        </button>
-        <button class="mode-btn" data-mode="online">
-            <i class="fas fa-globe"></i> Online Multiplayer
-        </button>
-    </div>
-    
-    <!-- Online Controls (hidden by default) -->
-    <div class="online-controls" style="display: none;">
-        <div class="room-controls">
-            <button id="createRoomBtn" class="room-btn">
-                <i class="fas fa-plus-circle"></i> Create Room
-            </button>
-            <div class="join-room">
-                <input type="text" id="roomCodeInput" placeholder="Enter room code">
-                <button id="joinRoomBtn" class="room-btn">
-                    <i class="fas fa-sign-in-alt"></i> Join
+        <div class="mode-selector">
+            <div class="mode-buttons">
+                <button class="mode-btn active" data-mode="ai">
+                    <i class="fas fa-robot"></i> VS AI
+                </button>
+                <button class="mode-btn" data-mode="local">
+                    <i class="fas fa-users"></i> 2 Players Local
+                </button>
+                <button class="mode-btn" data-mode="online">
+                    <i class="fas fa-globe"></i> Online Multiplayer
                 </button>
             </div>
-        </div>
-        
-        <div class="room-info" style="display: none;">
-            <p>Room Code: <span id="roomCodeDisplay" class="room-code"></span></p>
-            <p>Share this code with your friend!</p>
-            <p>Status: <span id="roomStatus">Waiting for player...</span></p>
-            <button id="leaveRoomBtn" class="room-btn">
-                <i class="fas fa-sign-out-alt"></i> Leave Room
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- Game Status -->
-<div class="game-status">
-    <p>Mode: <span id="currentMode">VS AI</span></p>
-    <p>Turn: <span id="currentPlayer">X</span></p>
-</div>
-        <div class="game-info">
-            <div class="game-controls">
-                <div class="control-group">
-                    <label><i class="fas fa-users"></i> Game Mode</label>
-                    <div class="mode-buttons">
-                        <button class="mode-btn active" id="mode-player">
-                            <i class="fas fa-user-friends"></i> 2 Players
-                        </button>
-                        <button class="mode-btn" id="mode-ai">
-                            <i class="fas fa-robot"></i> vs AI
+            
+            <!-- Online Controls -->
+            <div class="online-controls" style="display: none;">
+                <div class="room-controls">
+                    <button id="createRoomBtn" class="room-btn">
+                        <i class="fas fa-plus-circle"></i> Create Room
+                    </button>
+                    <div class="join-room">
+                        <input type="text" id="roomCodeInput" placeholder="Enter room code">
+                        <button id="joinRoomBtn" class="room-btn">
+                            <i class="fas fa-sign-in-alt"></i> Join
                         </button>
                     </div>
                 </div>
                 
+                <div class="room-info" style="display: none;">
+                    <p>Room Code: <span id="roomCodeDisplay" class="room-code"></span></p>
+                    <p>Share this code with your friend!</p>
+                    <p>Status: <span id="roomStatus">Waiting for player...</span></p>
+                    <button id="leaveRoomBtn" class="room-btn">
+                        <i class="fas fa-sign-out-alt"></i> Leave Room
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Status Display -->
+        <div class="game-status-display">
+            <p>Mode: <span id="currentMode">VS AI</span></p>
+            <p>Turn: <span id="currentPlayer">X</span></p>
+            <p id="statusMessage">Player X's Turn</p>
+            <div class="ai-thinking" id="ai-thinking" style="display: none;">
+                <i class="fas fa-robot"></i> AI is thinking...
+            </div>
+        </div>
+
+        <!-- Game Info and Controls -->
+        <div class="game-info">
+            <div class="game-controls">
                 <div class="control-group" id="ai-controls" style="display: none;">
                     <label><i class="fas fa-brain"></i> AI Difficulty</label>
                     <div class="difficulty-buttons">
@@ -89,40 +82,33 @@
                         </button>
                     </div>
                 </div>
-            </div>
-            
-            <div class="score-board">
-                <div class="score-title">Score Board</div>
-                <div class="score-grid">
-                    <div class="score-item">
-                        <span class="score-label x-label">X Wins</span>
-                        <span class="score-value" id="scoreX">0</span>
-                    </div>
-                    <div class="score-item">
-                        <span class="score-label draw-label">Draws</span>
-                        <span class="score-value" id="scoreDraw">0</span>
-                    </div>
-                    <div class="score-item">
-                        <span class="score-label o-label">O Wins</span>
-                        <span class="score-value" id="scoreO">0</span>
+                
+                <div class="score-board">
+                    <div class="score-title">Score Board</div>
+                    <div class="score-grid">
+                        <div class="score-item">
+                            <span class="score-label x-label">X Wins</span>
+                            <span class="score-value" id="scoreX">0</span>
+                        </div>
+                        <div class="score-item">
+                            <span class="score-label draw-label">Draws</span>
+                            <span class="score-value" id="scoreDraw">0</span>
+                        </div>
+                        <div class="score-item">
+                            <span class="score-label o-label">O Wins</span>
+                            <span class="score-value" id="scoreO">0</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        
-        <div class="game-status">
-            <div class="status-text" id="status">Player X's Turn</div>
-            <div class="ai-thinking" id="ai-thinking" style="display: none;">
-                <i class="fas fa-robot"></i> AI is thinking...
-            </div>
-        </div>
-        
+
+        <!-- Game Board -->
         <div class="game-board">
-            <div class="board" id="board">
-                <!-- Cells will be generated by JavaScript -->
-            </div>
+            <div class="board" id="board"></div>
         </div>
         
+        <!-- Action Buttons -->
         <div class="action-buttons">
             <button class="action-btn reset-btn" id="reset-btn">
                 <i class="fas fa-redo"></i> New Game
@@ -132,6 +118,7 @@
             </button>
         </div>
         
+        <!-- Instructions -->
         <div class="instructions">
             <h3><i class="fas fa-info-circle"></i> How to Play</h3>
             <ul>
@@ -145,6 +132,7 @@
             </ul>
         </div>
         
+        <!-- Footer -->
         <footer>
             <p>Made with <i class="fas fa-heart"></i> by Raoul Lupastean</p>
             <p>
@@ -158,7 +146,9 @@
         </footer>
     </div>
 
-    <script src="script.js"></script>
-    <script src="firebase.js"></script>
+    <!-- Firebase & Game Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    
 </body>
 </html>
