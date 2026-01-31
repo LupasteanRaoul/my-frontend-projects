@@ -154,26 +154,26 @@ document.addEventListener('DOMContentLoaded', function() {
     function animateProgressBars() {
         const progressBars = document.querySelectorAll('.level-progress');
         
-           setTimeout(() => {
-            progressBars.forEach((bar, index) => {
-                const styleAttribute = bar.getAttribute('style');
-                if (!styleAttribute) return;
-                
-                const match = styleAttribute.match(/width:\s*(\d+)%/);
-                if (!match) return;
-                
-                const targetWidth = match[1] + '%';
-                
-                bar.style.width = '0%';
-                
-                void bar.offsetWidth;
-                
-
-                setTimeout(() => {
-                    bar.style.width = targetWidth;
-                }, 300 + (index * 200)); // Delay crescător: 300ms, 500ms, 700ms
-            });
-        }, 500);
+        // Așteaptă ca pagina să se încarce complet
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                progressBars.forEach((bar, index) => {
+                    // Obține valoarea direct din atributul data-width
+                    const targetWidth = bar.getAttribute('data-width') || bar.style.width;
+                    
+                    // Setează la 0
+                    bar.style.width = '0%';
+                    
+                    // Forțează reflow
+                    bar.getBoundingClientRect();
+                    
+                    // Animează după un scurt delay
+                    setTimeout(() => {
+                        bar.style.width = targetWidth;
+                    }, 300 + (index * 200));
+                });
+            }, 300);
+        });
     }
     
     function animateNumber(element, target) {
