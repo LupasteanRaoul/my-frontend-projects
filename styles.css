@@ -1,3 +1,5 @@
+
+
 /* ===== VARIABLES & RESET ===== */
 :root {
     --primary: #2563eb;
@@ -441,12 +443,7 @@ h1, h2, h3, h4 {
 }
 
 .tech-item i {
-    font-size: 1.8rem;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    font-size: 1.25rem;
 }
 
 /* ===== FEATURED PROJECTS ===== */
@@ -731,7 +728,7 @@ h1, h2, h3, h4 {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     color: var(--primary);
 }
 
@@ -745,30 +742,20 @@ h1, h2, h3, h4 {
     display: flex;
     align-items: center;
     gap: 12px;
-    width: 100%;
 }
 
 .level-bar {
     flex: 1;
-    height: 10px;
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
+    height: 8px;
+    background: var(--gray-light);
+    border-radius: 4px;
     overflow: hidden;
-    min-width: 200px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-[data-theme="dark"] .level-bar {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
 }
 
 .level-progress {
     height: 100%;
     background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
-    border-radius: 5px;
-    width: 0;
-    transition: width 2s ease-out;
+    border-radius: 4px;
 }
 
 .skill-level span {
@@ -802,7 +789,7 @@ h1, h2, h3, h4 {
 }
 
 .tool-item i {
-    font-size: 2.2rem;
+    font-size: 2.5rem;
     color: var(--primary);
     margin-bottom: 16px;
 }
@@ -1084,80 +1071,6 @@ h1, h2, h3, h4 {
     margin: 0 4px;
 }
 
-/* ===== FIXED ICON SIZES (nu se schimbă cu ecranul) ===== */
-/* Aceste dimensiuni vor rămâne aceleași pe toate dispozitivele */
-
-/* Tech stack icons */
-.tech-item i {
-    font-size: 1.8rem !important;
-    width: 30px !important;
-    height: 30px !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Skill icons */
-.skill-icon i {
-    font-size: 1.8rem !important;
-    width: 30px !important;
-    height: 30px !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Tool icons */
-.tool-item i {
-    font-size: 2.2rem !important;
-    width: 40px !important;
-    height: 40px !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 16px !important;
-}
-
-/* Project image icons */
-.project-image i {
-    font-size: 4rem !important;
-    width: 60px !important;
-    height: 60px !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Card icons */
-.card-icon i {
-    font-size: 2.5rem !important;
-    width: 40px !important;
-    height: 40px !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Info icons */
-.info-icon i {
-    font-size: 1.5rem !important;
-    width: 30px !important;
-    height: 30px !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Principle icons */
-.principle-icon i {
-    font-size: 1.25rem !important;
-    width: 25px !important;
-    height: 25px !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 1024px) {
     .hero-content {
@@ -1251,18 +1164,6 @@ h1, h2, h3, h4 {
     .footer-links {
         grid-template-columns: repeat(2, 1fr);
     }
-    
-    /* Layout adjustments for mobile */
-    .tech-stack {
-        gap: 15px;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-    
-    .tech-item {
-        min-width: 120px;
-        padding: 10px 15px;
-    }
 }
 
 @media (max-width: 480px) {
@@ -1290,15 +1191,6 @@ h1, h2, h3, h4 {
     
     .tech-stack {
         flex-wrap: wrap;
-        gap: 10px;
-    }
-    
-    .tech-item {
-        flex: 0 0 calc(50% - 10px);
-        min-width: auto;
-        justify-content: center;
-        text-align: center;
-        padding: 8px 12px;
     }
     
     .footer-links {
@@ -1317,19 +1209,3 @@ h1, h2, h3, h4 {
         grid-template-columns: 1fr;
     }
 }
-
-/* ===== ANIMATIONS FOR PROGRESS BARS ===== */
-@keyframes progressAnimation {
-    0% { width: 0; }
-    100% { width: var(--target-width); }
-}
-
-/* Ensure progress bars are animated properly */
-.level-progress[style*="width"] {
-    animation: progressAnimation 2s ease-out forwards;
-}
-
-/* For browsers that don't support CSS custom properties in animations */
-.level-progress[style*="width: 95%"] { --target-width: 95%; }
-.level-progress[style*="width: 90%"] { --target-width: 90%; }
-.level-progress[style*="width: 88%"] { --target-width: 88%; }
