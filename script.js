@@ -1,259 +1,257 @@
-// Main Portfolio Script
-document.addEventListener('DOMContentLoaded', function() {
-    // Elements
-    const themeToggle = document.getElementById('themeToggle');
-    const themeIcon = themeToggle.querySelector('i');
-    const currentYear = document.getElementById('currentYear');
-    const menuToggle = document.getElementById('menuToggle');
-    const navLinks = document.querySelector('.nav-links');
-    
-    // Initialize
+/**
+ * Portfolio Script
+ * Raoul Lupastean - Frontend Developer
+ * Clean, performant vanilla JavaScript
+ */
+
+document.addEventListener('DOMContentLoaded', () => {
+    // ===== INITIALIZATION =====
     initTheme();
-    setupEventListeners();
+    initNavigation();
+    initMobileMenu();
+    initSmoothScroll();
+    initAnimatedNumbers();
+    initScrollAnimations();
+    initActiveSection();
     updateCurrentYear();
-    updateAllStats();
-    updateFooterName();
-    setupAnimations();
     
-    // Theme Management
-    function initTheme() {
-        const savedTheme = localStorage.getItem('theme') || 'light';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        updateThemeIcon(savedTheme);
-    }
+    console.log('Portfolio initialized successfully!');
+});
+
+// ===== THEME MANAGEMENT =====
+function initTheme() {
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
     
-    function updateThemeIcon(theme) {
-        themeIcon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
-    }
+    // Get saved theme or default to light
+    const savedTheme = localStorage.getItem('portfolio-theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    updateThemeIcon(savedTheme, themeIcon);
     
-    // Event Listeners
-    function setupEventListeners() {
-        // Theme toggle
-        themeToggle.addEventListener('click', toggleTheme);
-        
-        // Mobile menu toggle
-        menuToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-            menuToggle.querySelector('i').className = 
-                navLinks.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
-        });
-        
-        // Close mobile menu when clicking a link
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-                menuToggle.querySelector('i').className = 'fas fa-bars';
-            });
-        });
-        
-        // Smooth scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', smoothScroll);
-        });
-        
-        // Update active nav on scroll
-        window.addEventListener('scroll', updateActiveNav);
-        
-        // Keyboard shortcuts
-        document.addEventListener('keydown', handleKeyboardShortcuts);
-    }
-    
-    function toggleTheme() {
+    // Theme toggle handler
+    themeToggle.addEventListener('click', () => {
         const currentTheme = document.documentElement.getAttribute('data-theme');
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
         
         document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-        updateThemeIcon(newTheme);
-    }
-    
-    // Smooth Scrolling
-    function smoothScroll(e) {
-        const href = this.getAttribute('href');
-        if (href === '#' || href === '#home') return;
-        
-        e.preventDefault();
-        const targetElement = document.querySelector(href);
-        if (targetElement) {
-            // Update active nav link
-            document.querySelectorAll('.nav-links a').forEach(link => {
-                link.classList.remove('active');
-            });
-            this.classList.add('active');
-            
-            // Smooth scroll
-            const headerOffset = 80;
-            const elementPosition = targetElement.offsetTop;
-            const offsetPosition = elementPosition - headerOffset;
-            
-            window.scrollTo({
-                top: offsetPosition,
-                behavior: 'smooth'
-            });
-        }
-    }
-    
-    // Update active nav link on scroll
-    function updateActiveNav() {
-        let current = '';
-        const scrollPosition = window.scrollY + 100;
-        
-        document.querySelectorAll('section[id]').forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
-            
-            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-                current = section.getAttribute('id');
-            }
-        });
-        
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === `#${current}`) {
-                link.classList.add('active');
-            }
-        });
-    }
-    
-    // Animations
-    function setupAnimations() {
-        // Animate numbers - asteapta putin pentru a se incarca DOM-ul
-        setTimeout(() => {
-            const numberElements = document.querySelectorAll('.stat-number[data-target], .stat-value[data-target]');
-            numberElements.forEach(element => {
-                const target = parseInt(element.getAttribute('data-target'));
-                if (!isNaN(target)) {
-                    animateNumber(element, target);
-                }
-            });
-        }, 300);
-        
-        // Intersection Observer for fade-in animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animated');
-                }
-            });
-        }, observerOptions);
-        
-        // Observe elements
-        document.querySelectorAll('.project-card, .skill-item, .tool-item, .featured-card').forEach(el => {
-            el.classList.add('fade-in');
-            observer.observe(el);
-        });
-    }
-    
-    
-    
-function initializeProgressBars() {
-    const progressBars = document.querySelectorAll('.level-progress');
-    progressBars.forEach(bar => {
-        // Forțează afișarea corectă
-        bar.style.opacity = '1';
-        bar.style.visibility = 'visible';
+        localStorage.setItem('portfolio-theme', newTheme);
+        updateThemeIcon(newTheme, themeIcon);
     });
 }
 
+function updateThemeIcon(theme, iconElement) {
+    iconElement.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+}
 
-     initializeProgressBars();
+// ===== NAVIGATION =====
+function initNavigation() {
+    const navbar = document.getElementById('navbar');
+    let lastScrollY = window.scrollY;
     
-    function animateNumber(element, target) {
-        let current = 0;
-        const increment = target / 100;
-        const duration = 1500; // 1.5 seconds
-        const stepTime = duration / 100;
+    window.addEventListener('scroll', () => {
+        const currentScrollY = window.scrollY;
         
-        const timer = setInterval(() => {
-            current += increment;
-            if (current >= target) {
-                current = target;
-                clearInterval(timer);
-            }
-            element.textContent = Math.floor(current);
-        }, stepTime);
-    }
-    
-    // Update Current Year
-    function updateCurrentYear() {
-        if (currentYear) {
-            currentYear.textContent = new Date().getFullYear();
-        }
-    }
-    
-    // Update All Stats
-    function updateAllStats() {
-        const projectCount = document.querySelectorAll('.project-card').length;
-        
-        // 1. Actualizează în hero stats
-        const heroProjectElement = document.querySelector('.hero-stats .stat-number[data-target]');
-        if (heroProjectElement) {
-            heroProjectElement.setAttribute('data-target', projectCount);
-            // Nu anima aici, va fi animat în setupAnimations
+        // Add shadow on scroll
+        if (currentScrollY > 10) {
+            navbar.style.boxShadow = 'var(--shadow-md)';
+        } else {
+            navbar.style.boxShadow = 'none';
         }
         
-        // 2. Actualizează în about stats
-        const aboutStatBoxes = document.querySelectorAll('.about-stats .stat-box');
-        aboutStatBoxes.forEach(box => {
-            const statValue = box.querySelector('.stat-value');
-            const statLabel = box.querySelector('.stat-label');
+        lastScrollY = currentScrollY;
+    }, { passive: true });
+}
+
+// ===== MOBILE MENU =====
+function initMobileMenu() {
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+    
+    menuToggle.addEventListener('click', () => {
+        menuToggle.classList.toggle('active');
+        navLinks.classList.toggle('active');
+    });
+    
+    // Close menu when clicking a link
+    navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            menuToggle.classList.remove('active');
+            navLinks.classList.remove('active');
+        });
+    });
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!menuToggle.contains(e.target) && !navLinks.contains(e.target)) {
+            menuToggle.classList.remove('active');
+            navLinks.classList.remove('active');
+        }
+    });
+}
+
+// ===== SMOOTH SCROLL =====
+function initSmoothScroll() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (href === '#') return;
             
-            if (statLabel.textContent === 'Projects') {
-                statValue.setAttribute('data-target', projectCount);
-            } else if (statLabel.textContent === 'Technologies') {
-                // Setează numărul de tehnologii utilizate
-                // HTML, CSS, JS, Git, Responsive Design, Clean Code = 6
-                statValue.setAttribute('data-target', 6);
+            e.preventDefault();
+            const target = document.querySelector(href);
+            
+            if (target) {
+                const headerOffset = 80;
+                const elementPosition = target.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
             }
         });
+    });
+}
+
+// ===== ANIMATED NUMBERS =====
+function initAnimatedNumbers() {
+    const numbers = document.querySelectorAll('[data-target]');
+    
+    const animateNumber = (element) => {
+        const target = parseInt(element.getAttribute('data-target'));
+        const duration = 1500;
+        const startTime = performance.now();
+        const startValue = 0;
         
-        // 3. Actualizează codul JavaScript afișat
-        const codeElement = document.querySelector('.code-content code');
-        if (codeElement) {
-            const codeText = codeElement.textContent;
-            const updatedText = codeText.replace(
-                /projects: \d+,/,
-                `projects: ${projectCount},`
-            );
-            codeElement.textContent = updatedText;
-        }
+        const updateNumber = (currentTime) => {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            
+            // Easing function (ease-out)
+            const easeOut = 1 - Math.pow(1 - progress, 3);
+            const currentValue = Math.floor(startValue + (target - startValue) * easeOut);
+            
+            element.textContent = currentValue;
+            
+            if (progress < 1) {
+                requestAnimationFrame(updateNumber);
+            } else {
+                element.textContent = target;
+            }
+        };
+        
+        requestAnimationFrame(updateNumber);
+    };
+    
+    // Use Intersection Observer to trigger animation when visible
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateNumber(entry.target);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    numbers.forEach(num => observer.observe(num));
+}
+
+// ===== SCROLL ANIMATIONS =====
+function initScrollAnimations() {
+    const animatedElements = document.querySelectorAll(
+        '.project-card, .skill-card, .tool-card, .concept-card, .featured-card, .contact-card, .principle-item'
+    );
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('fade-in');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    });
+    
+    animatedElements.forEach(el => observer.observe(el));
+}
+
+// ===== ACTIVE SECTION TRACKING =====
+function initActiveSection() {
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link[data-section]');
+    
+    const setActiveLink = (sectionId) => {
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('data-section') === sectionId) {
+                link.classList.add('active');
+            }
+        });
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                setActiveLink(entry.target.id);
+            }
+        });
+    }, {
+        threshold: 0.3,
+        rootMargin: '-80px 0px -50% 0px'
+    });
+    
+    sections.forEach(section => observer.observe(section));
+}
+
+// ===== UPDATE CURRENT YEAR =====
+function updateCurrentYear() {
+    const yearElement = document.getElementById('currentYear');
+    if (yearElement) {
+        yearElement.textContent = new Date().getFullYear();
+    }
+}
+
+// ===== KEYBOARD SHORTCUTS =====
+document.addEventListener('keydown', (e) => {
+    // Toggle theme with Ctrl/Cmd + Shift + T
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'T') {
+        e.preventDefault();
+        document.getElementById('themeToggle').click();
     }
     
-    // Update Footer Name
-    function updateFooterName() {
-        const footerName = document.querySelector('.footer-brand h3');
-        if (footerName) {
-            footerName.textContent = 'Lupastean Raoul';
-        }
-        
-        const copyright = document.querySelector('.footer-bottom p');
-        if (copyright) {
-            copyright.innerHTML = copyright.innerHTML.replace('Raoul Lupastean', 'Lupastean Raoul');
-        }
+    // Close mobile menu with Escape
+    if (e.key === 'Escape') {
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+        menuToggle.classList.remove('active');
+        navLinks.classList.remove('active');
     }
     
-    // Keyboard Shortcuts
-    function handleKeyboardShortcuts(e) {
-        // Toggle theme with Ctrl+T
-        if (e.ctrlKey && e.key === 't') {
-            e.preventDefault();
-            themeToggle.click();
-        }
-        
-        // Toggle menu with Escape
-        if (e.key === 'Escape') {
-            navLinks.classList.remove('active');
-            menuToggle.querySelector('i').className = 'fas fa-bars';
-        }
-        
-        // Scroll to top with Home key
-        if (e.key === 'Home') {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+    // Scroll to top with Home
+    if (e.key === 'Home' && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 });
+
+// ===== UTILITY: Debounce Function =====
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// ===== PREFERS REDUCED MOTION =====
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+if (prefersReducedMotion.matches) {
+    document.documentElement.style.scrollBehavior = 'auto';
+}

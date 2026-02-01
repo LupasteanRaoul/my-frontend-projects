@@ -2,154 +2,328 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tic-Tac-Toe Game with AI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Advanced Tic-Tac-Toe | Raoul Lupastean</title>
+    <meta name="description" content="Advanced Tic-Tac-Toe Game with AI, Multiplayer, and Achievements - by Raoul Lupastean">
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❌⭕</text></svg>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 </head>
 <body>
-    <div class="game-container">
-        <header>
-            <h1><i class="fas fa-gamepad"></i> Advanced Tic-Tac-Toe</h1>
-            <p class="subtitle">Play against AI or with a friend</p>
-        </header>
-
-        <!-- Game Mode Selector -->
-        <div class="mode-selector">
-            <div class="mode-buttons">
-                <button class="mode-btn active" data-mode="ai">
-                    <i class="fas fa-robot"></i> VS AI
-                </button>
-                <button class="mode-btn" data-mode="local">
-                    <i class="fas fa-users"></i> 2 Players Local
-                </button>
-                <button class="mode-btn" data-mode="online">
-                    <i class="fas fa-globe"></i> Online Multiplayer
+    <!-- Name Entry Modal (Mandatory) -->
+    <div class="modal-overlay" id="nameEntryModal" style="display: flex;">
+        <div class="modal-content name-entry-modal">
+            <div class="modal-icon">
+                <i class="fas fa-user"></i>
+            </div>
+            <h2 class="modal-title">Welcome!</h2>
+            <p class="modal-message">Please enter your name to continue</p>
+            <div class="name-entry-input">
+                <input type="text" id="initialNameInput" placeholder="Enter your name..." maxlength="15" data-testid="initial-name-input">
+                <p class="name-error" id="nameError" style="display: none;">Name is required!</p>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn accept" onclick="submitInitialName()" data-testid="submit-name-btn">
+                    <i class="fas fa-play"></i> Start Playing
                 </button>
             </div>
-            
-            <!-- Online Controls -->
-            <div class="online-controls" style="display: none;">
-                <div class="room-controls">
-                    <button id="createRoomBtn" class="room-btn">
-                        <i class="fas fa-plus-circle"></i> Create Room
+        </div>
+    </div>
+
+    <div class="game-wrapper" id="app" style="display: none;">
+        <div class="game-container">
+            <!-- Header -->
+            <header class="header">
+                <h1 class="title">
+                    <i class="fas fa-gamepad title-icon"></i>
+                    <span>Advanced Tic-Tac-Toe</span>
+                </h1>
+                <p class="subtitle">Play against AI or with a friend</p>
+                <p class="welcome-user">Welcome, <span id="currentUserName"></span>!</p>
+            </header>
+
+            <!-- Mode Selector -->
+            <div class="mode-selector">
+                <div class="mode-buttons">
+                    <button class="mode-btn active" data-mode="ai" onclick="changeGameMode('ai')" data-testid="mode-ai-btn">
+                        <i class="fas fa-robot"></i> VS AI
                     </button>
-                    <div class="join-room">
-                        <input type="text" id="roomCodeInput" placeholder="Enter room code">
-                        <button id="joinRoomBtn" class="room-btn">
-                            <i class="fas fa-sign-in-alt"></i> Join
+                    <button class="mode-btn" data-mode="local" onclick="changeGameMode('local')" data-testid="mode-local-btn">
+                        <i class="fas fa-users"></i> 2 Players Local
+                    </button>
+                    <button class="mode-btn" data-mode="online" onclick="changeGameMode('online')" data-testid="mode-online-btn">
+                        <i class="fas fa-globe"></i> Online Multiplayer
+                    </button>
+                </div>
+
+                <!-- Local Player O Name (only for local mode) -->
+                <div class="player-o-setup" id="playerOSetup" style="display: none;">
+                    <div class="name-input-group">
+                        <label><span class="o-color">O</span> Player Name</label>
+                        <input type="text" id="playerOName" placeholder="Enter Player O name..." maxlength="15" value="">
+                    </div>
+                </div>
+
+                <!-- Online Controls -->
+                <div class="online-controls" id="onlineControls" style="display: none;">
+                    <div class="room-controls" id="roomControls">
+                        <button class="room-btn" onclick="createRoom()" data-testid="create-room-btn">
+                            <i class="fas fa-plus"></i> Create Room
+                        </button>
+                        <div class="join-room">
+                            <input type="text" id="roomInput" placeholder="Enter room code" maxlength="6" data-testid="room-input">
+                            <button class="room-btn" onclick="joinRoom()" data-testid="join-room-btn">
+                                <i class="fas fa-sign-in-alt"></i> Join
+                            </button>
+                        </div>
+                    </div>
+                    <div class="room-info" id="roomInfo" style="display: none;">
+                        <p>
+                            Room Code: 
+                            <span class="room-code" id="roomCodeDisplay"></span>
+                            <button class="copy-btn" onclick="copyRoomCode()" id="copyBtn" data-testid="copy-room-btn">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </p>
+                        <p class="room-status">Status: <span id="roomStatus">Waiting...</span></p>
+                        <p class="player-info">You are: <span id="playerSymbolDisplay" class="x-color">X</span></p>
+                        <p class="opponent-info" id="opponentInfo" style="display: none;">Opponent: <span id="opponentName"></span></p>
+                        <button class="room-btn leave-btn" onclick="leaveRoom()" data-testid="leave-room-btn">
+                            <i class="fas fa-sign-out-alt"></i> Leave Room
                         </button>
                     </div>
                 </div>
-                
-                <div class="room-info" style="display: none;">
-                    <p>Room Code: <span id="roomCodeDisplay" class="room-code"></span></p>
-                    <p>Share this code with your friend!</p>
-                    <p>Status: <span id="roomStatus">Waiting for player...</span></p>
-                    <button id="leaveRoomBtn" class="room-btn">
-                        <i class="fas fa-sign-out-alt"></i> Leave Room
-                    </button>
+            </div>
+
+            <!-- Game Status -->
+            <div class="game-status">
+                <div class="status-row">
+                    <span>Mode: <strong class="highlight" id="modeDisplay">VS AI</strong></span>
+                    <span>Turn: <strong id="turnDisplay" class="x-color">X</strong></span>
                 </div>
+                <div class="timer-display" id="timerDisplay" style="display: none;">
+                    <i class="fas fa-clock"></i> <span id="timerValue">30</span>s
+                </div>
+                <p class="status-message" id="statusMessage">Your Turn (X)</p>
             </div>
-        </div>
 
-        <!-- Game Status Display -->
-        <div class="game-status-display">
-            <p>Mode: <span id="currentMode">VS AI</span></p>
-            <p>Turn: <span id="currentPlayer">X</span></p>
-            <p id="statusMessage">Player X's Turn</p>
-            <div class="ai-thinking" id="ai-thinking" style="display: none;">
-                <i class="fas fa-robot"></i> AI is thinking...
-            </div>
-        </div>
-
-        <!-- Game Info and Controls -->
-        <div class="game-info">
-            <div class="game-controls">
-                <div class="control-group" id="ai-controls" style="display: none;">
-                    <label><i class="fas fa-brain"></i> AI Difficulty</label>
+            <!-- AI Controls -->
+            <div class="ai-controls-wrapper" id="aiControls">
+                <div class="ai-controls-inner">
+                    <label><i class="fas fa-robot"></i> AI Difficulty</label>
                     <div class="difficulty-buttons">
-                        <button class="difficulty-btn active" data-difficulty="easy">
-                            <i class="fas fa-baby"></i> Easy
-                        </button>
-                        <button class="difficulty-btn" data-difficulty="medium">
-                            <i class="fas fa-user-graduate"></i> Medium
-                        </button>
-                        <button class="difficulty-btn" data-difficulty="hard">
-                            <i class="fas fa-crown"></i> Hard
-                        </button>
+                        <button class="diff-btn" data-diff="easy" onclick="setAiDifficulty('easy')" data-testid="diff-easy-btn">😊 Easy</button>
+                        <button class="diff-btn active" data-diff="medium" onclick="setAiDifficulty('medium')" data-testid="diff-medium-btn">🎓 Medium</button>
+                        <button class="diff-btn" data-diff="hard" onclick="setAiDifficulty('hard')" data-testid="diff-hard-btn">👑 Hard</button>
                     </div>
                 </div>
-                
-                <div class="score-board">
-                    <div class="score-title">Score Board</div>
+            </div>
+
+            <!-- Game Board -->
+            <div class="board-container">
+                <div class="board" id="board" data-testid="game-board"></div>
+            </div>
+
+            <!-- Scoreboard -->
+            <div class="scoreboard-container">
+                <div class="scoreboard">
                     <div class="score-grid">
-                        <div class="score-item">
-                            <span class="score-label x-label">X Wins</span>
+                        <div class="score-item x-score">
+                            <span class="score-label x-color" id="scoreXLabel">X Wins</span>
                             <span class="score-value" id="scoreX">0</span>
                         </div>
-                        <div class="score-item">
-                            <span class="score-label draw-label">Draws</span>
+                        <div class="score-item draw-score">
+                            <span class="score-label draw-color">Draws</span>
                             <span class="score-value" id="scoreDraw">0</span>
                         </div>
-                        <div class="score-item">
-                            <span class="score-label o-label">O Wins</span>
+                        <div class="score-item o-score">
+                            <span class="score-label o-color" id="scoreOLabel">O Wins</span>
                             <span class="score-value" id="scoreO">0</span>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="action-btn primary" onclick="resetGame()" data-testid="new-game-btn">
+                    <i class="fas fa-redo"></i> New Game
+                </button>
+                <button class="action-btn secondary" onclick="resetScores()" data-testid="reset-score-btn">
+                    <i class="fas fa-trash"></i> Reset Score
+                </button>
+                <button class="action-btn icon-btn active" id="soundBtn" onclick="toggleSound()" data-testid="sound-btn">
+                    <i class="fas fa-volume-up" id="soundIcon"></i>
+                </button>
+                <button class="action-btn icon-btn" id="timerBtn" onclick="toggleTimer()" data-testid="timer-btn">
+                    <i class="fas fa-stopwatch"></i>
+                </button>
+            </div>
+
+            <!-- Leaderboard Section -->
+            <div class="section-toggle">
+                <button class="toggle-btn" onclick="toggleLeaderboard()" data-testid="leaderboard-toggle-btn">
+                    <i class="fas fa-ranking-star"></i>
+                    Global Leaderboard
+                    <i class="fas fa-chevron-down" id="leaderboardChevron"></i>
+                </button>
+                <div class="leaderboard-container" id="leaderboardContainer" style="display: none;">
+                    <div class="leaderboard-tabs">
+                        <button class="leaderboard-tab active" onclick="switchLeaderboardTab('wins')" data-tab="wins">
+                            <i class="fas fa-trophy"></i> Most Wins
+                        </button>
+                        <button class="leaderboard-tab" onclick="switchLeaderboardTab('streak')" data-tab="streak">
+                            <i class="fas fa-fire"></i> Best Streak
+                        </button>
+                    </div>
+                    <div class="leaderboard-content" id="leaderboardWins">
+                        <div class="leaderboard-list" id="winsLeaderboard"></div>
+                    </div>
+                    <div class="leaderboard-content" id="leaderboardStreak" style="display: none;">
+                        <div class="leaderboard-list" id="streakLeaderboard"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Achievements Section -->
+            <div class="section-toggle">
+                <button class="toggle-btn" onclick="toggleAchievements()" data-testid="achievements-toggle-btn">
+                    <i class="fas fa-trophy"></i>
+                    Achievements (<span id="achievementCount">0</span>/12)
+                    <i class="fas fa-chevron-down" id="achievementChevron"></i>
+                </button>
+                <div class="achievements-grid" id="achievementsGrid" style="display: none;"></div>
+            </div>
+
+            <!-- History Section -->
+            <div class="section-toggle">
+                <button class="toggle-btn" onclick="toggleHistory()" data-testid="history-toggle-btn">
+                    <i class="fas fa-history"></i>
+                    Game History (<span id="historyCount">0</span> games)
+                    <i class="fas fa-chevron-down" id="historyChevron"></i>
+                </button>
+                <div class="history-list" id="historyList" style="display: none;"></div>
+            </div>
+
+            <!-- Stats Display -->
+            <div class="stats-display">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-value" id="statGames">0</span>
+                        <span class="stat-label">Games Played</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="statWins">0</span>
+                        <span class="stat-label">Total Wins</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="statBestStreak">0</span>
+                        <span class="stat-label">Best Streak</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="statCurrentStreak">0</span>
+                        <span class="stat-label">Current Streak</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Instructions -->
+            <div class="instructions">
+                <h3><i class="fas fa-info-circle"></i> How to Play</h3>
+                <ul>
+                    <li>Players take turns placing X and O on a 3x3 grid</li>
+                    <li>First to get 3 in a row (horizontally, vertically, or diagonally) wins</li>
+                    <li>In AI mode, you play as X and AI plays as O</li>
+                    <li>For online play, share your room code with a friend!</li>
+                    <li>Unlock achievements by winning games and completing challenges</li>
+                </ul>
+            </div>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <p>Made with ❤️ by Raoul Lupastean</p>
+                <p>
+                    <a href="https://github.com/LupasteanRaoul" target="_blank">
+                        <i class="fab fa-github"></i> GitHub Profile
+                    </a>
+                    |
+                    <a href="https://lupasteanraoul.github.io" target="_blank">
+                        <i class="fas fa-external-link-alt"></i> View Portfolio
+                    </a>
+                </p>
+            </footer>
         </div>
 
-        <!-- Game Board -->
-        <div class="game-board">
-            <div class="board" id="board"></div>
+        <!-- Achievement Toast -->
+        <div class="achievement-toast" id="achievementToast" style="display: none;">
+            <div class="achievement-toast-icon" id="toastIcon">
+                <i class="fas fa-trophy"></i>
+            </div>
+            <div class="achievement-toast-content">
+                <span class="achievement-toast-title">Achievement Unlocked!</span>
+                <span class="achievement-toast-name" id="toastName"></span>
+            </div>
         </div>
-        
-        <!-- Action Buttons -->
-        <div class="action-buttons">
-            <button class="action-btn reset-btn" id="reset-btn">
-                <i class="fas fa-redo"></i> New Game
-            </button>
-            <button class="action-btn score-reset-btn" id="score-reset-btn">
-                <i class="fas fa-trash-alt"></i> Reset Score
-            </button>
+
+        <!-- Rematch Modal (for receiving rematch request) -->
+        <div class="modal-overlay" id="rematchModal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-icon">
+                    <i class="fas fa-redo"></i>
+                </div>
+                <h2 class="modal-title">Rematch Request</h2>
+                <p class="modal-message" id="rematchMessage">The other player wants a rematch!</p>
+                <p class="modal-submessage">Do you want to play again?</p>
+                <div class="modal-buttons">
+                    <button class="modal-btn accept" onclick="acceptRematch()" data-testid="accept-rematch-btn">
+                        <i class="fas fa-check"></i> Yes
+                    </button>
+                    <button class="modal-btn decline" onclick="declineRematch()" data-testid="decline-rematch-btn">
+                        <i class="fas fa-times"></i> No
+                    </button>
+                </div>
+            </div>
         </div>
-        
-        <!-- Instructions -->
-        <div class="instructions">
-            <h3><i class="fas fa-info-circle"></i> How to Play</h3>
-            <ul>
-                <li>Players take turns placing X and O on a 3x3 grid</li>
-                <li>First to get 3 in a row (horizontally, vertically, or diagonally) wins</li>
-                <li>Click on any empty cell to make your move</li>
-                <li>In AI mode, you play as X and AI plays as O</li>
-                <li>Easy AI: Makes random moves</li>
-                <li>Medium AI: Tries to win or block you</li>
-                <li>Hard AI: Uses advanced strategy</li>
-            </ul>
+
+        <!-- Waiting for Rematch Response Modal -->
+        <div class="modal-overlay" id="waitingRematchModal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-icon spinning">
+                    <i class="fas fa-sync-alt"></i>
+                </div>
+                <h2 class="modal-title">Waiting for Response</h2>
+                <p class="modal-message">Waiting for the other player to respond...</p>
+                <div class="modal-buttons">
+                    <button class="modal-btn decline" onclick="cancelRematchRequest()" data-testid="cancel-rematch-btn">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
+            </div>
         </div>
-        
-        <!-- Footer -->
-        <footer>
-            <p>Made with <i class="fas fa-heart"></i> by Raoul Lupastean</p>
-            <p>
-                <a href="https://github.com/LupasteanRaoul" target="_blank">
-                    <i class="fab fa-github"></i> GitHub Profile
-                </a> | 
-                <a href="https://lupasteanraoul.github.io" target="_blank">
-                    <i class="fas fa-external-link-alt"></i> View Portfolio
-                </a>
-            </p>
-        </footer>
+
+        <!-- Rematch Declined Modal -->
+        <div class="modal-overlay" id="rematchDeclinedModal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-icon declined">
+                    <i class="fas fa-times"></i>
+                </div>
+                <h2 class="modal-title">Rematch Declined</h2>
+                <p class="modal-message" id="declinedMessage">The other player declined the rematch.</p>
+                <div class="modal-buttons">
+                    <button class="modal-btn accept" onclick="closeDeclinedModal()" data-testid="close-declined-btn">
+                        <i class="fas fa-check"></i> OK
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Firebase & Game Scripts -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="script.js"></script>
- 
 </body>
 </html>

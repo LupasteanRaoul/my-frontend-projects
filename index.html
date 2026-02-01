@@ -3,39 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Frontend Developer Portfolio | Raoul Lupastean</title>
-    <link rel="stylesheet" href="./styles.css">
+    <title>Frontend Developer Portfolio |  Lupastean Raoul</title>
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👨‍💻</text></svg>">
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar">
+    <nav class="navbar" id="navbar">
         <div class="container">
             <div class="nav-content">
-                <div class="logo">
+                <a href="#home" class="logo">
                     <div class="logo-icon">
-                        <i class="fas fa-code"></i>
+                        <i class="fas fa-terminal"></i>
                     </div>
-                    <h1>RL<span>Dev</span></h1>
-                </div>
-                <div class="nav-links">
-                    <a href="#home" class="active">Home</a>
-                    <a href="#projects">Projects</a>
-                    <a href="#skills">Skills</a>
-                    <a href="#about">About</a>
-                    <a href="https://github.com/LupasteanRaoul" target="_blank" class="github-nav">
+                    <span class="logo-text">LR<span class="accent">Dev</span></span>
+                </a>
+                
+                <div class="nav-links" id="navLinks">
+                    <a href="#home" class="nav-link active" data-section="home">Home</a>
+                    <a href="#projects" class="nav-link" data-section="projects">Projects</a>
+                    <a href="#skills" class="nav-link" data-section="skills">Skills</a>
+                    <a href="#about" class="nav-link" data-section="about">About</a>
+                    <a href="https://github.com/LupasteanRaoul" target="_blank" rel="noopener" class="nav-link github-link">
                         <i class="fab fa-github"></i>
                     </a>
                 </div>
-                <button class="theme-toggle" id="themeToggle">
-                    <i class="fas fa-moon"></i>
-                </button>
-                <button class="menu-toggle" id="menuToggle">
-                    <i class="fas fa-bars"></i>
-                </button>
+                
+                <div class="nav-actions">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                        <i class="fas fa-moon" id="themeIcon"></i>
+                    </button>
+                    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+                        <span class="hamburger"></span>
+                    </button>
+                </div>
             </div>
         </div>
     </nav>
@@ -43,409 +46,502 @@
     <!-- Hero Section -->
     <section class="hero" id="home">
         <div class="container">
-            <div class="hero-content">
-                <div class="hero-text">
-                    <div class="badge">
-                        <span>Frontend Developer</span>
+            <div class="hero-grid">
+                <div class="hero-content">
+                    <div class="hero-badge">
+                        <span class="badge-dot"></span>
+                        <span>Available for projects</span>
                     </div>
-                    <h1 class="hero-title">Building Digital Experiences with <span class="highlight">Vanilla JavaScript</span></h1>
+                    
+                    <h1 class="hero-title">
+                        Building Digital<br>
+                        Experiences with
+                        <span class="gradient-text">Vanilla JavaScript</span>
+                    </h1>
+                    
                     <p class="hero-description">
-                        I'm <strong>Raoul Lupastean</strong>, a frontend developer specializing in clean, performant web applications using HTML, CSS, and JavaScript without frameworks.
+                        I'm <strong>Lupastean Raoul</strong>, a frontend developer specializing in clean, 
+                        performant web applications using HTML, CSS, and JavaScript without frameworks.
                     </p>
+                    
                     <div class="hero-stats">
-                        <div class="stat">
-                            <div class="stat-number" data-target="9">0</div>
-                            <div class="stat-label">Projects</div>
+                        <div class="stat-item">
+                            <span class="stat-number" data-target="7">0</span>
+                            <span class="stat-label">Projects</span>
                         </div>
-                        <div class="stat">
-                            <div class="stat-number">100%</div>
-                            <div class="stat-label">Vanilla JS</div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <span class="stat-number">100%</span>
+                            <span class="stat-label">Vanilla JS</span>
                         </div>
-                        <div class="stat">
-                            <div class="stat-number">100%</div>
-                            <div class="stat-label">Responsive</div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <span class="stat-number" data-target="12">0</span>
+                            <span class="stat-label">Technologies</span>
                         </div>
                     </div>
-                    <div class="hero-actions">
+                    
+                    <div class="hero-buttons">
                         <a href="#projects" class="btn btn-primary">
-                            <i class="fas fa-rocket"></i> View Projects
+                            <i class="fas fa-rocket"></i>
+                            <span>View Projects</span>
                         </a>
-                        <a href="#contact" class="btn btn-secondary">
-                            <i class="fas fa-envelope"></i> Contact Me
+                        <a href="#contact" class="btn btn-outline">
+                            <i class="fas fa-envelope"></i>
+                            <span>Contact Me</span>
                         </a>
                     </div>
                 </div>
+                
                 <div class="hero-visual">
-                    <div class="code-preview">
-                        <div class="code-header">
+                    <div class="code-window">
+                        <div class="window-header">
                             <div class="window-dots">
-                                <span class="dot red"></span>
-                                <span class="dot yellow"></span>
-                                <span class="dot green"></span>
+                                <span class="dot dot-red"></span>
+                                <span class="dot dot-yellow"></span>
+                                <span class="dot dot-green"></span>
                             </div>
-                            <span>portfolio.js</span>
+                            <span class="window-title">developer.js</span>
+                            <div class="window-actions">
+                                <i class="fas fa-minus"></i>
+                                <i class="fas fa-square"></i>
+                                <i class="fas fa-times"></i>
+                            </div>
                         </div>
-                        <div class="code-content">
-                            <pre><code>const developer = {
-    name: "Raoul Lupastean",
-    specialty: "Vanilla JavaScript",
-    focus: "Clean code & modern UI",
-    philosophy: "Master the fundamentals",
-    projects: 8,
-    experience: "Frontend Development"
+                        <div class="window-body">
+                            <pre><code><span class="code-keyword">const</span> <span class="code-var">developer</span> = {
+  <span class="code-prop">name</span>: <span class="code-string">"Lupastean Raoul"</span>,
+  <span class="code-prop">role</span>: <span class="code-string">"Frontend Developer"</span>,
+  <span class="code-prop">specialty</span>: <span class="code-string">"Vanilla JavaScript"</span>,
+  <span class="code-prop">philosophy</span>: <span class="code-string">"Master fundamentals"</span>,
+  <span class="code-prop">projects</span>: <span class="code-number">7</span>,
+  <span class="code-prop">passionate</span>: <span class="code-boolean">true</span>
 };</code></pre>
                         </div>
                     </div>
-                    <div class="tech-stack">
-                        <div class="tech-item">
+                    
+                    <div class="floating-tech">
+                        <div class="tech-bubble" style="--delay: 0s; --x: -20px; --y: 20px;">
                             <i class="fab fa-html5"></i>
-                            <span>HTML5</span>
                         </div>
-                        <div class="tech-item">
+                        <div class="tech-bubble" style="--delay: 0.5s; --x: 30px; --y: -30px;">
                             <i class="fab fa-css3-alt"></i>
-                            <span>CSS3</span>
                         </div>
-                        <div class="tech-item">
+                        <div class="tech-bubble" style="--delay: 1s; --x: 50px; --y: 40px;">
                             <i class="fab fa-js-square"></i>
-                            <span>JavaScript</span>
                         </div>
-                        <div class="tech-item">
-                            <i class="fab fa-git-alt"></i>
-                            <span>Git</span>
+                        <div class="tech-bubble" style="--delay: 1.5s; --x: -40px; --y: -20px;">
+                            <i class="fas fa-fire"></i>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        
+        <div class="hero-bg-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
     </section>
 
-    <!-- Featured Projects -->
-    <section class="featured-projects">
+    <!-- Featured Projects Section -->
+    <section class="featured" id="featured">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Featured Projects</h2>
+                <span class="section-tag">Featured Work</span>
+                <h2 class="section-title">Top Projects</h2>
                 <p class="section-subtitle">Interactive applications built with pure JavaScript</p>
             </div>
             
-            <div class="projects-showcase">
-                <a href="Currency-Converter/index.html" class="featured-card" target="_blank">
-                    <div class="card-overlay">
-                        <div class="overlay-content">
-                            <h3>Currency Converter</h3>
-                            <p>Real-time exchange rates for 32+ currencies</p>
-                            <span class="demo-link">View Demo →</span>
-                        </div>
+            <div class="featured-grid">
+                <a href="Tic-Tac-Toe-Multiplayer/index.html" target="_blank" class="featured-card featured-large">
+                    <div class="card-bg">
+                        <i class="fas fa-users"></i>
                     </div>
                     <div class="card-content">
-                        <div class="card-icon">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <h3>Currency Converter</h3>
-                        <p>Real-time currency conversion with API integration</p>
+                        <div class="card-badge">Featured</div>
+                        <h3>Tic Tac Toe Multiplayer</h3>
+                        <p>Real-time multiplayer with Firebase & leaderboard system</p>
                         <div class="card-tags">
-                            <span>API</span>
-                            <span>JavaScript</span>
-                            <span>Responsive</span>
+                            <span>Firebase</span>
+                            <span>Real-time</span>
+                            <span>Multiplayer</span>
                         </div>
+                        <span class="card-link">
+                            View Project <i class="fas fa-arrow-right"></i>
+                        </span>
                     </div>
                 </a>
                 
-                <a href="Event-rsvp/index.html" class="featured-card" target="_blank">
-                    <div class="card-overlay">
-                        <div class="overlay-content">
-                            <h3>Event RSVP System</h3>
-                            <p>Complete event management solution</p>
-                            <span class="demo-link">View Demo →</span>
-                        </div>
+                <a href="Currency-Converter/index.html" target="_blank" class="featured-card">
+                    <div class="card-bg">
+                        <i class="fas fa-chart-line"></i>
                     </div>
                     <div class="card-content">
-                        <div class="card-icon">
-                            <i class="fas fa-calendar-alt"></i>
+                        <div class="card-badge">API</div>
+                        <h3>Currency Converter</h3>
+                        <p>Real-time rates for 32+ currencies</p>
+                        <div class="card-tags">
+                            <span>Fetch API</span>
+                            <span>Responsive</span>
                         </div>
+                        <span class="card-link">
+                            View Project <i class="fas fa-arrow-right"></i>
+                        </span>
+                    </div>
+                </a>
+                
+                <a href="Event-rsvp/index.html" target="_blank" class="featured-card">
+                    <div class="card-bg">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-badge">CRUD</div>
                         <h3>Event RSVP System</h3>
                         <p>Guest management with LocalStorage</p>
                         <div class="card-tags">
                             <span>LocalStorage</span>
                             <span>Forms</span>
-                            <span>UI/UX</span>
                         </div>
-                    </div>
-                </a>
-                
-                <a href="Music-shopping-cart-page/index.html" class="featured-card" target="_blank">
-                    <div class="card-overlay">
-                        <div class="overlay-content">
-                            <h3>Music E-commerce</h3>
-                            <p>Full-featured shopping cart implementation</p>
-                            <span class="demo-link">View Demo →</span>
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <div class="card-icon">
-                            <i class="fas fa-shopping-bag"></i>
-                        </div>
-                        <h3>Music E-commerce</h3>
-                        <p>Complete shopping cart with checkout</p>
-                        <div class="card-tags">
-                            <span>E-commerce</span>
-                            <span>Cart Logic</span>
-                            <span>CSS Grid</span>
-                        </div>
+                        <span class="card-link">
+                            View Project <i class="fas fa-arrow-right"></i>
+                        </span>
                     </div>
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- All Projects -->
-    <section class="projects-section" id="projects">
+    <!-- All Projects Section -->
+    <section class="projects" id="projects">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Project Portfolio</h2>
+                <span class="section-tag">Portfolio</span>
+                <h2 class="section-title">All Projects</h2>
                 <p class="section-subtitle">Complete collection of vanilla JavaScript applications</p>
             </div>
             
             <div class="projects-grid">
-                <!-- Project 1 -->
-                <div class="project-card">
+                <!-- Project 1: Tic Tac Toe Multiplayer -->
+                <article class="project-card">
                     <div class="project-image">
-                        <div class="project-badge">Featured</div>
-                        <i class="fas fa-exchange-alt"></i>
+                        <div class="project-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <span class="project-badge">Featured</span>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Tic Tac Toe Multiplayer</h3>
+                        <p class="project-desc">Real-time multiplayer Tic Tac Toe with Firebase, achievements, and global leaderboard.</p>
+                        <div class="project-tags">
+                            <span>Firebase</span>
+                            <span>Real-time</span>
+                            <span>Multiplayer</span>
+                            <span>Game Logic</span>
+                        </div>
+                        <a href="Tic-Tac-Toe-Multiplayer/index.html" target="_blank" class="project-link">
+                            <i class="fas fa-external-link-alt"></i> Live Demo
+                        </a>
+                    </div>
+                </article>
+                
+                <!-- Project 2: Currency Converter -->
+                <article class="project-card">
+                    <div class="project-image">
+                        <div class="project-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <span class="project-badge">API</span>
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">Currency Converter</h3>
-                        <p class="project-description">Real-time currency conversion with API integration for 32+ world currencies.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">JavaScript</span>
-                            <span class="tech-tag">API Integration</span>
-                            <span class="tech-tag">Responsive</span>
+                        <p class="project-desc">Real-time currency conversion with API integration for 32+ world currencies.</p>
+                        <div class="project-tags">
+                            <span>JavaScript</span>
+                            <span>API Integration</span>
+                            <span>Responsive</span>
+                            <span>Fetch API</span>
                         </div>
-                        <div class="project-links">
-                            <a href="Currency-Converter/index.html" class="project-link" target="_blank">
-                                <i class="fas fa-external-link-alt"></i> Live Demo
-                            </a>
-                        </div>
+                        <a href="Currency-Converter/index.html" target="_blank" class="project-link">
+                            <i class="fas fa-external-link-alt"></i> Live Demo
+                        </a>
                     </div>
-                </div>
-
-                <!-- Project 2 -->
-                <div class="project-card">
+                </article>
+                
+                <!-- Project 3: Event RSVP -->
+                <article class="project-card">
                     <div class="project-image">
-                        <i class="fas fa-calendar-check"></i>
+                        <div class="project-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <span class="project-badge">CRUD</span>
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">Event RSVP System</h3>
-                        <p class="project-description">Complete event management system with guest tracking and statistics.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">LocalStorage</span>
-                            <span class="tech-tag">Form Validation</span>
-                            <span class="tech-tag">Data Management</span>
+                        <p class="project-desc">Complete event management system with guest tracking and statistics.</p>
+                        <div class="project-tags">
+                            <span>LocalStorage</span>
+                            <span>Form Validation</span>
+                            <span>Data Management</span>
+                            <span>DOM</span>
                         </div>
-                        <div class="project-links">
-                            <a href="Event-rsvp/index.html" class="project-link" target="_blank">
-                                <i class="fas fa-external-link-alt"></i> Live Demo
-                            </a>
-                        </div>
+                        <a href="Event-rsvp/index.html" target="_blank" class="project-link">
+                            <i class="fas fa-external-link-alt"></i> Live Demo
+                        </a>
                     </div>
-                </div>
-
-                <!-- Project 3 -->
-                <div class="project-card">
+                </article>
+                
+                <!-- Project 4: E-commerce Cart -->
+                <article class="project-card">
                     <div class="project-image">
-                        <i class="fas fa-shopping-cart"></i>
+                        <div class="project-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">E-commerce Cart</h3>
-                        <p class="project-description">Full-featured shopping cart with quantity management and checkout.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">E-commerce</span>
-                            <span class="tech-tag">JavaScript</span>
-                            <span class="tech-tag">Cart Logic</span>
+                        <p class="project-desc">Full-featured shopping cart with quantity management and checkout flow.</p>
+                        <div class="project-tags">
+                            <span>E-commerce</span>
+                            <span>JavaScript</span>
+                            <span>Cart Logic</span>
+                            <span>UI/UX</span>
                         </div>
-                        <div class="project-links">
-                            <a href="Music-shopping-cart-page/index.html" class="project-link" target="_blank">
-                                <i class="fas fa-external-link-alt"></i> Live Demo
-                            </a>
-                        </div>
+                        <a href="Music-shopping-cart-page/index.html" target="_blank" class="project-link">
+                            <i class="fas fa-external-link-alt"></i> Live Demo
+                        </a>
                     </div>
-                </div>
-
-                <!-- Project 4 -->
-                <div class="project-card">
+                </article>
+                
+                <!-- Project 5: Photo Gallery -->
+                <article class="project-card">
                     <div class="project-image">
-                        <i class="fas fa-camera"></i>
+                        <div class="project-icon">
+                            <i class="fas fa-camera"></i>
+                        </div>
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">Photo Gallery</h3>
-                        <p class="project-description">Interactive photography gallery with lightbox and filtering.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">CSS Grid</span>
-                            <span class="tech-tag">Lightbox</span>
-                            <span class="tech-tag">Animations</span>
+                        <p class="project-desc">Interactive photography gallery with lightbox and smooth animations.</p>
+                        <div class="project-tags">
+                            <span>CSS Grid</span>
+                            <span>Lightbox</span>
+                            <span>Animations</span>
+                            <span>Responsive</span>
                         </div>
-                        <div class="project-links">
-                            <a href="Lab-photography-exibit/index.html" class="project-link" target="_blank">
-                                <i class="fas fa-external-link-alt"></i> Live Demo
-                            </a>
-                        </div>
+                        <a href="Lab-photography-exibit/index.html" target="_blank" class="project-link">
+                            <i class="fas fa-external-link-alt"></i> Live Demo
+                        </a>
                     </div>
-                </div>
-
-                <!-- Project 5 -->
-                <div class="project-card">
+                </article>
+                
+                <!-- Project 6: Tic Tac Toe AI -->
+                <article class="project-card">
                     <div class="project-image">
-                        <i class="fas fa-gamepad"></i>
+                        <div class="project-icon">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">Tic Tac Toe AI</h3>
-                        <p class="project-description">Classic game with AI opponent and score tracking.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">Game Logic</span>
-                            <span class="tech-tag">AI</span>
-                            <span class="tech-tag">Local Storage</span>
+                        <p class="project-desc">Classic game with intelligent AI opponent and persistent score tracking.</p>
+                        <div class="project-tags">
+                            <span>Game Logic</span>
+                            <span>AI Algorithm</span>
+                            <span>Local Storage</span>
+                            <span>Minimax</span>
                         </div>
-                        <div class="project-links">
-                            <a href="Tic-Tac-Toe-AI/index.html" class="project-link" target="_blank">
-                                <i class="fas fa-external-link-alt"></i> Live Demo
-                            </a>
-                        </div>
+                        <a href="Tic-Tac-Toe-AI/index.html" target="_blank" class="project-link">
+                            <i class="fas fa-external-link-alt"></i> Live Demo
+                        </a>
                     </div>
-                </div>
-<!-- Project 6 -->
-<div class="project-card">
-    <div class="project-image">
-        <i class="fas fa-users"></i>
-    </div>
-    <div class="project-content">
-        <h3 class="project-title">Tic Tac Toe Multiplayer</h3>
-        <p class="project-description">Real-time multiplayer Tic Tac Toe played between two users.</p>
-        <div class="project-tech">
-            <span class="tech-tag">Game Logic</span>
-            <span class="tech-tag">Multiplayer</span>
-            <span class="tech-tag">JavaScript</span>
-        </div>
-        <div class="project-links">
-            <a href="Tic-Tac-Toe-Multiplayer/index.html" class="project-link" target="_blank">
-                <i class="fas fa-external-link-alt"></i> Live Demo
-            </a>
-        </div>
-    </div>
-</div>
-
-                <!-- Project 7 -->
-                <div class="project-card">
+                </article>
+                
+                <!-- Project 7: Music Store Cart -->
+                <article class="project-card">
                     <div class="project-image">
-                        <i class="fas fa-music"></i>
+                        <div class="project-icon">
+                            <i class="fas fa-music"></i>
+                        </div>
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">Music Store Cart</h3>
-                        <p class="project-description">Alternative e-commerce implementation with different features.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">JavaScript</span>
-                            <span class="tech-tag">UI Design</span>
-                            <span class="tech-tag">Experiments</span>
+                        <p class="project-desc">Alternative e-commerce implementation with unique UI patterns.</p>
+                        <div class="project-tags">
+                            <span>JavaScript</span>
+                            <span>UI Design</span>
+                            <span>Experiments</span>
+                            <span>DOM</span>
                         </div>
-                        <div class="project-links">
-                            <a href="Lab-music-shopping-cart-page/index.html" class="project-link" target="_blank">
-                                <i class="fas fa-external-link-alt"></i> Live Demo
-                            </a>
-                        </div>
+                        <a href="Lab-music-shopping-cart-page/index.html" target="_blank" class="project-link">
+                            <i class="fas fa-external-link-alt"></i> Live Demo
+                        </a>
                     </div>
-                </div>
+                </article>
             </div>
         </div>
     </section>
 
-    <!-- Skills -->
-    <section class="skills-section" id="skills">
+    <!-- Skills Section -->
+    <section class="skills" id="skills">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Core Technologies</h2>
-                <p class="section-subtitle">Mastering the fundamentals of web development</p>
+                <span class="section-tag">Expertise</span>
+                <h2 class="section-title">Skills & Technologies</h2>
+                <p class="section-subtitle">Mastering the full stack of web development technologies</p>
             </div>
             
-            <div class="skills-container">
-                <div class="skill-category">
-                    <h3 class="category-title">Frontend Development</h3>
-                    <div class="skills-grid">
-                        <div class="skill-item">
-                            <div class="skill-header">
-                                <div class="skill-icon">
-                                    <i class="fab fa-html5"></i>
-                                </div>
-                                <div class="skill-info">
-                                    <h4>HTML5</h4>
-                                    <div class="skill-level">
-                                        <div class="level-bar">
-                                            <div class="level-progress"></div>
-                                        </div>
-                                        <span>95%</span>
-                                    </div>
+            <div class="skills-wrapper">
+                <!-- Core Technologies -->
+                <div class="skills-category">
+                    <h3 class="category-title">
+                        <i class="fas fa-code"></i>
+                        Core Technologies
+                    </h3>
+                    <div class="skills-list">
+                        <div class="skill-card">
+                            <div class="skill-icon html">
+                                <i class="fab fa-html5"></i>
+                            </div>
+                            <div class="skill-info">
+                                <h4>HTML5</h4>
+                                <p>Semantic markup, accessibility, Canvas, SVG</p>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="--progress: 95%"></div>
                                 </div>
                             </div>
-                            <p>Semantic markup, accessibility standards, modern HTML features</p>
                         </div>
                         
-                        <div class="skill-item">
-                            <div class="skill-header">
-                                <div class="skill-icon">
-                                    <i class="fab fa-css3-alt"></i>
-                                </div>
-                                <div class="skill-info">
-                                    <h4>CSS3</h4>
-                                    <div class="skill-level">
-                                        <div class="level-bar">
-                                            <div class="level-progress"></div>
-                                        </div>
-                                        <span>90%</span>
-                                    </div>
+                        <div class="skill-card">
+                            <div class="skill-icon css">
+                                <i class="fab fa-css3-alt"></i>
+                            </div>
+                            <div class="skill-info">
+                                <h4>CSS3 & Preprocessors</h4>
+                                <p>Flexbox, Grid, Animations, SASS, Variables</p>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="--progress: 90%"></div>
                                 </div>
                             </div>
-                            <p>Flexbox, Grid, animations, custom properties, responsive design</p>
                         </div>
                         
-                        <div class="skill-item">
-                            <div class="skill-header">
-                                <div class="skill-icon">
-                                    <i class="fab fa-js-square"></i>
-                                </div>
-                                <div class="skill-info">
-                                    <h4>JavaScript ES6+</h4>
-                                    <div class="skill-level">
-                                        <div class="level-bar">
-                                            <div class="level-progress"></div>
-                                        </div>
-                                        <span>88%</span>
-                                    </div>
+                        <div class="skill-card">
+                            <div class="skill-icon js">
+                                <i class="fab fa-js-square"></i>
+                            </div>
+                            <div class="skill-info">
+                                <h4>JavaScript ES6+</h4>
+                                <p>Vanilla JS, DOM, Async/Await, Modules, APIs</p>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="--progress: 88%"></div>
                                 </div>
                             </div>
-                            <p>Vanilla JavaScript, DOM manipulation, async/await, modules</p>
+                        </div>
+                        
+                        <div class="skill-card">
+                            <div class="skill-icon firebase">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <div class="skill-info">
+                                <h4>Database & Backend</h4>
+                                <p>Firebase, LocalStorage, REST APIs, Fetch</p>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="--progress: 75%"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="skill-category">
-                    <h3 class="category-title">Tools & Practices</h3>
+                <!-- Tools -->
+                <div class="skills-category">
+                    <h3 class="category-title">
+                        <i class="fas fa-tools"></i>
+                        Tools & Libraries
+                    </h3>
                     <div class="tools-grid">
-                        <div class="tool-item">
+                        <div class="tool-card">
                             <i class="fab fa-git-alt"></i>
-                            <h4>Version Control</h4>
-                            <p>Git & GitHub for project management</p>
+                            <h4>Git & GitHub</h4>
+                            <p>Version control & collaboration</p>
                         </div>
-                        <div class="tool-item">
+                        <div class="tool-card">
+                            <i class="fas fa-fire"></i>
+                            <h4>Firebase</h4>
+                            <p>Real-time database & hosting</p>
+                        </div>
+                        <div class="tool-card">
+                            <i class="fas fa-exchange-alt"></i>
+                            <h4>REST APIs</h4>
+                            <p>Data fetching & integration</p>
+                        </div>
+                        <div class="tool-card">
                             <i class="fas fa-mobile-alt"></i>
                             <h4>Responsive Design</h4>
-                            <p>Mobile-first development approach</p>
+                            <p>Mobile-first development</p>
                         </div>
-                        <div class="tool-item">
+                        <div class="tool-card">
+                            <i class="fas fa-paint-brush"></i>
+                            <h4>UI/UX Design</h4>
+                            <p>User experience & accessibility</p>
+                        </div>
+                        <div class="tool-card">
                             <i class="fas fa-tachometer-alt"></i>
                             <h4>Performance</h4>
-                            <p>Optimized loading and rendering</p>
+                            <p>Optimization & best practices</p>
                         </div>
-                        <div class="tool-item">
+                    </div>
+                </div>
+                
+                <!-- Key Concepts -->
+                <div class="skills-category">
+                    <h3 class="category-title">
+                        <i class="fas fa-lightbulb"></i>
+                        Key Concepts
+                    </h3>
+                    <div class="concepts-grid">
+                        <div class="concept-card">
                             <i class="fas fa-code"></i>
-                            <h4>Clean Code</h4>
-                            <p>Maintainable and scalable architecture</p>
+                            <div>
+                                <h4>DOM Manipulation</h4>
+                                <p>Dynamic content updates & event handling</p>
+                            </div>
+                        </div>
+                        <div class="concept-card">
+                            <i class="fas fa-sync-alt"></i>
+                            <div>
+                                <h4>Async Programming</h4>
+                                <p>Promises, async/await, API calls</p>
+                            </div>
+                        </div>
+                        <div class="concept-card">
+                            <i class="fas fa-gamepad"></i>
+                            <div>
+                                <h4>Game Development</h4>
+                                <p>AI algorithms, state management</p>
+                            </div>
+                        </div>
+                        <div class="concept-card">
+                            <i class="fas fa-shopping-cart"></i>
+                            <div>
+                                <h4>E-commerce Logic</h4>
+                                <p>Cart systems, checkout flows</p>
+                            </div>
+                        </div>
+                        <div class="concept-card">
+                            <i class="fas fa-users"></i>
+                            <div>
+                                <h4>Multiplayer Systems</h4>
+                                <p>Real-time updates, sessions</p>
+                            </div>
+                        </div>
+                        <div class="concept-card">
+                            <i class="fas fa-chart-bar"></i>
+                            <div>
+                                <h4>Data Visualization</h4>
+                                <p>Charts, statistics display</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -453,17 +549,21 @@
         </div>
     </section>
 
-    <!-- About -->
-    <section class="about-section" id="about">
+    <!-- About Section -->
+    <section class="about" id="about">
         <div class="container">
-            <div class="about-content">
-                <div class="about-text">
+            <div class="about-grid">
+                <div class="about-content">
+                    <span class="section-tag">About Me</span>
                     <h2 class="section-title">Development Philosophy</h2>
-                    <p class="about-description">
-                        I believe in mastering the fundamentals. By building projects with vanilla JavaScript, I gain a deep understanding of how web technologies work at their core, without relying on framework abstractions.
+                    <p class="about-text">
+                        I believe in mastering the fundamentals. By building projects with vanilla JavaScript, 
+                        I gain a deep understanding of how web technologies work at their core, without relying 
+                        on framework abstractions.
                     </p>
-                    <div class="principles">
-                        <div class="principle">
+                    
+                    <div class="principles-list">
+                        <div class="principle-item">
                             <div class="principle-icon">
                                 <i class="fas fa-bolt"></i>
                             </div>
@@ -472,7 +572,8 @@
                                 <p>Lightweight implementations with optimal loading times and smooth interactions.</p>
                             </div>
                         </div>
-                        <div class="principle">
+                        
+                        <div class="principle-item">
                             <div class="principle-icon">
                                 <i class="fas fa-expand-alt"></i>
                             </div>
@@ -481,9 +582,10 @@
                                 <p>Clean, modular code that grows efficiently with project requirements.</p>
                             </div>
                         </div>
-                        <div class="principle">
+                        
+                        <div class="principle-item">
                             <div class="principle-icon">
-                                <i class="fas fa-users"></i>
+                                <i class="fas fa-heart"></i>
                             </div>
                             <div class="principle-content">
                                 <h4>User Experience</h4>
@@ -492,25 +594,26 @@
                         </div>
                     </div>
                 </div>
+                
                 <div class="about-stats">
                     <div class="stats-card">
                         <h3>Portfolio Metrics</h3>
                         <div class="stats-grid">
                             <div class="stat-box">
-                                <div class="stat-value" data-target="9">0</div>
-                                <div class="stat-label">Projects</div>
+                                <span class="stat-value" data-target="7">0</span>
+                                <span class="stat-label">Projects</span>
                             </div>
                             <div class="stat-box">
-                                <div class="stat-value">100%</div>
-                                <div class="stat-label">Vanilla JS</div>
+                                <span class="stat-value">100%</span>
+                                <span class="stat-label">Vanilla JS</span>
                             </div>
                             <div class="stat-box">
-                                <div class="stat-value" data-target="7">0</div>
-                                <div class="stat-label">Technologies</div>
+                                <span class="stat-value" data-target="12">0</span>
+                                <span class="stat-label">Technologies</span>
                             </div>
                             <div class="stat-box">
-                                <div class="stat-value">100%</div>
-                                <div class="stat-label">Responsive</div>
+                                <span class="stat-value">100%</span>
+                                <span class="stat-label">Responsive</span>
                             </div>
                         </div>
                     </div>
@@ -519,38 +622,33 @@
         </div>
     </section>
 
-    <!-- Contact -->
-    <section class="contact-section" id="contact">
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
         <div class="container">
             <div class="section-header">
+                <span class="section-tag">Contact</span>
                 <h2 class="section-title">Get In Touch</h2>
                 <p class="section-subtitle">Interested in collaboration or have questions about my work?</p>
             </div>
             
-            <div class="contact-content">
-                <div class="contact-info">
-                    <div class="info-card">
-                        <div class="info-icon">
-                            <i class="fab fa-github"></i>
-                        </div>
-                        <h4>GitHub Portfolio</h4>
-                        <p>View all source code and project repositories</p>
-                        <a href="https://github.com/LupasteanRaoul" target="_blank" class="info-link">
-                            github.com/LupasteanRaoul →
-                        </a>
+            <div class="contact-grid">
+                <a href="https://github.com/LupasteanRaoul" target="_blank" rel="noopener" class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fab fa-github"></i>
                     </div>
-                    
-                    <div class="info-card">
-                        <div class="info-icon">
-                            <i class="fas fa-globe"></i>
-                        </div>
-                        <h4>Live Demos</h4>
-                        <p>All projects are available for immediate testing</p>
-                        <a href="#projects" class="info-link">
-                            View All Projects →
-                        </a>
+                    <h4>GitHub Portfolio</h4>
+                    <p>View all source code and project repositories</p>
+                    <span class="contact-link">github.com/LupasteanRaoul <i class="fas fa-arrow-right"></i></span>
+                </a>
+                
+                <a href="#projects" class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-globe"></i>
                     </div>
-                </div>
+                    <h4>Live Demos</h4>
+                    <p>All projects are available for immediate testing</p>
+                    <span class="contact-link">View All Projects <i class="fas fa-arrow-right"></i></span>
+                </a>
             </div>
         </div>
     </section>
@@ -558,15 +656,15 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <div class="footer-content">
+            <div class="footer-grid">
                 <div class="footer-brand">
-                    <div class="logo">
+                    <a href="#home" class="logo">
                         <div class="logo-icon">
-                            <i class="fas fa-code"></i>
+                            <i class="fas fa-terminal"></i>
                         </div>
-                        <h3>Raoul Lupastean</h3>
-                    </div>
-                    <p class="footer-tagline">Frontend Developer specializing in vanilla JavaScript solutions</p>
+                        <span class="logo-text">Lupastean Raoul</span>
+                    </a>
+                    <p>Frontend Developer specializing in vanilla JavaScript solutions</p>
                 </div>
                 
                 <div class="footer-links">
@@ -580,13 +678,10 @@
                     
                     <div class="link-group">
                         <h4>Projects</h4>
+                        <a href="Tic-Tac-Toe-Multiplayer/index.html" target="_blank">Tic Tac Toe MP</a>
                         <a href="Currency-Converter/index.html" target="_blank">Currency Converter</a>
                         <a href="Event-rsvp/index.html" target="_blank">Event RSVP</a>
                         <a href="Music-shopping-cart-page/index.html" target="_blank">E-commerce Cart</a>
-                        <a href="Lab-photography-exibit/index.html" target="_blank">Photo Gallery</a>
-                        <a href="Tic-Tac-Toe-AI/index.html" target="_blank">Tic Tac Toe AI</a>
-                        <a href="Tic-Tac-Toe-Multiplayer/index.html" target="_blank">Tic Tac Toe Multiplayer</a>
-
                     </div>
                     
                     <div class="link-group">
@@ -595,19 +690,19 @@
                             <i class="fab fa-github"></i> GitHub
                         </a>
                         <a href="https://lupasteanraoul.github.io" target="_blank">
-                            <i class="fas fa-external-link-alt"></i> Main Portfolio
+                            <i class="fas fa-external-link-alt"></i> Portfolio
                         </a>
                     </div>
                 </div>
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; <span id="currentYear"></span> Raoul Lupastean. All projects are open source and available for review.</p>
-                <p class="footer-note">Built with <i class="fas fa-heart"></i> and vanilla JavaScript</p>
+                <p>&copy; <span id="currentYear">2024</span>Lupastean Raoul. All projects are open source.</p>
+                <p class="footer-heart">Built with <i class="fas fa-heart"></i> and vanilla JavaScript</p>
             </div>
         </div>
     </footer>
 
-    <script src="./script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
